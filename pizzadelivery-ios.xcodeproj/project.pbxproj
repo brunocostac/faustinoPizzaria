@@ -10,7 +10,6 @@
 		1119FA322787307E00AF25E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA312787307E00AF25E1 /* AppDelegate.swift */; };
 		1119FA342787307E00AF25E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA332787307E00AF25E1 /* SceneDelegate.swift */; };
 		1119FA362787307E00AF25E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA352787307E00AF25E1 /* ViewController.swift */; };
-		1119FA392787307E00AF25E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1119FA372787307E00AF25E1 /* Main.storyboard */; };
 		1119FA3B2787308200AF25E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1119FA3A2787308200AF25E1 /* Assets.xcassets */; };
 		1119FA3E2787308200AF25E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1119FA3C2787308200AF25E1 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -20,7 +19,6 @@
 		1119FA312787307E00AF25E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1119FA332787307E00AF25E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1119FA352787307E00AF25E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1119FA382787307E00AF25E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1119FA3A2787308200AF25E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1119FA3D2787308200AF25E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1119FA3F2787308200AF25E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -59,7 +57,6 @@
 				1119FA312787307E00AF25E1 /* AppDelegate.swift */,
 				1119FA332787307E00AF25E1 /* SceneDelegate.swift */,
 				1119FA352787307E00AF25E1 /* ViewController.swift */,
-				1119FA372787307E00AF25E1 /* Main.storyboard */,
 				1119FA3A2787308200AF25E1 /* Assets.xcassets */,
 				1119FA3C2787308200AF25E1 /* LaunchScreen.storyboard */,
 				1119FA3F2787308200AF25E1 /* Info.plist */,
@@ -74,6 +71,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1119FA422787308200AF25E1 /* Build configuration list for PBXNativeTarget "pizzadelivery-ios" */;
 			buildPhases = (
+				1119FA452787392100AF25E1 /* Swiftlint */,
 				1119FA2A2787307E00AF25E1 /* Sources */,
 				1119FA2B2787307E00AF25E1 /* Frameworks */,
 				1119FA2C2787307E00AF25E1 /* Resources */,
@@ -127,11 +125,31 @@
 			files = (
 				1119FA3E2787308200AF25E1 /* LaunchScreen.storyboard in Resources */,
 				1119FA3B2787308200AF25E1 /* Assets.xcassets in Resources */,
-				1119FA392787307E00AF25E1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1119FA452787392100AF25E1 /* Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftlint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, 'brew install swiftlint' or download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1119FA2A2787307E00AF25E1 /* Sources */ = {
@@ -147,14 +165,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		1119FA372787307E00AF25E1 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1119FA382787307E00AF25E1 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1119FA3C2787308200AF25E1 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -293,7 +303,6 @@
 				INFOPLIST_FILE = "pizzadelivery-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -320,7 +329,6 @@
 				INFOPLIST_FILE = "pizzadelivery-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
