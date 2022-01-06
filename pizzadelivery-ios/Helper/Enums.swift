@@ -10,7 +10,7 @@ import Foundation
 enum AppFlow {
     case menu(MenuScreen)
     case order(OrderScreen)
-    case promotion(PromotionScreen)
+    case campaign(CampaignScreen)
 }
 
 enum MenuScreen {
@@ -27,6 +27,6 @@ enum OrderScreen {
     case confirmationScreen
 }
 
-enum PromotionScreen {
-    case promotionScreen
+enum CampaignScreen {
+    case campaignScreen
 }
