@@ -20,10 +20,11 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         setupViewConfiguration()
     }
     
+    // MARK: - Initialization
+    
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
-        title = "Cardápio"
     }
     
     required init?(coder: NSCoder) {

@@ -21,6 +21,14 @@
 		1119FA6627877FC700AF25E1 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6527877FC700AF25E1 /* MenuViewController.swift */; };
 		1119FA682787804D00AF25E1 /* MenuBaseCoordinated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA672787804D00AF25E1 /* MenuBaseCoordinated.swift */; };
 		1119FA6A2787974D00AF25E1 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA692787974D00AF25E1 /* LogoView.swift */; };
+		1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6B2787A7A900AF25E1 /* OrderViewController.swift */; };
+		1119FA6E2787A7BA00AF25E1 /* CampaignViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6D2787A7BA00AF25E1 /* CampaignViewController.swift */; };
+		1119FA702787A8BC00AF25E1 /* CampaignCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6F2787A8BC00AF25E1 /* CampaignCoordinator.swift */; };
+		1119FA722787A8CD00AF25E1 /* CampaignBaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA712787A8CD00AF25E1 /* CampaignBaseCoordinator.swift */; };
+		1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA732787A8E800AF25E1 /* CampaignBaseCoordinated.swift */; };
+		1119FA762787A8F900AF25E1 /* OrderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA752787A8F900AF25E1 /* OrderCoordinator.swift */; };
+		1119FA782787A90B00AF25E1 /* OrderBaseCoordinated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA772787A90B00AF25E1 /* OrderBaseCoordinated.swift */; };
+		1119FA7A2787A91C00AF25E1 /* OrderBaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA792787A91C00AF25E1 /* OrderBaseCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +48,14 @@
 		1119FA6527877FC700AF25E1 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		1119FA672787804D00AF25E1 /* MenuBaseCoordinated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBaseCoordinated.swift; sourceTree = "<group>"; };
 		1119FA692787974D00AF25E1 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
+		1119FA6B2787A7A900AF25E1 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
+		1119FA6D2787A7BA00AF25E1 /* CampaignViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignViewController.swift; sourceTree = "<group>"; };
+		1119FA6F2787A8BC00AF25E1 /* CampaignCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignCoordinator.swift; sourceTree = "<group>"; };
+		1119FA712787A8CD00AF25E1 /* CampaignBaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignBaseCoordinator.swift; sourceTree = "<group>"; };
+		1119FA732787A8E800AF25E1 /* CampaignBaseCoordinated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignBaseCoordinated.swift; sourceTree = "<group>"; };
+		1119FA752787A8F900AF25E1 /* OrderCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCoordinator.swift; sourceTree = "<group>"; };
+		1119FA772787A90B00AF25E1 /* OrderBaseCoordinated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderBaseCoordinated.swift; sourceTree = "<group>"; };
+		1119FA792787A91C00AF25E1 /* OrderBaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderBaseCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +160,7 @@
 		1119FA562787763800AF25E1 /* Order */ = {
 			isa = PBXGroup;
 			children = (
+				1119FA6B2787A7A900AF25E1 /* OrderViewController.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -151,6 +168,7 @@
 		1119FA572787763F00AF25E1 /* Campaign */ = {
 			isa = PBXGroup;
 			children = (
+				1119FA6D2787A7BA00AF25E1 /* CampaignViewController.swift */,
 			);
 			path = Campaign;
 			sourceTree = "<group>";
@@ -207,6 +225,9 @@
 		1119FA5E27877D0E00AF25E1 /* Order */ = {
 			isa = PBXGroup;
 			children = (
+				1119FA752787A8F900AF25E1 /* OrderCoordinator.swift */,
+				1119FA792787A91C00AF25E1 /* OrderBaseCoordinator.swift */,
+				1119FA772787A90B00AF25E1 /* OrderBaseCoordinated.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -214,6 +235,9 @@
 		1119FA5F27877D2600AF25E1 /* Campaign */ = {
 			isa = PBXGroup;
 			children = (
+				1119FA6F2787A8BC00AF25E1 /* CampaignCoordinator.swift */,
+				1119FA712787A8CD00AF25E1 /* CampaignBaseCoordinator.swift */,
+				1119FA732787A8E800AF25E1 /* CampaignBaseCoordinated.swift */,
 			);
 			path = Campaign;
 			sourceTree = "<group>";
@@ -221,8 +245,8 @@
 		1119FA6027877D3800AF25E1 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				1119FA4A27875B9300AF25E1 /* MainBaseCoordinator.swift */,
 				1119FA4F27876A3900AF25E1 /* MainCoordinator.swift */,
+				1119FA4A27875B9300AF25E1 /* MainBaseCoordinator.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -319,16 +343,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1119FA7A2787A91C00AF25E1 /* OrderBaseCoordinator.swift in Sources */,
 				1119FA492787586500AF25E1 /* Coordinator.swift in Sources */,
+				1119FA702787A8BC00AF25E1 /* CampaignCoordinator.swift in Sources */,
 				1119FA6A2787974D00AF25E1 /* LogoView.swift in Sources */,
+				1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */,
+				1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */,
 				1119FA5027876A3900AF25E1 /* MainCoordinator.swift in Sources */,
 				1119FA6227877EDE00AF25E1 /* MenuBaseCoordinator.swift in Sources */,
+				1119FA782787A90B00AF25E1 /* OrderBaseCoordinated.swift in Sources */,
 				1119FA6627877FC700AF25E1 /* MenuViewController.swift in Sources */,
+				1119FA722787A8CD00AF25E1 /* CampaignBaseCoordinator.swift in Sources */,
 				1119FA322787307E00AF25E1 /* AppDelegate.swift in Sources */,
 				1119FA342787307E00AF25E1 /* SceneDelegate.swift in Sources */,
 				1119FA5227876B7200AF25E1 /* ViewConfiguration.swift in Sources */,
 				1119FA682787804D00AF25E1 /* MenuBaseCoordinated.swift in Sources */,
+				1119FA6E2787A7BA00AF25E1 /* CampaignViewController.swift in Sources */,
 				1119FA6427877F7A00AF25E1 /* MenuCoordinator.swift in Sources */,
+				1119FA762787A8F900AF25E1 /* OrderCoordinator.swift in Sources */,
 				1119FA4E2787697300AF25E1 /* Enums.swift in Sources */,
 				1119FA4B27875B9300AF25E1 /* MainBaseCoordinator.swift in Sources */,
 			);
