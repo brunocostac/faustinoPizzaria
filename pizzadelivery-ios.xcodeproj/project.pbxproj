@@ -20,6 +20,7 @@
 		1119FA6427877F7A00AF25E1 /* MenuCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6327877F7A00AF25E1 /* MenuCoordinator.swift */; };
 		1119FA6627877FC700AF25E1 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6527877FC700AF25E1 /* MenuViewController.swift */; };
 		1119FA682787804D00AF25E1 /* MenuBaseCoordinated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA672787804D00AF25E1 /* MenuBaseCoordinated.swift */; };
+		1119FA6A2787974D00AF25E1 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA692787974D00AF25E1 /* LogoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		1119FA6327877F7A00AF25E1 /* MenuCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCoordinator.swift; sourceTree = "<group>"; };
 		1119FA6527877FC700AF25E1 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		1119FA672787804D00AF25E1 /* MenuBaseCoordinated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBaseCoordinated.swift; sourceTree = "<group>"; };
+		1119FA692787974D00AF25E1 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 		1119FA592787767000AF25E1 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				1119FA692787974D00AF25E1 /* LogoView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1119FA492787586500AF25E1 /* Coordinator.swift in Sources */,
+				1119FA6A2787974D00AF25E1 /* LogoView.swift in Sources */,
 				1119FA5027876A3900AF25E1 /* MainCoordinator.swift in Sources */,
 				1119FA6227877EDE00AF25E1 /* MenuBaseCoordinator.swift in Sources */,
 				1119FA6627877FC700AF25E1 /* MenuViewController.swift in Sources */,
