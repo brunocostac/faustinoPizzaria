@@ -47,7 +47,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
         tableView.rowHeight = 100.0
-        tableView.register(OrdersTableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     // MARK: - Setup Constraints
@@ -134,7 +134,7 @@ extension OrderViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? OrdersTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? OrderTableViewCell else {
             return UITableViewCell()
         }
         cell.titleLabel.text = "10/11/2021 - Entregue às 22:23"

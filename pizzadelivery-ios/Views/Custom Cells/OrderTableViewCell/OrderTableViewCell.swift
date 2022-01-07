@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OrdersTableViewCell: UITableViewCell {
+class OrderTableViewCell: UITableViewCell {
     
     // MARK: - Views
     
@@ -60,7 +60,7 @@ class OrdersTableViewCell: UITableViewCell {
 
 // MARK: - ViewConfiguration
 
-extension OrdersTableViewCell: ViewConfiguration {
+extension OrderTableViewCell: ViewConfiguration {
     func setupConstraints() {
         setupTitleLabelConstraints()
         setupDescriptionLabelConstraints()

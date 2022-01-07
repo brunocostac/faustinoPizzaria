@@ -31,8 +31,8 @@ class MainCoordinator: MainBaseCoordinator {
         orderCoordinator.parentCoordinator = self
         orderViewController.tabBarItem = UITabBarItem(title: "Pedidos", image: UIImage(systemName: "doc.plaintext"), tag: 2)
         
-       (rootViewController as? UITabBarController)?.viewControllers = [menuViewController, campaignViewController, orderViewController]
-        
+        (rootViewController as? UITabBarController)?.viewControllers = [menuViewController, campaignViewController, orderViewController]
+    
         return rootViewController
     }
     

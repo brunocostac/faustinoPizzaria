@@ -11,6 +11,12 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    
+        // MARK: UITabBar Customization
+    
+        UITabBar.appearance().tintColor = .red
+        UITabBar.appearance().backgroundColor = .white
+        UITabBar.appearance().isTranslucent = false
         return true
     }
 

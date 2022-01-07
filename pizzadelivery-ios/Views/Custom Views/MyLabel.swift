@@ -8,6 +8,7 @@
 import UIKit
 
 class MyLabel: UILabel {
+    
     init(text: String = "", font: UIFont, textColor: UIColor, numberOfLines: Int) {
         super.init(frame: .zero)
         self.text = text
