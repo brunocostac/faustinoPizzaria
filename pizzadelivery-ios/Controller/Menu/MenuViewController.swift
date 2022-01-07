@@ -15,6 +15,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     private let logoView = LogoView()
     
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewConfiguration()

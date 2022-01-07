@@ -42,9 +42,9 @@ class LogoView: UIView {
         backgroundImage.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            backgroundImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
-            backgroundImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0),
-            backgroundImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0),
+            backgroundImage.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            backgroundImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
+            backgroundImage.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
             backgroundImage.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
@@ -53,7 +53,7 @@ class LogoView: UIView {
             
         NSLayoutConstraint.activate([
             logoImage.centerXAnchor.constraint(equalTo: backgroundImage.centerXAnchor),
-            logoImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 25),
+            logoImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 25),
             logoImage.heightAnchor.constraint(equalToConstant: 80),
             logoImage.widthAnchor.constraint(equalToConstant: 80)
         ])
