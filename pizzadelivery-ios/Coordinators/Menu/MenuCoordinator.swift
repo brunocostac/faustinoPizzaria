@@ -19,7 +19,7 @@ class MenuCoordinator: MenuBaseCoordinator {
         return rootViewController
     }
     
-    func moveTo(flow: AppFlow, userData: [String : Any]? = nil) {
+    func moveTo(flow: AppFlow, userData: [String: Any]? = nil) {
         switch flow {
         case .menu(let screen):
             handleMenuFlow(for: screen, userData: userData)

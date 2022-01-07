@@ -9,8 +9,11 @@ import Foundation
 import UIKit
 
 class MainCoordinator: MainBaseCoordinator {
+    
     var parentCoordinator: MainBaseCoordinator?
+    
     var rootViewController: UIViewController  = UITabBarController()
+    
     lazy var menuCoordinator: MenuBaseCoordinator = MenuCoordinator()
     lazy var campaignCoordinator: CampaignBaseCoordinator = CampaignCoordinator()
     lazy var orderCoordinator: OrderBaseCoordinator = OrderCoordinator()
@@ -18,7 +21,7 @@ class MainCoordinator: MainBaseCoordinator {
     func start() -> UIViewController {
         let menuViewController = menuCoordinator.start()
         menuCoordinator.parentCoordinator = self
-        menuViewController.tabBarItem = UITabBarItem(title: "Cardápio", image: UIImage(systemName: "homekit"), tag: 0)
+        menuViewController.tabBarItem = UITabBarItem(title: "Cardápio", image: UIImage(systemName: "menucard"), tag: 0)
         
         let campaignViewController = campaignCoordinator.start()
         campaignCoordinator.parentCoordinator = self
@@ -29,17 +32,18 @@ class MainCoordinator: MainBaseCoordinator {
         orderViewController.tabBarItem = UITabBarItem(title: "Pedidos", image: UIImage(systemName: "doc.plaintext"), tag: 2)
         
        (rootViewController as? UITabBarController)?.viewControllers = [menuViewController, campaignViewController, orderViewController]
+        
         return rootViewController
     }
     
-    func moveTo(flow: AppFlow, userData: [String : Any]? ) {
+    func moveTo(flow: AppFlow, userData: [String: Any]? ) { 
         switch flow {
-           case .menu:
-             print("ok")
-           case .campaign:
-             print("ok")
-           case .order:
-             print("ok")
+        case .menu:
+           print("ok")
+        case .campaign:
+           print("ok")
+        case .order:
+           print("ok")
         }
     }
 }

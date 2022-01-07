@@ -19,7 +19,7 @@ class CampaignCoordinator: CampaignBaseCoordinator {
         return rootViewController
     }
     
-    func moveTo(flow: AppFlow, userData: [String : Any]? = nil) {
+    func moveTo(flow: AppFlow, userData: [String: Any]? = nil) {
         switch flow {
         case .campaign(let screen):
             handleCampaignFlow(for: screen, userData: userData)
