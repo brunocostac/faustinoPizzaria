@@ -17,7 +17,7 @@ class MenuTableViewCell: UITableViewCell {
         return dishImage
     }()
     
-    let titleLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 16)!, textColor: .black, numberOfLines: 0)
+    let titleLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 16)!, textColor: .black, numberOfLines: 1)
     
     let descriptionLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .gray, numberOfLines: 2)
     
@@ -51,7 +51,7 @@ class MenuTableViewCell: UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            titleLabel.firstBaselineAnchor.constraint(equalTo: dishImage.firstBaselineAnchor),
+            titleLabel.firstBaselineAnchor.constraint(equalTo: dishImage.firstBaselineAnchor, constant: 5),
             titleLabel.leadingAnchor.constraint(equalTo: dishImage.trailingAnchor, constant: 20),
             titleLabel.heightAnchor.constraint(equalToConstant: 60),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12)
