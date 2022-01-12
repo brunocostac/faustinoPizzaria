@@ -25,7 +25,7 @@ class LogoView: UIView {
         return logoImage
     }()
     
-    // MARK: - Inicialization
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -17,7 +17,7 @@ class TableHeaderView: UIView {
     
     let feeLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .gray, numberOfLines: 0)
     
-    // MARK: - Inicialization
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: .zero)

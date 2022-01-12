@@ -15,7 +15,7 @@ enum AppFlow {
 
 enum MenuScreen {
     case menuScreen
-    case detailsScreen
+    case dishDetailsScreen
     case shoppingCartScreen
     case paymentScreen
     case placeToDeliveryScreen
