@@ -22,6 +22,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         return tableView
     }()
     
+    private let myCartButton = MyCartButton()
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -49,6 +51,10 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         tableView.register(MenuTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
+    @objc func goToCartScreen() {
+        coordinator?.moveTo(flow: .menu(.cartScreen), userData: nil)
+    }
+    
     // MARK: - Setup Constraints
     
     private func setupLogoViewConstraints() {
@@ -72,6 +78,15 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
+    
+    private func setupMyCartButtonConstraints() {
+        myCartButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            myCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            myCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            myCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
 }
 
 // MARK: - ViewConfiguration
@@ -80,16 +95,19 @@ extension MenuViewController: ViewConfiguration {
     func setupConstraints() {
         setupLogoViewConstraints()
         setupTableViewConstraints()
+        setupMyCartButtonConstraints()
     }
     
     func buildViewHierarchy() {
         view.addSubview(logoView)
         view.addSubview(tableView)
+        view.addSubview(myCartButton)
     }
     
     func configureViews() {
         view.backgroundColor = .white
         configureTableView()
+        myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
     }
 }
 

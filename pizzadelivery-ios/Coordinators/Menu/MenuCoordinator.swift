@@ -35,8 +35,8 @@ class MenuCoordinator: MenuBaseCoordinator {
         case .dishDetailsScreen:
             guard let title = userData?["title"] as? String else { return }
             goToDishDetailsScreenWith(title: title)
-        case .shoppingCartScreen:
-            print("ok")
+        case .cartScreen:
+            goToCartScreenWith()
         case .paymentScreen:
             print("ok")
         case .placeToDeliveryScreen:
@@ -48,6 +48,11 @@ class MenuCoordinator: MenuBaseCoordinator {
         let dishDetailsViewController = DishDetailsViewController(coordinator: self)
         dishDetailsViewController.title = title
         navigationRootViewController?.pushViewController(dishDetailsViewController, animated: true)
+    }
+    
+    func goToCartScreenWith() {
+        let cartViewController = CartViewController(coordinator: self)
+        navigationRootViewController?.pushViewController(cartViewController, animated: true)
     }
     
     func resetToRoot() -> Self {

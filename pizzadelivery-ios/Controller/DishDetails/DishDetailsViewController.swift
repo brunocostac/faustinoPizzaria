@@ -25,6 +25,8 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     private let scrollView = UIScrollView()
     
+    private let myCartButton = MyCartButton()
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -52,8 +54,12 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         stackView.spacing = 2.0
     }
     
-    @objc func addToCart() {
+    @objc func addToMyCart() {
        print("add to cart")
+    }
+    
+    @objc func goToCartScreen() {
+        coordinator?.moveTo(flow: .menu(.cartScreen), userData: nil)
     }
     
     // MARK: - Setup Constraints
@@ -105,6 +111,15 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
           quantityView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
+    
+    private func setupMyCartButtonConstraints() {
+        myCartButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            myCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            myCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            myCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
 }
 
 // MARK: - ViewConfiguration
@@ -116,6 +131,7 @@ extension DishDetailsViewController: ViewConfiguration {
         setupInfoViewConstraints()
         setupCommentViewConstraints()
         setupQuantityViewConstraints()
+        setupMyCartButtonConstraints()
     }
     
     func buildViewHierarchy() {
@@ -125,11 +141,13 @@ extension DishDetailsViewController: ViewConfiguration {
         stackView.addArrangedSubview(commentView)
         stackView.addArrangedSubview(quantityView)
         scrollView.addSubview(stackView)
+        scrollView.addSubview(myCartButton)
     }
     
     func configureViews() {
         view.backgroundColor = .white
         configureStackView()
-        quantityView.addToCartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
+        quantityView.addToCartButton.addTarget(self, action: #selector(addToMyCart), for: .touchUpInside)
+        myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
     }
 }
