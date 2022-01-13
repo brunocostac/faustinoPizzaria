@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TableHeaderView: UIView {
+class HeaderView: UIView {
     
     let nameLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 26)!, textColor: .black, numberOfLines: 0)
     
@@ -81,7 +81,7 @@ class TableHeaderView: UIView {
     }
 }
 
-extension TableHeaderView: ViewConfiguration {
+extension HeaderView: ViewConfiguration {
     func setupConstraints() {
         setupNameLabelConstraints()
         setupAddressLabelConstraints()
@@ -97,6 +97,6 @@ extension TableHeaderView: ViewConfiguration {
     }
     
     func configureViews() {
-        backgroundColor = .red
+        backgroundColor = .white
     }
 }

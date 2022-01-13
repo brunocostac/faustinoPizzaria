@@ -15,7 +15,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     private let logoView = LogoView()
     
-    private let tableHeaderView = TableHeaderView()
+    private let tableHeaderView = HeaderView()
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
