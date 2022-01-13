@@ -23,7 +23,7 @@ class MenuTableViewCell: UITableViewCell {
     
     let priceLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 18)!, textColor: .black, numberOfLines: 0)
     
-    // MARK: - Inicialization
+    // MARK: - Initialization
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -17,7 +17,7 @@ class OrderTableViewCell: UITableViewCell {
     
     let priceLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 14)!, textColor: .gray, numberOfLines: 0)
     
-    // MARK: - Inicialization
+    // MARK: - Initialization
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

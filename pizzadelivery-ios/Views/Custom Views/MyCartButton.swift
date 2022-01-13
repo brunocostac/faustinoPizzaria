@@ -10,29 +10,13 @@ class MyCartButton: UIButton {
     
     // MARK: - Views
     
-    private let myCartLabel: UILabel = {
-        let myCartLabel = UILabel()
-        myCartLabel.textColor = .white
-        myCartLabel.text = "Meu carrinho"
-        myCartLabel.font = UIFont(name: "Avenir-Heavy", size: 16)
-        return myCartLabel
-    }()
+    private let myCartLabel: UILabel = MyLabel(font: UIFont(name: "Avenir-Heavy", size: 16)!, textColor: .white, numberOfLines: 0)
     
-    private let itemLabel: UILabel = {
-        let itemLabel = UILabel()
-        itemLabel.textColor = .white
-        itemLabel.text = "1 item"
-        itemLabel.font = UIFont(name: "Avenir-Heavy", size: 16)
-        return itemLabel
-    }()
+    private let itemLabel: UILabel = MyLabel(font: UIFont(name: "Avenir-Heavy", size: 16)!, textColor: .white, numberOfLines: 0)
     
-    private let totalPriceLabel: UILabel = {
-        let totalPriceLabel = UILabel()
-        totalPriceLabel.textColor = .white
-        totalPriceLabel.text = "R$ 35,90"
-        totalPriceLabel.font = UIFont(name: "Avenir-Heavy", size: 16)
-        return totalPriceLabel
-    }()
+    private let totalPriceLabel: UILabel = MyLabel(font: UIFont(name: "Avenir-Heavy", size: 16)!, textColor: .white, numberOfLines: 0)
+    
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,7 +26,6 @@ class MyCartButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemeted")
     }
-    
     
     // MARK: - Setup Constraints
     
@@ -93,5 +76,8 @@ extension MyCartButton: ViewConfiguration {
     
     func configureViews() {
         backgroundColor = .red
+        myCartLabel.text = "Meu carrinho"
+        itemLabel.text = "1 item"
+        totalPriceLabel.text = "R$ 35,90"
     }
 }

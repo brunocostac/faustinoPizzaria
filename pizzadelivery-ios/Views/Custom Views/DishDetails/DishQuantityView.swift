@@ -40,6 +40,7 @@ class DishQuantityView: UIView {
     }()
     
     // MARK: - Initialization
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViewConfiguration()
