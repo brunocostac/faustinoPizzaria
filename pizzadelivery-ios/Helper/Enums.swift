@@ -18,7 +18,7 @@ enum MenuScreen {
     case dishDetailsScreen
     case cartScreen
     case paymentScreen
-    case placeToDeliveryScreen
+    case deliveryLocationScreen
 }
 
 enum OrderScreen {

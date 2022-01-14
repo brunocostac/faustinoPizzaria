@@ -39,8 +39,8 @@ class MenuCoordinator: MenuBaseCoordinator {
             goToCartScreenWith()
         case .paymentScreen:
             print("ok")
-        case .placeToDeliveryScreen:
-            print("ok")
+        case .deliveryLocationScreen:
+            goToDeliveryLocationScreen()
         }
     }
     
@@ -53,6 +53,11 @@ class MenuCoordinator: MenuBaseCoordinator {
     func goToCartScreenWith() {
         let cartViewController = CartViewController(coordinator: self)
         navigationRootViewController?.pushViewController(cartViewController, animated: true)
+    }
+    
+    func goToDeliveryLocationScreen() {
+        let deliveryLocationViewController = DeliveryLocationViewController(coordinator: self)
+        navigationRootViewController?.pushViewController(deliveryLocationViewController, animated: true)
     }
     
     func resetToRoot() -> Self {

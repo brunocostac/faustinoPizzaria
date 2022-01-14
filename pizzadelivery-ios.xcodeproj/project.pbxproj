@@ -33,6 +33,8 @@
 		111BCCF8278FA2D400F6E89E /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BCCF7278FA2D400F6E89E /* CartViewController.swift */; };
 		11377A4B2788549E00ABBA2D /* OrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11377A4A2788549E00ABBA2D /* OrderTableViewCell.swift */; };
 		11377A4E2788577800ABBA2D /* MyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11377A4D2788577800ABBA2D /* MyLabel.swift */; };
+		11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */; };
+		11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */; };
 		11627C842790CED900FC4AA0 /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */; };
 		11627C862790CF0100FC4AA0 /* CartItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */; };
 		118560DC278DB9AE00B7D149 /* DishDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118560DB278DB9AE00B7D149 /* DishDetailsViewController.swift */; };
@@ -73,6 +75,8 @@
 		111BCCF7278FA2D400F6E89E /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		11377A4A2788549E00ABBA2D /* OrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTableViewCell.swift; sourceTree = "<group>"; };
 		11377A4D2788577800ABBA2D /* MyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLabel.swift; sourceTree = "<group>"; };
+		11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationTableViewCell.swift; sourceTree = "<group>"; };
+		11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationViewController.swift; sourceTree = "<group>"; };
 		11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
 		11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemTableViewCell.swift; sourceTree = "<group>"; };
 		118560DB278DB9AE00B7D149 /* DishDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishDetailsViewController.swift; sourceTree = "<group>"; };
@@ -169,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				111BCCF6278FA2C300F6E89E /* Cart */,
+				11498DD32792010800241EC9 /* DeliveryLocation */,
 				1119FA552787763000AF25E1 /* Menu */,
 				118560DA278DB98B00B7D149 /* DishDetails */,
 				1119FA562787763800AF25E1 /* Order */,
@@ -302,11 +307,20 @@
 			path = OrderTableViewCell;
 			sourceTree = "<group>";
 		};
+		11498DD32792010800241EC9 /* DeliveryLocation */ = {
+			isa = PBXGroup;
+			children = (
+				11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */,
+			);
+			path = DeliveryLocation;
+			sourceTree = "<group>";
+		};
 		11627C812790CEA600FC4AA0 /* CartTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
 				11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */,
 				11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */,
+				11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */,
 			);
 			path = CartTableViewCell;
 			sourceTree = "<group>";
@@ -438,6 +452,7 @@
 				11A043902788A0A600C0420E /* MenuTableViewCell.swift in Sources */,
 				1119FA702787A8BC00AF25E1 /* CampaignCoordinator.swift in Sources */,
 				11377A4B2788549E00ABBA2D /* OrderTableViewCell.swift in Sources */,
+				11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */,
 				1119FA6A2787974D00AF25E1 /* LogoView.swift in Sources */,
 				1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */,
 				1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */,
@@ -452,6 +467,7 @@
 				1119FA322787307E00AF25E1 /* AppDelegate.swift in Sources */,
 				1119FA342787307E00AF25E1 /* SceneDelegate.swift in Sources */,
 				1119FA5227876B7200AF25E1 /* ViewConfiguration.swift in Sources */,
+				11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */,
 				118560DF278DC2D900B7D149 /* DishImageView.swift in Sources */,
 				11627C862790CF0100FC4AA0 /* CartItemTableViewCell.swift in Sources */,
 				1119FA682787804D00AF25E1 /* MenuBaseCoordinated.swift in Sources */,
