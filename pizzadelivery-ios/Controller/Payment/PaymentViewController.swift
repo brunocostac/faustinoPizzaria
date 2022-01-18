@@ -1,15 +1,16 @@
 //
-//  CartViewController.swift
+//  PaymentViewController.swift
 //  pizzadelivery-ios
 //
-//  Created by Bruno Costa on 12/01/22.
+//  Created by Bruno Costa on 17/01/22.
 //
 
 import UIKit
 
-class CartViewController: UIViewController, MenuBaseCoordinated {
+class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Views
+    
     var coordinator: MenuBaseCoordinator?
     
     private let logoView = LogoView()
@@ -46,14 +47,15 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
-        tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
+        tableView.register(PaymentMethodTableViewCell.self, forCellReuseIdentifier: "PaymentMethodTableViewCell")
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
+        tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
     }
-    
+
     // MARK: - Setup Constraints
     
-    private func setupLogoViewConstraints() {
+    func setupLogoConstraints() {
         logoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -78,9 +80,9 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
 
 // MARK: - ViewConfiguration
 
-extension CartViewController: ViewConfiguration {
+extension PaymentViewController: ViewConfiguration {
     func setupConstraints() {
-        setupLogoViewConstraints()
+        setupLogoConstraints()
         setupTableViewConstraints()
     }
     
@@ -92,13 +94,12 @@ extension CartViewController: ViewConfiguration {
     func configureViews() {
         view.backgroundColor = .white
         configureTableView()
-        title = "Carrinho"
+        title = "Pagamento"
     }
 }
 
 // MARK: - UITableViewDelegate
-
-extension CartViewController: UITableViewDelegate {
+extension PaymentViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
@@ -113,24 +114,27 @@ extension CartViewController: UITableViewDelegate {
 }
 
 // MARK: - UITableViewDataSource
-
-extension CartViewController: UITableViewDataSource {
+extension PaymentViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        3
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
+            return "Forma de pagamento na entrega"
+        } else if  section == 1 {
             return "Resumo do Pedido"
         } else {
-            return "Local de entrega"
+            return "Entregar em"
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return items.count + 1
+            return 1
         case 1:
+            return items.count + 1
+        case 2:
             return 1
         default:
             return 0
@@ -140,6 +144,12 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
+            guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "PaymentMethodTableViewCell", for: indexPath) as? PaymentMethodTableViewCell else {
+                return UITableViewCell()
+            }
+            cell3.selectionStyle = .none
+            return cell3
+        case 1:
             if (self.items.count) >= indexPath.row + 1 {
                 guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
@@ -162,26 +172,17 @@ extension CartViewController: UITableViewDataSource {
                 cell1.totalValueLabel.text = "R$ 62,90"
                 return cell1
             }
-        case 1:
+        case 2:
             guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
             cell3.selectionStyle = .none
             cell3.placeDescriptionLabel.text = "Estrada dos Tres Rios 9000 - apt 908 - bl 2"
-            cell3.delegate = self
+            cell3.goToPaymentButton.setTitle("Concluir o pedido", for: .normal)
+            
             return cell3
         default:
             return UITableViewCell()
         }
-    }
-}
-
-extension CartViewController: DeliveryLocationTableViewCellDelegate {
-    func goToPaymentScreen() {
-        coordinator?.moveTo(flow: .menu(.paymentScreen), userData: nil)
-    }
-    
-    func goToDeliveryLocationScreen() {
-        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), userData: nil)
     }
 }

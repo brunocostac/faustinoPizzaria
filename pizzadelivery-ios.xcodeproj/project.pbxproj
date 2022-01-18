@@ -31,6 +31,9 @@
 		1119FA7A2787A91C00AF25E1 /* OrderBaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA792787A91C00AF25E1 /* OrderBaseCoordinator.swift */; };
 		111BCCF5278F848100F6E89E /* MyCartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BCCF4278F848100F6E89E /* MyCartButton.swift */; };
 		111BCCF8278FA2D400F6E89E /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BCCF7278FA2D400F6E89E /* CartViewController.swift */; };
+		112F25382795E0A700A50E11 /* DeliveryLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F25372795E0A700A50E11 /* DeliveryLocationView.swift */; };
+		112F253B2795E49200A50E11 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F253A2795E49200A50E11 /* PaymentViewController.swift */; };
+		112F25402796075500A50E11 /* PaymentMethodTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F253F2796075400A50E11 /* PaymentMethodTableViewCell.swift */; };
 		11377A4B2788549E00ABBA2D /* OrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11377A4A2788549E00ABBA2D /* OrderTableViewCell.swift */; };
 		11377A4E2788577800ABBA2D /* MyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11377A4D2788577800ABBA2D /* MyLabel.swift */; };
 		11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */; };
@@ -73,6 +76,9 @@
 		1119FA792787A91C00AF25E1 /* OrderBaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderBaseCoordinator.swift; sourceTree = "<group>"; };
 		111BCCF4278F848100F6E89E /* MyCartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCartButton.swift; sourceTree = "<group>"; };
 		111BCCF7278FA2D400F6E89E /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		112F25372795E0A700A50E11 /* DeliveryLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationView.swift; sourceTree = "<group>"; };
+		112F253A2795E49200A50E11 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
+		112F253F2796075400A50E11 /* PaymentMethodTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableViewCell.swift; sourceTree = "<group>"; };
 		11377A4A2788549E00ABBA2D /* OrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTableViewCell.swift; sourceTree = "<group>"; };
 		11377A4D2788577800ABBA2D /* MyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLabel.swift; sourceTree = "<group>"; };
 		11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationTableViewCell.swift; sourceTree = "<group>"; };
@@ -172,6 +178,7 @@
 		1119FA542787762200AF25E1 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				112F25392795E47F00A50E11 /* Payment */,
 				111BCCF6278FA2C300F6E89E /* Cart */,
 				11498DD32792010800241EC9 /* DeliveryLocation */,
 				1119FA552787763000AF25E1 /* Menu */,
@@ -218,6 +225,7 @@
 		1119FA592787767000AF25E1 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				112F25362795E08000A50E11 /* DeliveryLocation */,
 				118560DD278DC27500B7D149 /* DishDetails */,
 				1119FA692787974D00AF25E1 /* LogoView.swift */,
 				11377A4D2788577800ABBA2D /* MyLabel.swift */,
@@ -230,6 +238,7 @@
 		1119FA5A2787768D00AF25E1 /* Custom Cells */ = {
 			isa = PBXGroup;
 			children = (
+				112F253C279606DE00A50E11 /* PaymentTableViewCell */,
 				11627C812790CEA600FC4AA0 /* CartTableViewCell */,
 				11A0438E2788A08B00C0420E /* MenuTableViewCell */,
 				11377A4C278854F800ABBA2D /* OrderTableViewCell */,
@@ -297,6 +306,30 @@
 				111BCCF7278FA2D400F6E89E /* CartViewController.swift */,
 			);
 			path = Cart;
+			sourceTree = "<group>";
+		};
+		112F25362795E08000A50E11 /* DeliveryLocation */ = {
+			isa = PBXGroup;
+			children = (
+				112F25372795E0A700A50E11 /* DeliveryLocationView.swift */,
+			);
+			path = DeliveryLocation;
+			sourceTree = "<group>";
+		};
+		112F25392795E47F00A50E11 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				112F253A2795E49200A50E11 /* PaymentViewController.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		112F253C279606DE00A50E11 /* PaymentTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				112F253F2796075400A50E11 /* PaymentMethodTableViewCell.swift */,
+			);
+			path = PaymentTableViewCell;
 			sourceTree = "<group>";
 		};
 		11377A4C278854F800ABBA2D /* OrderTableViewCell */ = {
@@ -453,8 +486,10 @@
 				1119FA702787A8BC00AF25E1 /* CampaignCoordinator.swift in Sources */,
 				11377A4B2788549E00ABBA2D /* OrderTableViewCell.swift in Sources */,
 				11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */,
+				112F253B2795E49200A50E11 /* PaymentViewController.swift in Sources */,
 				1119FA6A2787974D00AF25E1 /* LogoView.swift in Sources */,
 				1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */,
+				112F25402796075500A50E11 /* PaymentMethodTableViewCell.swift in Sources */,
 				1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */,
 				118560E3278DF30900B7D149 /* DishCommentView.swift in Sources */,
 				1119FA5027876A3900AF25E1 /* MainCoordinator.swift in Sources */,
@@ -466,6 +501,7 @@
 				11627C842790CED900FC4AA0 /* TotalPriceTableViewCell.swift in Sources */,
 				1119FA322787307E00AF25E1 /* AppDelegate.swift in Sources */,
 				1119FA342787307E00AF25E1 /* SceneDelegate.swift in Sources */,
+				112F25382795E0A700A50E11 /* DeliveryLocationView.swift in Sources */,
 				1119FA5227876B7200AF25E1 /* ViewConfiguration.swift in Sources */,
 				11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */,
 				118560DF278DC2D900B7D149 /* DishImageView.swift in Sources */,
