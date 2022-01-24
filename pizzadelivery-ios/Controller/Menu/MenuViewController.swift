@@ -9,6 +9,9 @@ import UIKit
 
 class MenuViewController: UIViewController, MenuBaseCoordinated {
     
+    // MARK: - ViewModel
+    var menu = [Menu]()
+   
     // MARK: - Views
     
     var coordinator: MenuBaseCoordinator?
@@ -28,6 +31,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initializeMenu()
         setupViewConfiguration()
     }
     
@@ -43,6 +47,22 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     
     // MARK: - Functions
+    
+    private func initializeMenu() {
+        menu.append(
+        Menu(category: "Tradicionais napoletanas", items: [
+            ItemMenu(name: "Magueritta 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella de bufala, manjericão fresco e tomates cerejas", price: 35.95),
+            ItemMenu(name: "Calabresa 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, calabresa e orégano", price: 34.95),
+            ItemMenu(name: "Quatro queijos 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, gorgonzola, provolone, parmesão e orégano", price: 36.95)
+        ]))
+        
+        menu.append(
+        Menu(category: "Tradicionais brasileiras", items: [
+        ItemMenu(name: "Calabresa e cebola 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, calabresa, cebola e orégano", price: 31.95),
+        ItemMenu(name: "Brasileira 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, calabresa, cebola, ovos e orégano", price: 33.95),
+        ItemMenu(name: "Veneza 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, presunto, champignon orégano", price: 34.95)
+        ])) 
+    }
     
     private func configureTableView() {
         tableView.delegate = self
@@ -136,29 +156,40 @@ extension MenuViewController: UITableViewDelegate {
 extension MenuViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Tradicionais da Itália"
-        } else {
-            return "Linha Premium"
+        switch section {
+        case 0:
+            return menu[section].category
+        case 1:
+            return menu[section].category
+        default:
+            return "Não existem categorias cadastradas"
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return menu.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        
+        switch section {
+        case 0:
+            return menu[section].items.count
+        case 1:
+            return menu[section].items.count
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? MenuTableViewCell else {
             return UITableViewCell()
         }
-        cell.titleLabel.text = "Pizza Magueritta 35cm"
-        cell.dishImage.image = UIImage(named: "pizza3")
-        cell.descriptionLabel.text = "Tomate pelatti, Queijo Mozzarela, Tomate cereja e manjericão"
-        cell.priceLabel.text = "por R$ 35,90"
+        cell.titleLabel.text = menu[indexPath.section].items[indexPath.row].name
+        cell.dishImage.image = UIImage(named: menu[indexPath.section].items[indexPath.row].imageUrl)
+        cell.descriptionLabel.text = menu[indexPath.section].items[indexPath.row].description
+        cell.priceLabel.text = "por R$ \(menu[indexPath.section].items[indexPath.row].price)"
         return cell
     }
 }
