@@ -19,7 +19,7 @@ struct Order: Decodable {
     let dateWasRequest: String
     let dateCompletion: String
     
-    init(items:[ItemOrder], address: String, status: String, subTotal: Double, total: Double, paymentMethod: String, orderId: Int, customerName: String, dateWasRequest: String, dateCompletion: String) {
+    init(items: [ItemOrder], address: String, status: String, subTotal: Double, total: Double, paymentMethod: String, orderId: Int, customerName: String, dateWasRequest: String, dateCompletion: String) {
         self.items = items
         self.address = address
         self.status = status

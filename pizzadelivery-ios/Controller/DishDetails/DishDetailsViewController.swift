@@ -9,6 +9,9 @@ import UIKit
 
 class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
+    // View Model
+    var itemOrder: ItemOrder
+    
     // MARK: - Views
     
     var coordinator: MenuBaseCoordinator?
@@ -31,11 +34,13 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateUI()
     }
     
     // MARK: - Initialization
     
     required init(coordinator: MenuBaseCoordinator) {
+        itemOrder = ItemOrder(name: "aa", itemId: "123", quantity: 1, price: 36.59, comment: "")
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
         setupViewConfiguration()
@@ -46,6 +51,35 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     // MARK: - Functions
+    @objc func addToMyCart() {
+       print("add to cart / save in coredata")
+    }
+    
+    @objc func increaseQuantity() {
+        itemOrder.increaseQuantity()
+        updateUI()
+    }
+    
+    @objc func decreaseQuantity() {
+        itemOrder.decreaseQuantity()
+        updateUI()
+    }
+    
+    @objc func goToCartScreen() {
+        coordinator?.moveTo(flow: .menu(.cartScreen), userData: nil)
+    }
+    
+    func updateUI() {
+        quantityView.quantityLabel.text = "\(itemOrder.quantity)"
+        quantityView.addToCartButton.setTitle("Adicionar R$ \(itemOrder.calculateTotal())", for: .normal)
+    }
+    
+    func configureButtons() {
+        quantityView.addToCartButton.addTarget(self, action: #selector(addToMyCart), for: .touchUpInside)
+        myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
+        quantityView.increaseButton.addTarget(self, action: #selector(increaseQuantity), for: .touchUpInside)
+        quantityView.decreaseButton.addTarget(self, action: #selector(decreaseQuantity), for: .touchUpInside)
+    }
     
     func configureStackView() {
         stackView.axis = .vertical
@@ -53,15 +87,6 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         stackView.alignment = .fill
         stackView.spacing = 2.0
     }
-    
-    @objc func addToMyCart() {
-       print("add to cart")
-    }
-    
-    @objc func goToCartScreen() {
-        coordinator?.moveTo(flow: .menu(.cartScreen), userData: nil)
-    }
-    
     // MARK: - Setup Constraints
     
     private func setupScrollViewConstraints() {
@@ -147,7 +172,6 @@ extension DishDetailsViewController: ViewConfiguration {
     func configureViews() {
         view.backgroundColor = .white
         configureStackView()
-        quantityView.addToCartButton.addTarget(self, action: #selector(addToMyCart), for: .touchUpInside)
-        myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
+        configureButtons()
     }
 }
