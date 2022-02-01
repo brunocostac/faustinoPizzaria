@@ -36,7 +36,7 @@ class MainCoordinator: MainBaseCoordinator {
         return rootViewController
     }
     
-    func moveTo(flow: AppFlow, userData: [String: Any]? ) { 
+    func moveTo<T>(flow: AppFlow, data: T ) { 
         switch flow {
         case .menu:
            print("ok")

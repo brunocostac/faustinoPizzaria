@@ -21,13 +21,19 @@ class DishInfoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViewConfiguration()
-        nameLabel.text = "Magueritta (35 Cm)"
-        descriptionLabel.text = "Molho de tomate italiano, mozzarella de bufala, manjericão fresco e tomates cerejas"
-        priceLabel.text = "R$ 35,90"
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemeted")
+    }
+    
+    // MARK: - Functions
+    
+    func configureLayout(name: String, description: String, price: Double) {
+        nameLabel.text = name
+        descriptionLabel.text = description
+        priceLabel.text = "R$ \(price)"
     }
     
     // MARK: - Setup Constraints

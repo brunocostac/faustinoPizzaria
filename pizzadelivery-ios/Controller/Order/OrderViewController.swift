@@ -47,13 +47,13 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     // MARK: - Functions
     
     private func initializeOrders() {
-        orders.append(Order(items:
-        [ItemOrder(name: "Magueritta 30cm",
+        /*orders.append(Order(items:
+        //[ItemOrder(name: "Magueritta 30cm",
             itemId: "32",
             quantity: 1,
             price: 35.95,
             comment:"A"),
-         ItemOrder(name: "Calabresa 30cm",
+        // ItemOrder(name: "Calabresa 30cm",
              itemId: "34",
              quantity: 2,
              price: 31.95,
@@ -62,7 +62,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
          status: "Finalizado",
          subTotal: 67.95, total: 71.95, paymentMethod: "dinheiro",
          orderId: 32, customerName: "Bruno", dateWasRequest: "21/01/2022 ás 17:33",
-         dateCompletion: "21/01/2022 ás 18:32"))
+         dateCompletion: "21/01/2022 ás 18:32"))*/
     }
     
     private func configureTableView() {
@@ -160,8 +160,8 @@ extension OrderViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? OrderTableViewCell else {
             return UITableViewCell()
         }
-        cell.titleLabel.text = "\(orders[indexPath.row].status) - Entregue às \(orders[indexPath.row].dateCompletion)"
-        cell.descriptionLabel.text = "\(orders[indexPath.row].items[indexPath.row].quantity) \(orders[indexPath.row].items[indexPath.row].name)"
+       // cell.titleLabel.text = "\(orders[indexPath.row].status) - Entregue às \(orders[indexPath.row].dateCompletion)"
+      //  cell.descriptionLabel.text = "\(orders[indexPath.row].items[indexPath.row].quantity) \(orders[indexPath.row].items[indexPath.row].name)"
         cell.priceLabel.text = "R$ \(orders[indexPath.row].total)"
         return cell
     }

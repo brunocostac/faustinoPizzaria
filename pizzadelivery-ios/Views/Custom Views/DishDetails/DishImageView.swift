@@ -11,11 +11,11 @@ class DishImageView: UIImageView {
     
     // MARK: - Views
     
-    let dishImageView: UIImageView = {
-        let dishImageView = UIImageView(image: UIImage(named: "pizza3"))
-        dishImageView.contentMode = .scaleAspectFill
-        dishImageView.clipsToBounds = true
-        return dishImageView
+    var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
     }()
     
     // MARK: - Initialization
@@ -29,15 +29,21 @@ class DishImageView: UIImageView {
         fatalError("init(coder:) has not been implemeted")
     }
     
+    // MARK: - Functions
+    
+    func configureLayout(url: String) {
+        imageView.image = UIImage(named: url)
+    }
+    
     // MARK: - Setup Constraints
     
     private func setupDishImageViewConstraints() {
-        dishImageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dishImageView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            dishImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-            dishImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-            dishImageView.heightAnchor.constraint(equalToConstant: 120)
+            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            imageView.heightAnchor.constraint(equalToConstant: 120)
         ])
     }
 }
@@ -48,10 +54,10 @@ extension DishImageView: ViewConfiguration {
     }
     
     func buildViewHierarchy() {
-        addSubview(dishImageView)
+        addSubview(imageView)
     }
     
     func configureViews() {
-        backgroundColor = .red
+        backgroundColor = .lightGray
     }
 }

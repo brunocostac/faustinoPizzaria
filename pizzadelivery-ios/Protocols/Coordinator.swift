@@ -15,7 +15,7 @@ protocol FlowCoordinator: AnyObject {
 protocol Coordinator: FlowCoordinator {
     var rootViewController: UIViewController { get set }
     func start() -> UIViewController
-    func moveTo(flow: AppFlow, userData: [String: Any]?)
+    func moveTo<T: Any>(flow: AppFlow, data: T)
     @discardableResult func resetToRoot(animated: Bool) -> Self
 }
 

@@ -6,41 +6,36 @@
 //
 
 import UIKit
+import CoreData
 
 class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
-    // View Model
-    var itemOrder: ItemOrder
+    var itemMenuViewModel: ItemMenuViewModel?
     
     // MARK: - Views
     
     var coordinator: MenuBaseCoordinator?
-    
-    private let imageView = DishImageView(frame: .zero)
-    
+    private let dishImageView = DishImageView(frame: .zero)
     private let infoView = DishInfoView()
-    
     private let commentView = DishCommentView()
-    
     private let quantityView = DishQuantityView()
-    
     private let stackView = UIStackView()
-    
     private let scrollView = UIScrollView()
-    
     private let myCartButton = MyCartButton()
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        setupViewModelAtViews()
     }
     
     // MARK: - Initialization
     
     required init(coordinator: MenuBaseCoordinator) {
-        itemOrder = ItemOrder(name: "aa", itemId: "123", quantity: 1, price: 36.59, comment: "")
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
         setupViewConfiguration()
@@ -51,27 +46,43 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     // MARK: - Functions
+    
+    func setupViewModelAtViews() {
+        if let viewModel = itemMenuViewModel?.itemMenu {
+            dishImageView.configureLayout(url: viewModel.imageUrl)
+            infoView.configureLayout(name: viewModel.name, description: viewModel.description, price: viewModel.price)
+        }
+    }
+    
     @objc func addToMyCart() {
-       print("add to cart / save in coredata")
     }
     
     @objc func increaseQuantity() {
-        itemOrder.increaseQuantity()
+        if let currentQuantity = quantityView.quantityLabel.text {
+            let newQuantity = Int(currentQuantity)! + 1
+            quantityView.quantityLabel.text = "\(newQuantity)"
+        }
+        
         updateUI()
     }
     
     @objc func decreaseQuantity() {
-        itemOrder.decreaseQuantity()
-        updateUI()
+        if let currentQuantity = quantityView.quantityLabel.text {
+            if Int(currentQuantity)! > 1 {
+                let newQuantity = Int(currentQuantity)! - 1
+                quantityView.quantityLabel.text = "\(newQuantity)"
+            }
+        }
     }
     
     @objc func goToCartScreen() {
-        coordinator?.moveTo(flow: .menu(.cartScreen), userData: nil)
+        let date = Date()
+        coordinator?.moveTo(flow: .menu(.cartScreen), data: date)
     }
     
     func updateUI() {
-        quantityView.quantityLabel.text = "\(itemOrder.quantity)"
-        quantityView.addToCartButton.setTitle("Adicionar R$ \(itemOrder.calculateTotal())", for: .normal)
+        //quantityView.quantityLabel.text = "\(itemOrder.quantity)"
+        //quantityView.addToCartButton.setTitle("Adicionar R$ \(itemOrder.calculateTotal())", for: .normal)
     }
     
     func configureButtons() {
@@ -79,6 +90,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
         quantityView.increaseButton.addTarget(self, action: #selector(increaseQuantity), for: .touchUpInside)
         quantityView.decreaseButton.addTarget(self, action: #selector(decreaseQuantity), for: .touchUpInside)
+        myCartButton.isHidden = true
     }
     
     func configureStackView() {
@@ -110,10 +122,10 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func setupImageViewConstraints() {
-       imageView.translatesAutoresizingMaskIntoConstraints = false
+       dishImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-           imageView.heightAnchor.constraint(equalToConstant: 120),
-           imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+           dishImageView.heightAnchor.constraint(equalToConstant: 120),
+           dishImageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     private func setupInfoViewConstraints() {
@@ -161,7 +173,7 @@ extension DishDetailsViewController: ViewConfiguration {
     
     func buildViewHierarchy() {
         view.addSubview(scrollView)
-        stackView.addArrangedSubview(imageView)
+        stackView.addArrangedSubview(dishImageView)
         stackView.addArrangedSubview(infoView)
         stackView.addArrangedSubview(commentView)
         stackView.addArrangedSubview(quantityView)

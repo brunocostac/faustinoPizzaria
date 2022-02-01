@@ -13,9 +13,7 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     var coordinator: MenuBaseCoordinator?
     
     private let logoView = LogoView()
-    
     private let tableHeaderView = HeaderView()
-    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         return tableView
@@ -178,10 +176,12 @@ extension CartViewController: UITableViewDataSource {
 
 extension CartViewController: DeliveryLocationTableViewCellDelegate {
     func goToPaymentScreen() {
-        coordinator?.moveTo(flow: .menu(.paymentScreen), userData: nil)
+        let date = Date()
+        coordinator?.moveTo(flow: .menu(.paymentScreen), data: date)
     }
     
     func goToDeliveryLocationScreen() {
-        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), userData: nil)
+        let date = Date()
+        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: date)
     }
 }

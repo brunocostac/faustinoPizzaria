@@ -10,7 +10,7 @@ import UIKit
 class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
-    var menu = [Menu]()
+    var menuListViewModel = MenuListViewModel()
    
     // MARK: - Views
     
@@ -31,7 +31,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeMenu()
+        populateMenu()
         setupViewConfiguration()
     }
     
@@ -48,20 +48,11 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Functions
     
-    private func initializeMenu() {
-        menu.append(
-        Menu(category: "Tradicionais napoletanas", items: [
-            ItemMenu(name: "Magueritta 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella de bufala, manjericão fresco e tomates cerejas", price: 35.95),
-            ItemMenu(name: "Calabresa 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, calabresa e orégano", price: 34.95),
-            ItemMenu(name: "Quatro queijos 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, gorgonzola, provolone, parmesão e orégano", price: 36.95)
-        ]))
-        
-        menu.append(
-        Menu(category: "Tradicionais brasileiras", items: [
-        ItemMenu(name: "Calabresa e cebola 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, calabresa, cebola e orégano", price: 31.95),
-        ItemMenu(name: "Brasileira 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, mozzarella, calabresa, cebola, ovos e orégano", price: 33.95),
-        ItemMenu(name: "Veneza 30cm", imageUrl: "pizza3", description: "Molho de tomate italiano, presunto, champignon orégano", price: 34.95)
-        ])) 
+    private func populateMenu() {
+        MockApiClient().fetchMenu { [self] (_, menuData) in
+            self.menuListViewModel.menuViewModel = menuData.map(MenuViewModel.init)
+            self.tableView.reloadData()
+        }
     }
     
     private func configureTableView() {
@@ -72,7 +63,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     
     @objc func goToCartScreen() {
-        coordinator?.moveTo(flow: .menu(.cartScreen), userData: nil)
+        let date = Date()
+        coordinator?.moveTo(flow: .menu(.cartScreen), data: date)
     }
     
     // MARK: - Setup Constraints
@@ -101,6 +93,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     private func setupMyCartButtonConstraints() {
         myCartButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             myCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             myCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -127,6 +120,7 @@ extension MenuViewController: ViewConfiguration {
     func configureViews() {
         view.backgroundColor = .white
         configureTableView()
+        myCartButton.isHidden = true
         myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
     }
 }
@@ -147,8 +141,9 @@ extension MenuViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let viewModel = self.menuListViewModel.menuViewModel(at: indexPath.section)
         tableView.deselectRow(at: indexPath, animated: false)
-        coordinator?.moveTo(flow: .menu(.dishDetailsScreen), userData: ["title": "Detalhes"])
+        coordinator?.moveTo(flow: .menu(.dishDetailsScreen), data: viewModel.items[indexPath.row])
     }
 }
 
@@ -156,27 +151,30 @@ extension MenuViewController: UITableViewDelegate {
 extension MenuViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let viewModel = self.menuListViewModel.menuViewModel(at: section)
+        
         switch section {
         case 0:
-            return menu[section].category
+            return viewModel.category
         case 1:
-            return menu[section].category
+            return viewModel.category
         default:
             return "Não existem categorias cadastradas"
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return menu.count
+        return menuListViewModel.menuViewModel.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let viewModel = self.menuListViewModel.menuViewModel(at: section)
         
         switch section {
         case 0:
-            return menu[section].items.count
+            return viewModel.items.count
         case 1:
-            return menu[section].items.count
+            return viewModel.items.count
         default:
             return 0
         }
@@ -186,10 +184,13 @@ extension MenuViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? MenuTableViewCell else {
             return UITableViewCell()
         }
-        cell.titleLabel.text = menu[indexPath.section].items[indexPath.row].name
-        cell.dishImage.image = UIImage(named: menu[indexPath.section].items[indexPath.row].imageUrl)
-        cell.descriptionLabel.text = menu[indexPath.section].items[indexPath.row].description
-        cell.priceLabel.text = "por R$ \(menu[indexPath.section].items[indexPath.row].price)"
+        
+        let viewModel = self.menuListViewModel.menuViewModel(at: indexPath.section)
+        
+        cell.titleLabel.text = viewModel.items[indexPath.row].name
+        cell.dishImage.image = UIImage(named: viewModel.items[indexPath.row].imageUrl)
+        cell.descriptionLabel.text = viewModel.items[indexPath.row].description
+        cell.priceLabel.text = "por R$ \(viewModel.items[indexPath.row].price)"
         return cell
     }
 }

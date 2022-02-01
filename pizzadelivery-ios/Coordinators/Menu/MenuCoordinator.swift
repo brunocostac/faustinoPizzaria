@@ -19,22 +19,23 @@ class MenuCoordinator: MenuBaseCoordinator {
         return rootViewController
     }
     
-    func moveTo(flow: AppFlow, userData: [String: Any]? = nil) {
+    func moveTo<T: Any>(flow: AppFlow, data: T) {
         switch flow {
         case .menu(let screen):
-            handleMenuFlow(for: screen, userData: userData)
+            handleMenuFlow(for: screen, data: data)
         default:
-            parentCoordinator?.moveTo(flow: flow, userData: userData)
+            parentCoordinator?.moveTo(flow: flow, data: data)
         }
     }
     
-    private func handleMenuFlow(for screen: MenuScreen, userData: [String: Any]?) {
+    private func handleMenuFlow<T: Any>(for screen: MenuScreen, data: T) {
         switch screen {
         case .menuScreen:
             navigationRootViewController?.popToRootViewController(animated: true)
         case .dishDetailsScreen:
-            guard let title = userData?["title"] as? String else { return }
-            goToDishDetailsScreenWith(title: title)
+            guard let itemMenu = data as? ItemMenu else { return }
+            let itemVM = ItemMenuViewModel(itemMenu)
+            goToDishDetailsScreenWith(itemVM)
         case .cartScreen:
             goToCartScreenWith()
         case .paymentScreen:
@@ -44,9 +45,9 @@ class MenuCoordinator: MenuBaseCoordinator {
         }
     }
     
-    func goToDishDetailsScreenWith(title: String) {
+    func goToDishDetailsScreenWith(_ itemMenuSelected: ItemMenuViewModel) {
         let dishDetailsViewController = DishDetailsViewController(coordinator: self)
-        dishDetailsViewController.title = title
+        dishDetailsViewController.itemMenuViewModel = itemMenuSelected
         navigationRootViewController?.pushViewController(dishDetailsViewController, animated: true)
     }
     

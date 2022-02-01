@@ -19,16 +19,16 @@ class OrderCoordinator: OrderBaseCoordinator {
         return rootViewController
     }
     
-    func moveTo(flow: AppFlow, userData: [String: Any]? = nil) {
+    func moveTo<T: Any>(flow: AppFlow, data: T) {
         switch flow {
         case .order(let screen):
-            handleOrderFlow(for: screen, userData: userData)
+            handleOrderFlow(for: screen, data: data)
         default:
-            parentCoordinator?.moveTo(flow: flow, userData: userData)
+            parentCoordinator?.moveTo(flow: flow, data: data)
         }
     }
     
-    private func handleOrderFlow(for screen: OrderScreen, userData: [String: Any]?) {
+    private func handleOrderFlow<T: Any>(for screen: OrderScreen, data: T) {
         switch screen {
         case .lastOrdersScreen:
             print("Ok")

@@ -19,16 +19,17 @@ class CampaignCoordinator: CampaignBaseCoordinator {
         return rootViewController
     }
     
-    func moveTo(flow: AppFlow, userData: [String: Any]? = nil) {
+    func moveTo<T: Any>(flow: AppFlow, data: T) {
         switch flow {
         case .campaign(let screen):
-            handleCampaignFlow(for: screen, userData: userData)
+            handleCampaignFlow(for: screen, data: data)
         default:
-            parentCoordinator?.moveTo(flow: flow, userData: userData)
+            let date = Date()
+            parentCoordinator?.moveTo(flow: flow, data: date)
         }
     }
     
-    private func handleCampaignFlow(for screen: CampaignScreen, userData: [String: Any]?) {
+    private func handleCampaignFlow<T: Any>(for screen: CampaignScreen, data: T) {
         switch screen {
         case .campaignScreen:
             print("OK")
