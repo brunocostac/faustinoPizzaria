@@ -252,12 +252,13 @@ extension DishDetailsViewController {
         } else if sender.titleLabel?.text == "-" && initialFlag == ItemOrderStatus.update {
             if newQuantity! > 0 {
                 newQuantity = newQuantity! - 1
+                updateUI(quantity: newQuantity!, flag: currentFlag)
                 if newQuantity! == 0 {
                     currentFlag = ItemOrderStatus.remove
                     quantityView.decreaseButton.isEnabled = false
                     quantityView.decreaseButton.backgroundColor = .lightGray
+                    updateUI(quantity: Int(itemOrderViewModel!.quantity), flag: currentFlag)
                 }
-                updateUI(quantity: Int(itemOrderViewModel!.quantity), flag: currentFlag)
             }
         } else if sender.titleLabel?.text == "-" && initialFlag == ItemOrderStatus.create {
             if newQuantity! > 1 {
