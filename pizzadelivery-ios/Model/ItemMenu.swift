@@ -12,11 +12,13 @@ struct ItemMenu: Decodable, Equatable {
     let imageUrl: String
     let description: String
     let price: Double
+    let itemId: Int
     
-    init(name: String, imageUrl: String, description: String, price: Double) {
+    init(name: String, imageUrl: String, description: String, price: Double, itemId: Int) {
         self.name = name
         self.imageUrl = imageUrl
         self.description = description
         self.price = price
+        self.itemId = itemId
     }
 }

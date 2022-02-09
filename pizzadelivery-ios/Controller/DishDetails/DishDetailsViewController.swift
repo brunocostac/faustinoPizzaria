@@ -10,7 +10,13 @@ import CoreData
 
 class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
+    // MARK: - ViewModel
+    
     var itemMenuViewModel: ItemMenuViewModel?
+    var orderViewModel: OrderViewModel?
+    var itemOrderViewModel: ItemOrderViewModel?
+    
+    var initialFlag = ItemOrderStatus.create
     
     // MARK: - Views
     
@@ -30,7 +36,9 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setupViewModelAtViews()
+        loadOrderFromDB()
+        loadDetailsFromMenu()
+        loadItemFromDB()
     }
     
     // MARK: - Initialization
@@ -47,50 +55,65 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Functions
     
-    func setupViewModelAtViews() {
-        if let viewModel = itemMenuViewModel?.itemMenu {
-            dishImageView.configureLayout(url: viewModel.imageUrl)
-            infoView.configureLayout(name: viewModel.name, description: viewModel.description, price: viewModel.price)
+    func loadOrderFromDB() {
+        let currentOrder = CoreDataHelper().fetchCurrentOrder() ?? []
+        if currentOrder == [] {
+            CoreDataHelper().createOrder()
+        } else {
+            orderViewModel = OrderViewModel(currentOrder[0])
+            //CoreDataHelper().fetchAllItems(orderViewModel: orderViewModel)
         }
     }
     
-    @objc func addToMyCart() {
-    }
-    
-    @objc func increaseQuantity() {
-        if let currentQuantity = quantityView.quantityLabel.text {
-            let newQuantity = Int(currentQuantity)! + 1
-            quantityView.quantityLabel.text = "\(newQuantity)"
+    func loadDetailsFromMenu() {
+        if let itemMenuVM = itemMenuViewModel?.itemMenu {
+            dishImageView.configureLayout(url: itemMenuVM.imageUrl)
+            infoView.configureLayout(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price)
+            quantityView.addToCartButton.setTitle("\(initialFlag.rawValue) R$ \(itemMenuVM.price)", for: .normal)
         }
-        
-        updateUI()
     }
     
-    @objc func decreaseQuantity() {
-        if let currentQuantity = quantityView.quantityLabel.text {
-            if Int(currentQuantity)! > 1 {
-                let newQuantity = Int(currentQuantity)! - 1
-                quantityView.quantityLabel.text = "\(newQuantity)"
+    func loadItemFromDB() {
+        CoreDataHelper().fetchCurrentItem(itemMenuViewModel: itemMenuViewModel, orderViewModel: orderViewModel) { [self] itemOrderVM in
+            if itemOrderVM != [] {
+                initialFlag = ItemOrderStatus.update
+                itemOrderViewModel = ItemOrderViewModel(name: itemOrderVM[0].name,
+                                                        itemId: Int64(itemOrderVM[0].itemId),
+                                                        price: itemOrderVM[0].price,
+                                                        quantity: Int64(itemOrderVM[0].quantity),
+                                                        comment: itemOrderVM[0].comment)
+                
+                updateUI(quantity: (Int(itemOrderVM[0].quantity)), comment: itemOrderVM[0].comment, flag: initialFlag)
             }
         }
     }
     
-    @objc func goToCartScreen() {
-        let date = Date()
-        coordinator?.moveTo(flow: .menu(.cartScreen), data: date)
+    func getCalcTotal(_ quantity: Int, price: Double) -> String {
+        let total = Double(quantity) * Double(price)
+        return String(format: "%.2f", total)
     }
     
-    func updateUI() {
-        //quantityView.quantityLabel.text = "\(itemOrder.quantity)"
-        //quantityView.addToCartButton.setTitle("Adicionar R$ \(itemOrder.calculateTotal())", for: .normal)
+    func updateUI(quantity: Int, comment: String = "", flag: ItemOrderStatus?) {
+        let currentFlag = flag ?? initialFlag
+        let total = getCalcTotal(quantity, price: itemMenuViewModel!.itemMenu.price)
+        
+        if currentFlag == ItemOrderStatus.create || currentFlag == ItemOrderStatus.update {
+            quantityView.addToCartButton.setTitle("\(currentFlag.rawValue) R$ \(total)", for: .normal)
+            quantityView.quantityLabel.text = "\(quantity)"
+        } else if currentFlag == ItemOrderStatus.remove {
+            quantityView.addToCartButton.setTitle("\(currentFlag.rawValue) R$ \(total)", for: .normal)
+            quantityView.quantityLabel.text = "0"
+        }
+        
+        commentView.commentTextField.text = comment
     }
     
     func configureButtons() {
-        quantityView.addToCartButton.addTarget(self, action: #selector(addToMyCart), for: .touchUpInside)
+        quantityView.addToCartButton.addTarget(self, action: #selector(addOrRemoveButtonPressed(_:)), for: .touchUpInside)
         myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
-        quantityView.increaseButton.addTarget(self, action: #selector(increaseQuantity), for: .touchUpInside)
-        quantityView.decreaseButton.addTarget(self, action: #selector(decreaseQuantity), for: .touchUpInside)
-        myCartButton.isHidden = true
+        quantityView.increaseButton.addTarget(self, action: #selector(changeQuantityButtonPressed(_:)), for: .touchUpInside)
+        quantityView.decreaseButton.addTarget(self, action: #selector(changeQuantityButtonPressed(_:)), for: .touchUpInside)
+        myCartButton.isHidden = false
     }
     
     func configureStackView() {
@@ -99,6 +122,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         stackView.alignment = .fill
         stackView.spacing = 2.0
     }
+    
     // MARK: - Setup Constraints
     
     private func setupScrollViewConstraints() {
@@ -122,30 +146,30 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func setupImageViewConstraints() {
-       dishImageView.translatesAutoresizingMaskIntoConstraints = false
+        dishImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-           dishImageView.heightAnchor.constraint(equalToConstant: 120),
-           dishImageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            dishImageView.heightAnchor.constraint(equalToConstant: 120),
+            dishImageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     private func setupInfoViewConstraints() {
         infoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-          infoView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            infoView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     
     private func setupCommentViewConstraints() {
         commentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-           commentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            commentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     
     private func setupQuantityViewConstraints() {
         quantityView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-          quantityView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            quantityView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     
@@ -185,5 +209,67 @@ extension DishDetailsViewController: ViewConfiguration {
         view.backgroundColor = .white
         configureStackView()
         configureButtons()
+    }
+}
+
+// MARK: - User Actions
+
+extension DishDetailsViewController {
+    
+    @objc func addOrRemoveButtonPressed(_ sender: UIButton) {
+        let buttonTitle = sender.titleLabel?.text
+        let name = itemMenuViewModel?.itemMenu.name
+        let itemId = itemMenuViewModel?.itemMenu.itemId
+        let price = itemMenuViewModel?.itemMenu.price
+        let quantity = Int(quantityView.quantityLabel.text!)
+        let comment = commentView.commentTextField.text ?? ""
+        
+        itemOrderViewModel = ItemOrderViewModel(name: name!,
+                                                itemId: Int64(itemId!),
+                                                price: price!,
+                                                quantity: Int64(quantity!),
+                                                comment: comment)
+        
+        let isToRemoveItem = buttonTitle?.contains(ItemOrderStatus.remove.rawValue)
+        
+        if isToRemoveItem! {
+            CoreDataHelper().removeItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
+        } else {
+            CoreDataHelper().saveItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
+        }
+    }
+    
+    @objc func changeQuantityButtonPressed(_ sender: UIButton) {
+        var newQuantity = Int(quantityView.quantityLabel.text!)
+        var currentFlag: ItemOrderStatus?
+        
+        if sender.titleLabel?.text == "+" {
+            newQuantity = newQuantity! + 1
+            currentFlag = initialFlag
+            quantityView.decreaseButton.isEnabled = true
+            quantityView.decreaseButton.backgroundColor = .darkGray
+            updateUI(quantity: newQuantity!, flag: currentFlag)
+        } else if sender.titleLabel?.text == "-" && initialFlag == ItemOrderStatus.update {
+            if newQuantity! > 0 {
+                newQuantity = newQuantity! - 1
+                if newQuantity! == 0 {
+                    currentFlag = ItemOrderStatus.remove
+                    quantityView.decreaseButton.isEnabled = false
+                    quantityView.decreaseButton.backgroundColor = .lightGray
+                }
+                updateUI(quantity: Int(itemOrderViewModel!.quantity), flag: currentFlag)
+            }
+        } else if sender.titleLabel?.text == "-" && initialFlag == ItemOrderStatus.create {
+            if newQuantity! > 1 {
+                newQuantity = newQuantity! - 1
+                currentFlag = ItemOrderStatus.create
+                updateUI(quantity: newQuantity!, flag: currentFlag)
+            }
+        }
+    }
+    
+    @objc func goToCartScreen() {
+        let date = Date()
+        coordinator?.moveTo(flow: .menu(.cartScreen), data: date)
     }
 }

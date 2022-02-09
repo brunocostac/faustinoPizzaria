@@ -30,3 +30,9 @@ enum OrderScreen {
 enum CampaignScreen {
     case campaignScreen
 }
+
+enum ItemOrderStatus: String {
+    case create = "Adicionar"
+    case update = "Atualizar"
+    case remove = "Remover"
+}

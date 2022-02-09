@@ -39,6 +39,7 @@
 		11377A4E2788577800ABBA2D /* MyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11377A4D2788577800ABBA2D /* MyLabel.swift */; };
 		113C0B4A279745C4004C2FAC /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113C0B49279745C4004C2FAC /* Menu.swift */; };
 		113C0B4C27974614004C2FAC /* ItemMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113C0B4B27974614004C2FAC /* ItemMenu.swift */; };
+		11449D3327AB0A4100E22997 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11449D3227AB0A4100E22997 /* CoreDataHelper.swift */; };
 		11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */; };
 		11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */; };
 		11627C842790CED900FC4AA0 /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */; };
@@ -48,7 +49,7 @@
 		117EC0AA27A2DC0B0003D3EC /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0A927A2DC0B0003D3EC /* OrderViewModel.swift */; };
 		117EC0AC27A2DC1D0003D3EC /* ItemOrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0AB27A2DC1D0003D3EC /* ItemOrderViewModel.swift */; };
 		117EC0AF27A2E4160003D3EC /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0AD27A2E4150003D3EC /* DataModel.xcdatamodeld */; };
-		117EC0B227A34CCB0003D3EC /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0B127A34CCA0003D3EC /* CoreDataManager.swift */; };
+		117EC0B227A34CCB0003D3EC /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0B127A34CCA0003D3EC /* CoreDataStack.swift */; };
 		118560DC278DB9AE00B7D149 /* DishDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118560DB278DB9AE00B7D149 /* DishDetailsViewController.swift */; };
 		118560DF278DC2D900B7D149 /* DishImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118560DE278DC2D900B7D149 /* DishImageView.swift */; };
 		118560E1278DCA4E00B7D149 /* DishInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118560E0278DCA4E00B7D149 /* DishInfoView.swift */; };
@@ -94,6 +95,7 @@
 		11377A4D2788577800ABBA2D /* MyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLabel.swift; sourceTree = "<group>"; };
 		113C0B49279745C4004C2FAC /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		113C0B4B27974614004C2FAC /* ItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMenu.swift; sourceTree = "<group>"; };
+		11449D3227AB0A4100E22997 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationTableViewCell.swift; sourceTree = "<group>"; };
 		11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationViewController.swift; sourceTree = "<group>"; };
 		11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -103,7 +105,7 @@
 		117EC0A927A2DC0B0003D3EC /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		117EC0AB27A2DC1D0003D3EC /* ItemOrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemOrderViewModel.swift; sourceTree = "<group>"; };
 		117EC0AE27A2E4160003D3EC /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
-		117EC0B127A34CCA0003D3EC /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		117EC0B127A34CCA0003D3EC /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		118560DB278DB9AE00B7D149 /* DishDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishDetailsViewController.swift; sourceTree = "<group>"; };
 		118560DE278DC2D900B7D149 /* DishImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishImageView.swift; sourceTree = "<group>"; };
 		118560E0278DCA4E00B7D149 /* DishInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishInfoView.swift; sourceTree = "<group>"; };
@@ -291,8 +293,8 @@
 		1119FA5C278776E200AF25E1 /* View Model */ = {
 			isa = PBXGroup;
 			children = (
-				117EC0A527A2DBE60003D3EC /* MenuViewModel.swift */,
 				117EC0A727A2DBF50003D3EC /* ItemMenuViewModel.swift */,
+				117EC0A527A2DBE60003D3EC /* MenuViewModel.swift */,
 				117EC0A927A2DC0B0003D3EC /* OrderViewModel.swift */,
 				117EC0AB27A2DC1D0003D3EC /* ItemOrderViewModel.swift */,
 			);
@@ -399,7 +401,8 @@
 		117EC0B027A34CB10003D3EC /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
-				117EC0B127A34CCA0003D3EC /* CoreDataManager.swift */,
+				117EC0B127A34CCA0003D3EC /* CoreDataStack.swift */,
+				11449D3227AB0A4100E22997 /* CoreDataHelper.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -541,7 +544,7 @@
 				11A043902788A0A600C0420E /* MenuTableViewCell.swift in Sources */,
 				1119FA702787A8BC00AF25E1 /* CampaignCoordinator.swift in Sources */,
 				11377A4B2788549E00ABBA2D /* OrderTableViewCell.swift in Sources */,
-				117EC0B227A34CCB0003D3EC /* CoreDataManager.swift in Sources */,
+				117EC0B227A34CCB0003D3EC /* CoreDataStack.swift in Sources */,
 				11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */,
 				113C0B4A279745C4004C2FAC /* Menu.swift in Sources */,
 				112F253B2795E49200A50E11 /* PaymentViewController.swift in Sources */,
@@ -550,6 +553,7 @@
 				1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */,
 				112F25402796075500A50E11 /* PaymentMethodTableViewCell.swift in Sources */,
 				1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */,
+				11449D3327AB0A4100E22997 /* CoreDataHelper.swift in Sources */,
 				117EC0AF27A2E4160003D3EC /* DataModel.xcdatamodeld in Sources */,
 				118560E3278DF30900B7D149 /* DishCommentView.swift in Sources */,
 				1119FA5027876A3900AF25E1 /* MainCoordinator.swift in Sources */,

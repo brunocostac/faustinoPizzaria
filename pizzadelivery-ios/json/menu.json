@@ -6,19 +6,22 @@
                 "name": "Magueritta 30cm",
                 "imageUrl": "pizza3",
                 "description": "Molho de tomate italiano, mozzarella de bufala, manjericão fresco e tomates cerejas",
-                "price": 35.95
+                "price": 35.95,
+                "itemId": 1
             },
             {
                 "name": "Calabresa 30cm",
                 "imageUrl": "pizza2",
                 "description": "Molho de tomate italiano, mozzarella, calabresa e orégano",
-                "price": 34.95
+                "price": 34.95,
+                "itemId": 2
             },
             {
                 "name": "Quatro queijos 30cm",
                 "imageUrl": "pizza3",
                 "description": "Molho de tomate italiano, mozzarella, gorgonzola, provolone, parmesão e orégano",
-                "price": 36.95
+                "price": 36.95,
+                "itemId": 3
             }
         ]
     },
@@ -29,19 +32,22 @@
                 "name": "Calabresa e cebola 30cm",
                 "imageUrl": "pizza3",
                 "description": "Molho de tomate italiano, mozzarella, calabresa, cebola e orégano",
-                "price": 31.95
+                "price": 31.95,
+                "itemId": 4
             },
             {
                 "name": "Brasileira 30cm",
                 "imageUrl": "pizza3",
                 "description": "Molho de tomate italiano, mozzarella, calabresa, cebola, ovos e orégano",
-                "price": 33.95
+                "price": 33.95,
+                "itemId": 5
             },
             {
                 "name": "Veneza 30cm",
                 "imageUrl": "pizza3",
                 "description": "Molho de tomate italiano, presunto, champignon e orégano",
-                "price": 34.95
+                "price": 34.95,
+                "itemId": 6
             }
         ]
     }

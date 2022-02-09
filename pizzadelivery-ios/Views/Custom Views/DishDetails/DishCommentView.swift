@@ -13,7 +13,7 @@ class DishCommentView: UIView {
     
     private let commentLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 20)!, textColor: .black, numberOfLines: 0)
     
-    private let commentTextField: UITextField = {
+    let commentTextField: UITextField = {
         let commentTextField = UITextField()
         commentTextField.borderStyle = .bezel
         commentTextField.placeholder = "Ex: Tirar cebola, maionese à parte, ponto da carne, etc"

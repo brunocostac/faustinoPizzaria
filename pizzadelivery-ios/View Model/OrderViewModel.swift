@@ -7,6 +7,12 @@
 
 import Foundation
 
-class OrderViewModel {
-    
+struct OrderViewModel {
+    let order: Order
+}
+
+extension OrderViewModel {
+    init(_ order: Order) {
+        self.order = order
+    }
 }
