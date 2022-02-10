@@ -9,6 +9,10 @@ import UIKit
 
 class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
+    // MARK: - ViewModel
+    var orderViewModel: OrderViewModel?
+    var itemOrderListViewModel: ItemOrderListViewModel?
+    
     // MARK: - Views
     
     var coordinator: MenuBaseCoordinator?
@@ -29,6 +33,7 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initializeViewModels()
         setupViewConfiguration()
     }
     
@@ -39,6 +44,16 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initializeViewModels() {
+        let currentOrder = CoreDataHelper().fetchCurrentOrder()
+        if currentOrder == nil {
+            CoreDataHelper().createOrder()
+        } else {
+            orderViewModel = currentOrder
+            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+        }
     }
     
     // MARK: - Functions
@@ -130,10 +145,9 @@ extension PaymentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0:
-            return 1
+        case 0: return 1
         case 1:
-            return items.count + 1
+            return itemOrderListViewModel!.count + 1 ?? 0
         case 2:
             return 1
         default:
@@ -144,43 +158,43 @@ extension PaymentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "PaymentMethodTableViewCell", for: indexPath) as? PaymentMethodTableViewCell else {
+            guard let c0 = tableView.dequeueReusableCell(withIdentifier: "PaymentMethodTableViewCell", for: indexPath) as? PaymentMethodTableViewCell else {
                 return UITableViewCell()
             }
-            cell3.selectionStyle = .none
-            return cell3
+            c0.selectionStyle = .none
+            return c0
         case 1:
-            if (self.items.count) >= indexPath.row + 1 {
-                guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
+            if itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
+                guard let c1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
-                cell2.selectionStyle = .none
-                let itemInCart = self.items[indexPath.row]
-                cell2.itemNameLabel.text = itemInCart
-                cell2.itemTotalLabel.text = "R$ 46,20"
-                return cell2
+                c1.selectionStyle = .none
+                let itemInCart = itemOrderListViewModel?.itemOrderViewModel[indexPath.row]
+                c1.itemNameLabel.text = "\(String(describing: itemInCart!.quantity)) \(itemInCart!.name)"
+                c1.itemTotalLabel.text = "R$ \(String(describing: itemInCart!.price)) "
+                
+                return c1
             } else {
-                guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
+                guard let c2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                cell1.selectionStyle = .none
-                cell1.subTotalLabel.text = "Subtotal:"
-                cell1.subTotalValueLabel.text = "R$ 57,90"
-                cell1.feeLabel.text = "Taxa de entrega:"
-                cell1.feeValueLabel.text =  "R$ 4,00"
-                cell1.totalLabel.text = "Total:"
-                cell1.totalValueLabel.text = "R$ 62,90"
-                return cell1
+                c2.selectionStyle = .none
+                c2.subTotalLabel.text = "Subtotal:"
+                c2.subTotalValueLabel.text = "R$ \(itemOrderListViewModel!.totalPrice)"
+                c2.feeLabel.text = "Taxa de entrega:"
+                c2.feeValueLabel.text =  "R$ 0.00"
+                c2.totalLabel.text = "Total:"
+                c2.totalValueLabel.text = "R$ \(itemOrderListViewModel!.totalPrice)"
+                return c2
             }
         case 2:
-            guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
+            guard let c3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
-            cell3.selectionStyle = .none
-            cell3.placeDescriptionLabel.text = "Estrada dos Tres Rios 9000 - apt 908 - bl 2"
-            cell3.goToPaymentButton.setTitle("Concluir o pedido", for: .normal)
-            
-            return cell3
+            c3.selectionStyle = .none
+            c3.placeDescriptionLabel.text = "Estrada dos Tres Rios 9000 - apt 908 - bl 2"
+            c3.goToPaymentButton.setTitle("Concluir o pedido", for: .normal)
+            return c3
         default:
             return UITableViewCell()
         }

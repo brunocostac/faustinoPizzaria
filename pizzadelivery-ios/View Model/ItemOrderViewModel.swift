@@ -32,6 +32,10 @@ extension ItemOrderListViewModel {
         }
         return String(describing: total)
     }
+    
+    var count: Int {
+        return self.itemOrderViewModel.count
+    }
 }
 
 struct ItemOrderViewModel: Equatable, Decodable {
