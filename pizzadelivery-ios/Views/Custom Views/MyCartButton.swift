@@ -27,6 +27,12 @@ class MyCartButton: UIButton {
         fatalError("init(coder:) has not been implemeted")
     }
     
+    func configureLayout(quantity: String, totalPrice: String) {
+        myCartLabel.text = "Meu carrinho"
+        itemLabel.text = "\(Int(quantity)! == 1 ? "\(quantity) item" : " \(quantity) items")"
+        totalPriceLabel.text = "R$ \(totalPrice)"
+    }
+    
     // MARK: - Setup Constraints
     
     func setupButtonConstraints() {
@@ -76,8 +82,6 @@ extension MyCartButton: ViewConfiguration {
     
     func configureViews() {
         backgroundColor = .red
-        myCartLabel.text = "Meu carrinho"
-        itemLabel.text = "1 item"
-        totalPriceLabel.text = "R$ 35,90"
+        isHidden = true
     }
 }

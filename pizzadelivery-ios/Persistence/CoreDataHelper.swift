@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 class CoreDataHelper {
     private let coreDataStack = CoreDataStack.shared
@@ -15,36 +16,34 @@ class CoreDataHelper {
     
     public func createOrder() {
         let orderEntity = Order(context: self.coreDataStack.managedObjectContext)
-        
         orderEntity.isOpen = true
         orderEntity.orderId = UUID()
         coreDataStack.saveContext()
     }
     
-    public func fetchCurrentOrder() -> [Order]? {
+    public func fetchCurrentOrder() -> OrderViewModel? {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == true")
-        var order: [Order]? = []
-        
+        var orderVM: OrderViewModel?
         request.predicate = predicate
         request.fetchLimit = 1
         
         do {
-            order = try self.coreDataStack.managedObjectContext.fetch(request)
-            return order
+            let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
+            if orders != [] {
+                orderVM = OrderViewModel(orders[0])
+            }
         } catch {
             print("Error fetching data from context \(error)")
         }
-        return order
+        return orderVM
     }
     
     // MARK: - ItemOrder functions
     
     public func saveItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
-        let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
-        
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
-            
+            let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
             let predicateOne = NSPredicate(format: "itemId MATCHES %@", itemIdAsString)
             let predicateTwo = NSPredicate(format: "parentOrder == %@", currentOrder)
@@ -61,15 +60,12 @@ class CoreDataHelper {
             } catch {
                 print("Error fetching data from context \(error)")
             }
-            
         }
     }
     
     public func updateItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
-        let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
-        
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
-            
+            let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
             let predicateOne = NSPredicate(format: "(itemId MATCHES %@)", itemIdAsString)
             let predicateTwo = NSPredicate(format: "parentOrder == %@", currentOrder)
@@ -77,11 +73,11 @@ class CoreDataHelper {
             request.predicate = NSCompoundPredicate(type: .and, subpredicates: [predicateOne, predicateTwo])
             
             do {
-                let currentItem = try coreDataStack.managedObjectContext.fetch(request)
-                currentItem.first!.setValue(itemOrderViewModel!.price, forKey: "price")
-                currentItem.first!.setValue(itemOrderViewModel!.quantity, forKey: "quantity")
-                currentItem.first!.setValue(itemOrderViewModel!.name, forKey: "name")
-                currentItem.first!.setValue(itemOrderViewModel!.comment, forKey: "comment")
+                let itemEntity = try coreDataStack.managedObjectContext.fetch(request)
+                itemEntity.first!.setValue(itemOrderViewModel!.price, forKey: "price")
+                itemEntity.first!.setValue(itemOrderViewModel!.quantity, forKey: "quantity")
+                itemEntity.first!.setValue(itemOrderViewModel!.name, forKey: "name")
+                itemEntity.first!.setValue(itemOrderViewModel!.comment, forKey: "comment")
                 
                 coreDataStack.saveContext()
             } catch {
@@ -104,10 +100,8 @@ class CoreDataHelper {
     }
     
     public func removeItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
-        let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
-        
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
-            
+            let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
             let predicateOne = NSPredicate(format: "(itemId MATCHES %@)", itemIdAsString)
             let predicateTwo = NSPredicate(format: "parentOrder == %@", currentOrder)
@@ -124,28 +118,48 @@ class CoreDataHelper {
         }
     }
     
-    public func fetchCurrentItem(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?, completion: @escaping ([ItemOrderViewModel]) -> Void) {
+    public func fetchCurrentItem(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?) -> ItemOrderViewModel? {
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
         let currentItemId = String(describing: itemMenuViewModel!.itemMenu.itemId)
-        let currentOrder =  orderViewModel!.order
-        let predicateOne = NSPredicate(format: "(itemId MATCHES %@)", currentItemId)
-        let predicateTwo = NSPredicate(format: "parentOrder == %@", currentOrder)
-        request.predicate = NSCompoundPredicate(type: .and, subpredicates: [predicateOne, predicateTwo])
-        var itemOrderArray = [ItemOrderViewModel]()
+        var itemOrderVM: ItemOrderViewModel?
         
+        if let currentOrder = orderViewModel?.order {
+            let predicateOne = NSPredicate(format: "(itemId MATCHES %@)", currentItemId)
+            let predicateTwo = NSPredicate(format: "parentOrder == %@", currentOrder)
+            request.predicate = NSCompoundPredicate(type: .and, subpredicates: [predicateOne, predicateTwo])
+            
+            do {
+                let currentItem = try coreDataStack.managedObjectContext.fetch(request)
+                if currentItem != [] {
+                    itemOrderVM = ItemOrderViewModel(itemOrder: currentItem[0])
+                }
+            } catch {
+                print("Error fetching data from context \(error)")
+            }
+        }
+        return itemOrderVM
+    }
+    
+    public func fetchItemsCurrentOrder(orderViewModel: OrderViewModel?) -> ItemOrderListViewModel? {
+        let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
+        let currentOrder =  orderViewModel!.order
+        let predicate = NSPredicate(format: "parentOrder == %@", currentOrder)
+        var itemsVM = [ItemOrderViewModel]()
+        var itemOrderListVM: ItemOrderListViewModel?
+        request.predicate = predicate
+       
         do {
             let itemOrders: [ItemOrder] = try coreDataStack.managedObjectContext.fetch(request)
             if itemOrders != [] {
                 for itemOrder in itemOrders {
                     let viewModel = ItemOrderViewModel(itemOrder: itemOrder)
-                    itemOrderArray.append(viewModel)
-                    completion(itemOrderArray)
+                    itemsVM.append(viewModel)
                 }
-            } else {
-                completion([])
+                itemOrderListVM = ItemOrderListViewModel(itemsOrder: itemsVM)
             }
         } catch {
             print("Error fetching data from context \(error)")
         }
+        return itemOrderListVM
     }
 }

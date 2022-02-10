@@ -7,11 +7,30 @@
 
 import Foundation
 
-struct ItemOrderListViewModel {
+class ItemOrderListViewModel {
     var itemOrderViewModel: [ItemOrderViewModel]
     
-    init() {
-        self.itemOrderViewModel = [ItemOrderViewModel]()
+    init(itemsOrder: [ItemOrderViewModel]) {
+        self.itemOrderViewModel = itemsOrder
+    }
+}
+
+extension ItemOrderListViewModel {
+    
+    var totalPrice: String {
+        var total: Double = 0.0
+        for item in itemOrderViewModel {
+            total += Double(item.quantity) * item.price
+        }
+        return String(format: "%.2f", total)
+    }
+    
+    var quantity: String {
+        var total: Int = 0
+        for item in itemOrderViewModel {
+            total += Int(item.quantity)
+        }
+        return String(describing: total)
     }
 }
 

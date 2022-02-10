@@ -28,7 +28,7 @@ class MenuCoordinator: MenuBaseCoordinator {
         }
     }
     
-    private func handleMenuFlow<T: Any>(for screen: MenuScreen, data: T) {
+    private func handleMenuFlow<T: Any>(for screen: MenuScreen, data: T?) {
         switch screen {
         case .menuScreen:
             navigationRootViewController?.popToRootViewController(animated: true)
