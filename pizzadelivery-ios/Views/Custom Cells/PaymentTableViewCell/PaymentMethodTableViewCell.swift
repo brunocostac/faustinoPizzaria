@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol PaymentMethodTableViewCellDelegate: AnyObject {
+    func getPaymentSelected(id: String)
+}
+
 class PaymentMethodTableViewCell: UITableViewCell {
+    
+    weak var delegate: PaymentMethodTableViewCellDelegate?
     
     // MARK: - Views
     
@@ -51,11 +57,13 @@ class PaymentMethodTableViewCell: UITableViewCell {
     @objc func firstPaymentMethodWasSelected(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         paymentMethodTwoButton.isSelected = false
+        delegate?.getPaymentSelected(id: "0")
     }
     
     @objc func secondPaymentMethodWasSelected(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         paymentMethodOneButton.isSelected = false
+        delegate?.getPaymentSelected(id: "1")
     }
     
     // MARK: - Setup Constraints

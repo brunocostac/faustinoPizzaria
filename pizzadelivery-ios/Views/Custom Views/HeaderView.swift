@@ -13,7 +13,7 @@ class HeaderView: UIView {
     
     let addressLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .systemGray, numberOfLines: 0)
     
-    let timeLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .red, numberOfLines: 0)
+    let timeLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .green, numberOfLines: 0)
     
     let feeLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .gray, numberOfLines: 0)
     
@@ -34,8 +34,8 @@ class HeaderView: UIView {
     func setup() {
         nameLabel.text = "Pizza Lover - Freguesia"
         addressLabel.text = "Rua Araguaia 2000"
-        timeLabel.text = "⏱ Abre 18:00"
-        feeLabel.text = "Entrega a partir de R$ 4,00 ● 45m - 1h"
+        timeLabel.text = "⏱ Aberto"
+        feeLabel.text = "Entrega a partir de R$ 0,00 ● 45m - 1h"
     }
     
     override var intrinsicContentSize: CGSize {

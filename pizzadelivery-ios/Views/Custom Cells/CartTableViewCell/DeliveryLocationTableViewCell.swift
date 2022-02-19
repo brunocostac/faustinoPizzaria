@@ -8,7 +8,7 @@
 import UIKit
 
 protocol DeliveryLocationTableViewCellDelegate: AnyObject {
-    func goToPaymentScreen()
+    func goToNextScreen()
     func goToDeliveryLocationScreen()
 }
 
@@ -56,8 +56,8 @@ class DeliveryLocationTableViewCell: UITableViewCell {
         delegate?.goToDeliveryLocationScreen()
     }
     
-    @objc func goToPaymentButtonClicked() {
-        delegate?.goToPaymentScreen()
+    @objc func goToNextScreenButtonClicked() {
+        delegate?.goToNextScreen()
     }
     
     // MARK: - Setup Constraints
@@ -105,7 +105,7 @@ extension DeliveryLocationTableViewCell: ViewConfiguration {
     
     func configureViews() {
         backgroundColor = .white
-        goToPaymentButton.addTarget(self, action: #selector(goToPaymentButtonClicked), for: .touchUpInside)
+        goToPaymentButton.addTarget(self, action: #selector(goToNextScreenButtonClicked), for: .touchUpInside)
         editDeliveryLocationButton.addTarget(self, action: #selector(editDeliveryLocationButtonClicked), for: .touchUpInside)
     }
 }

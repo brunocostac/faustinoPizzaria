@@ -20,7 +20,7 @@ class LogoView: UIView {
     
     private let logoImage: UIImageView = {
         let logoImage = UIImageView(image: UIImage(named: "logoImage"))
-        logoImage.contentMode = .scaleAspectFill
+        logoImage.contentMode = .scaleAspectFit
         logoImage.clipsToBounds = true
         return logoImage
     }()

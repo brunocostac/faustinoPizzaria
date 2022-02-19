@@ -37,8 +37,8 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        initializeViewModels()
-        loadMenuDetails()
+        fetchOrder()
+        configureMenuDetails()
     }
     
     // MARK: - Initialization
@@ -53,11 +53,9 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func initializeViewModels() {
+    func fetchOrder() {
         let currentOrder = CoreDataHelper().fetchCurrentOrder()
-        if currentOrder == nil {
-            CoreDataHelper().createOrder()
-        } else {
+        if currentOrder != nil {
             orderViewModel = currentOrder
             itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
             itemOrderViewModel = CoreDataHelper().fetchCurrentItem(itemMenuViewModel: itemMenuViewModel, orderViewModel: orderViewModel)
@@ -65,14 +63,14 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     // MARK: - Functions
     
-    func loadMenuDetails() {
+    func configureMenuDetails() {
         if let itemMenuVM = itemMenuViewModel?.itemMenu {
             dishImageView.configureLayout(url: itemMenuVM.imageUrl)
             infoView.configureLayout(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price)
             quantityView.addToCartButton.setTitle("\(initialFlag.rawValue) R$ \(itemMenuVM.price)", for: .normal)
         }
         if let itemListVM = itemOrderListViewModel {
-            myCartButton.configureLayout(quantity: itemListVM.quantity, totalPrice: itemListVM.totalPrice)
+            myCartButton.configureLayout(quantity: itemListVM.quantity, totalPrice: itemListVM.total)
             myCartButton.isHidden = false
         }
         if let itemOrderVM = itemOrderViewModel {
@@ -227,7 +225,6 @@ extension DishDetailsViewController {
                                                 price: price!,
                                                 quantity: Int64(quantity!),
                                                 comment: comment)
-        
         if isToRemoveItem! {
             CoreDataHelper().removeItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
             goToHomeScreen()
@@ -266,12 +263,10 @@ extension DishDetailsViewController {
     }
     
     @objc func goToCartScreen() {
-        let date = Date()
-        coordinator?.moveTo(flow: .menu(.cartScreen), data: date)
+        coordinator?.moveTo(flow: .menu(.cartScreen), data: [])
     }
     
     @objc func goToHomeScreen() {
-        let date = Date()
-        coordinator?.moveTo(flow: .menu(.menuScreen), data: date)
+        coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
     }
 }

@@ -17,7 +17,7 @@ class ItemOrderListViewModel {
 
 extension ItemOrderListViewModel {
     
-    var totalPrice: String {
+    var total: String {
         var total: Double = 0.0
         for item in itemOrderViewModel {
             total += Double(item.quantity) * item.price
@@ -31,6 +31,14 @@ extension ItemOrderListViewModel {
             total += Int(item.quantity)
         }
         return String(describing: total)
+    }
+    
+    var itemsDescription: String {
+        var items = ""
+        for item in itemOrderViewModel {
+            items += "- \(item.quantity) \(item.name) "
+        }
+        return items
     }
     
     var count: Int {

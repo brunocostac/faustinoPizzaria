@@ -15,10 +15,22 @@ class CoreDataHelper {
     // MARK: - Order functions
     
     public func createOrder() {
+        let request: NSFetchRequest<Order> = Order.fetchRequest()
+        let predicate = NSPredicate(format: "isOpen == true")
         let orderEntity = Order(context: self.coreDataStack.managedObjectContext)
-        orderEntity.isOpen = true
-        orderEntity.orderId = UUID()
-        coreDataStack.saveContext()
+        request.predicate = predicate
+        request.fetchLimit = 1
+        
+        do {
+            let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
+            if orders == [] {
+                orderEntity.isOpen = true
+                orderEntity.orderId = UUID()
+                coreDataStack.saveContext()
+            }
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
     }
     
     public func fetchCurrentOrder() -> OrderViewModel? {
@@ -37,6 +49,42 @@ class CoreDataHelper {
             print("Error fetching data from context \(error)")
         }
         return orderVM
+    }
+    
+    public func updateOrder(orderViewModel: OrderViewModel?) {
+        if orderViewModel != nil {
+            let request: NSFetchRequest<Order> = Order.fetchRequest()
+            request.fetchLimit = 1
+            do {
+                try self.coreDataStack.managedObjectContext.fetch(request)
+                coreDataStack.saveContext()
+            } catch {
+                print("Error fetching data from context \(error)")
+            }
+        }
+    }
+    
+    public func fetchOrders() -> OrderListViewModel? {
+        let request: NSFetchRequest<Order> = Order.fetchRequest()
+        let predicate = NSPredicate(format: "isOpen == false")
+        var orderListVM: OrderListViewModel?
+        var orderVM = [OrderViewModel]()
+        
+        request.predicate = predicate
+        
+        do {
+            let orders: [Order] = try coreDataStack.managedObjectContext.fetch(request)
+            if orders != [] {
+                for order in orders {
+                    let viewModel = OrderViewModel(order: order)
+                    orderVM.append(viewModel)
+                }
+                orderListVM = OrderListViewModel(orders: orderVM)
+            }
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+        return orderListVM
     }
     
     // MARK: - ItemOrder functions
@@ -88,7 +136,6 @@ class CoreDataHelper {
     
     public func createItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
         let itemEntity = ItemOrder(context: coreDataStack.managedObjectContext)
-        
         itemEntity.name = itemOrderViewModel!.name
         itemEntity.price = itemOrderViewModel!.price
         itemEntity.itemId = itemOrderViewModel!.itemId
@@ -142,23 +189,25 @@ class CoreDataHelper {
     
     public func fetchItemsCurrentOrder(orderViewModel: OrderViewModel?) -> ItemOrderListViewModel? {
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
-        let currentOrder =  orderViewModel!.order
-        let predicate = NSPredicate(format: "parentOrder == %@", currentOrder)
-        var itemsVM = [ItemOrderViewModel]()
         var itemOrderListVM: ItemOrderListViewModel?
-        request.predicate = predicate
-       
-        do {
-            let itemOrders: [ItemOrder] = try coreDataStack.managedObjectContext.fetch(request)
-            if itemOrders != [] {
-                for itemOrder in itemOrders {
-                    let viewModel = ItemOrderViewModel(itemOrder: itemOrder)
-                    itemsVM.append(viewModel)
+        if let currentOrder = orderViewModel?.order {
+            let predicate = NSPredicate(format: "parentOrder == %@", currentOrder)
+            var itemsVM = [ItemOrderViewModel]()
+
+            request.predicate = predicate
+           
+            do {
+                let itemOrders: [ItemOrder] = try coreDataStack.managedObjectContext.fetch(request)
+                if itemOrders != [] {
+                    for itemOrder in itemOrders {
+                        let viewModel = ItemOrderViewModel(itemOrder: itemOrder)
+                        itemsVM.append(viewModel)
+                    }
+                    itemOrderListVM = ItemOrderListViewModel(itemsOrder: itemsVM)
                 }
-                itemOrderListVM = ItemOrderListViewModel(itemsOrder: itemsVM)
+            } catch {
+                print("Error fetching data from context \(error)")
             }
-        } catch {
-            print("Error fetching data from context \(error)")
         }
         return itemOrderListVM
     }

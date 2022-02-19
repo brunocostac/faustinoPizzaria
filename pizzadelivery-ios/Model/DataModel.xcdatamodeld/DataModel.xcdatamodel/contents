@@ -14,7 +14,8 @@
         <attribute name="dateCompletion" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dateWasRequest" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isOpen" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="orderId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="neighborhood" optional="YES" attributeType="String"/>
+        <attribute name="orderId" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="paymentMethod" optional="YES" attributeType="String"/>
         <attribute name="subTotal" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="total" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -22,6 +23,6 @@
     </entity>
     <elements>
         <element name="ItemOrder" positionX="-54" positionY="-9" width="128" height="119"/>
-        <element name="Order" positionX="-244.025146484375" positionY="-12.9927978515625" width="128" height="193"/>
+        <element name="Order" positionX="-244.025146484375" positionY="-12.9927978515625" width="128" height="208"/>
     </elements>
 </model>

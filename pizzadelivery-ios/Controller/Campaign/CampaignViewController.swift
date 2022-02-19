@@ -15,6 +15,20 @@ class CampaignViewController: UIViewController, CampaignBaseCoordinated {
     
     private let logoView = LogoView()
     
+    private let firstPromotionalCampaign: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "promo1"))
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        return image
+    }()
+    
+    private let secondPromotionalCampaign: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "promo2"))
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        return image
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewConfiguration()
@@ -35,22 +49,30 @@ class CampaignViewController: UIViewController, CampaignBaseCoordinated {
 
 extension CampaignViewController: ViewConfiguration {
     func setupConstraints() {
-        logoView.translatesAutoresizingMaskIntoConstraints = false
-               
+        firstPromotionalCampaign.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            logoView.heightAnchor.constraint(equalToConstant: 140)
+            firstPromotionalCampaign.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            firstPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            firstPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            firstPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
+        ])
+        
+        secondPromotionalCampaign.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            secondPromotionalCampaign.topAnchor.constraint(equalTo: firstPromotionalCampaign.bottomAnchor, constant: 0),
+            secondPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            secondPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            secondPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
     
     func buildViewHierarchy() {
-        view.addSubview(logoView)
+        view.addSubview(firstPromotionalCampaign)
+        view.addSubview(secondPromotionalCampaign)
     }
     
     func configureViews() {
         view.backgroundColor = .white
-        title = "Promoção"
+        title = "Promoções"
     }
 }

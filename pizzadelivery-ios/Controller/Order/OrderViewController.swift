@@ -10,7 +10,7 @@ import UIKit
 class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     // MARK: - View Models
-    var orders = [Order]()
+    var orderListViewModel: OrderListViewModel?
     
     // MARK: - Views
     
@@ -26,14 +26,24 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     }()
     
     // MARK: - Life Cycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewConfiguration()
-        initializeOrders()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        fetchOrders()
+        configureTableView()
     }
     
     // MARK: - Initialization
+    
+    func fetchOrders() {
+        if let orders = CoreDataHelper().fetchOrders() {
+            orderListViewModel = orders
+        }
+    }
     
     required init(coordinator: OrderBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
@@ -46,31 +56,13 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     // MARK: - Functions
     
-    private func initializeOrders() {
-        /*orders.append(Order(items:
-        //[ItemOrder(name: "Magueritta 30cm",
-            itemId: "32",
-            quantity: 1,
-            price: 35.95,
-            comment:"A"),
-        // ItemOrder(name: "Calabresa 30cm",
-             itemId: "34",
-             quantity: 2,
-             price: 31.95,
-             comment: "B")],
-         address: "Estrada dos Tres Rios 9000 - apt 908 - bl 2",
-         status: "Finalizado",
-         subTotal: 67.95, total: 71.95, paymentMethod: "dinheiro",
-         orderId: 32, customerName: "Bruno", dateWasRequest: "21/01/2022 ás 17:33",
-         dateCompletion: "21/01/2022 ás 18:32"))*/
-    }
-    
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
         tableView.rowHeight = 100.0
         tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.reloadData()
     }
     
     // MARK: - Setup Constraints
@@ -114,8 +106,6 @@ extension OrderViewController: ViewConfiguration {
     
     func configureViews() {
         view.backgroundColor = .white
-        title = "Pedidos"
-        configureTableView()
     }
 }
 
@@ -153,16 +143,24 @@ extension OrderViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return orders.count
+        return orderListViewModel?.orderViewModel.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? OrderTableViewCell else {
             return UITableViewCell()
         }
-       // cell.titleLabel.text = "\(orders[indexPath.row].status) - Entregue às \(orders[indexPath.row].dateCompletion)"
-      //  cell.descriptionLabel.text = "\(orders[indexPath.row].items[indexPath.row].quantity) \(orders[indexPath.row].items[indexPath.row].name)"
-        cell.priceLabel.text = "R$ \(orders[indexPath.row].total)"
+        
+        if let orderListVM = self.orderListViewModel?.orderViewModel(at: indexPath.row) {
+            if let dateWasRequest = orderListVM.order.dateWasRequest {
+                cell.titleLabel.text = "Data do pedido: \(String(describing: dateWasRequest.getFormattedDate(format: "dd-MM-yyyy HH:mm:ss")))"
+            }
+        }
+        
+        if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderListViewModel?.orderViewModel[indexPath.row]) {
+            cell.descriptionLabel.text = "\(itemOrderListVM.itemsDescription)"
+            cell.priceLabel.text = "Valor Total: R$ \(itemOrderListVM.total)"
+        }
         return cell
     }
 }

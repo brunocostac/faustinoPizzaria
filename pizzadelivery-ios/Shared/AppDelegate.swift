@@ -15,7 +15,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
         print(dataFilePath)
         // MARK: UITabBar Customization
     
-        UITabBar.appearance().tintColor = .red
+        UITabBar.appearance().tintColor = .black
         UITabBar.appearance().backgroundColor = .white
         UITabBar.appearance().isTranslucent = false
         return true

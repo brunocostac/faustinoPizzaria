@@ -25,7 +25,7 @@ class MainCoordinator: MainBaseCoordinator {
         
         let campaignViewController = campaignCoordinator.start()
         campaignCoordinator.parentCoordinator = self
-        campaignViewController.tabBarItem = UITabBarItem(title: "Promoção", image: UIImage(systemName: "tag"), tag: 1)
+        campaignViewController.tabBarItem = UITabBarItem(title: "Promoções", image: UIImage(systemName: "tag"), tag: 1)
         
         let orderViewController = orderCoordinator.start()
         orderCoordinator.parentCoordinator = self

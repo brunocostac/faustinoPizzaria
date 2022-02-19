@@ -62,7 +62,8 @@ class TotalPriceTableViewCell: UITableViewCell {
     func setupDeliveryFeeValueLabelConstraints() {
         feeValueLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            feeValueLabel.firstBaselineAnchor.constraint(equalTo: feeLabel.firstBaselineAnchor),      feeValueLabel.leadingAnchor.constraint(equalTo: feeLabel.trailingAnchor, constant: 10)
+            feeValueLabel.firstBaselineAnchor.constraint(equalTo: feeLabel.firstBaselineAnchor),
+            feeValueLabel.leadingAnchor.constraint(equalTo: feeLabel.trailingAnchor, constant: 10)
         ])
     }
     

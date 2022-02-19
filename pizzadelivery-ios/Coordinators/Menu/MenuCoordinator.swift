@@ -37,7 +37,7 @@ class MenuCoordinator: MenuBaseCoordinator {
             let itemVM = ItemMenuViewModel(itemMenu)
             goToDishDetailsScreenWith(itemVM)
         case .cartScreen:
-            goToCartScreenWith()
+            goToCartScreen()
         case .paymentScreen:
             goToPaymentScreen()
         case .deliveryLocationScreen:
@@ -51,7 +51,7 @@ class MenuCoordinator: MenuBaseCoordinator {
         navigationRootViewController?.pushViewController(dishDetailsViewController, animated: true)
     }
     
-    func goToCartScreenWith() {
+    func goToCartScreen() {
         let cartViewController = CartViewController(coordinator: self)
         navigationRootViewController?.pushViewController(cartViewController, animated: true)
     }

@@ -31,6 +31,16 @@ class DeliveryLocationView: UIView {
         return textField
     }()
     
+    let customerNameTextField: UITextField = {
+        let textField = UITextField()
+        textField.layer.cornerRadius = 4
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.placeholder = "Nome de quem vai receber"
+        textField.textAlignment = .center
+        return textField
+    }()
+    
     let saveLocationDeliveryButton: UIButton = {
         let button = UIButton()
         button.setTitle("Salvar", for: .normal)
@@ -75,11 +85,22 @@ class DeliveryLocationView: UIView {
         ])
     }
     
+    func setupCustomerTextFieldConstraints() {
+        customerNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            customerNameTextField.topAnchor.constraint(equalTo: neighborhoodTextField.bottomAnchor, constant: 10),
+            customerNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            customerNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            customerNameTextField.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
+    
     func setupSaveLocationDeliveryButtonConstraints() {
         saveLocationDeliveryButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            saveLocationDeliveryButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
+            saveLocationDeliveryButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40),
             saveLocationDeliveryButton.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
     }
@@ -89,12 +110,14 @@ extension DeliveryLocationView: ViewConfiguration {
     func setupConstraints() {
         setupAddressTextFieldConstraints()
         setupNeighborhoodTextFieldConstraints()
+        setupCustomerTextFieldConstraints()
         setupSaveLocationDeliveryButtonConstraints()
     }
     
     func buildViewHierarchy() {
         addSubview(addressTextField)
         addSubview(neighborhoodTextField)
+        addSubview(customerNameTextField)
         addSubview(saveLocationDeliveryButton)
     }
     

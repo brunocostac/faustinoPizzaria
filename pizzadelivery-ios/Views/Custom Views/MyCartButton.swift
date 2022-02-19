@@ -29,7 +29,7 @@ class MyCartButton: UIButton {
     
     func configureLayout(quantity: String, totalPrice: String) {
         myCartLabel.text = "Meu carrinho"
-        itemLabel.text = "\(Int(quantity)! == 1 ? "\(quantity) item" : " \(quantity) items")"
+        itemLabel.text = "\(Int(quantity)! == 1 ? "\(quantity) item" : " \(quantity) itens")"
         totalPriceLabel.text = "R$ \(totalPrice)"
     }
     

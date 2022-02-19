@@ -9,9 +9,12 @@ import UIKit
 
 class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
-    // MARK: - ViewModel
+    // MARK: - ViewModels
     var orderViewModel: OrderViewModel?
     var itemOrderListViewModel: ItemOrderListViewModel?
+    
+    // MARK: - Variables
+    var paymentSelected: String?
     
     // MARK: - Views
     
@@ -26,15 +29,16 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         return tableView
     }()
     
-    // MARK: - ViewModel
-    let items = ["1 Magueritta 30 CM", "10 Cerveja Império", "1 Mussarela 30CM"]
-    
     // MARK: - Initialization
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeViewModels()
         setupViewConfiguration()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        fetchOrder()
+        configureTableView()
     }
     
     required init(coordinator: MenuBaseCoordinator) {
@@ -46,13 +50,12 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func initializeViewModels() {
-        let currentOrder = CoreDataHelper().fetchCurrentOrder()
-        if currentOrder == nil {
-            CoreDataHelper().createOrder()
-        } else {
+    func fetchOrder() {
+        if let currentOrder = CoreDataHelper().fetchCurrentOrder() {
             orderViewModel = currentOrder
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+            if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel) {
+                itemOrderListViewModel = itemOrderListVM
+            }
         }
     }
     
@@ -66,6 +69,7 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
         tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
+        tableView.reloadData()
     }
 
     // MARK: - Setup Constraints
@@ -108,8 +112,6 @@ extension PaymentViewController: ViewConfiguration {
     
     func configureViews() {
         view.backgroundColor = .white
-        configureTableView()
-        title = "Pagamento"
     }
 }
 
@@ -145,9 +147,10 @@ extension PaymentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 1
+        case 0:
+            return 1
         case 1:
-            return itemOrderListViewModel!.count + 1 ?? 0
+            return itemOrderListViewModel!.count + 1
         case 2:
             return 1
         default:
@@ -158,45 +161,78 @@ extension PaymentViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            guard let c0 = tableView.dequeueReusableCell(withIdentifier: "PaymentMethodTableViewCell", for: indexPath) as? PaymentMethodTableViewCell else {
+            guard let cell0 = tableView.dequeueReusableCell(withIdentifier: "PaymentMethodTableViewCell", for: indexPath) as? PaymentMethodTableViewCell else {
                 return UITableViewCell()
             }
-            c0.selectionStyle = .none
-            return c0
+            cell0.delegate = self
+            cell0.selectionStyle = .none
+            return cell0
         case 1:
             if itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
-                guard let c1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
+                guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
-                c1.selectionStyle = .none
+                cell1.selectionStyle = .none
                 let itemInCart = itemOrderListViewModel?.itemOrderViewModel[indexPath.row]
-                c1.itemNameLabel.text = "\(String(describing: itemInCart!.quantity)) \(itemInCart!.name)"
-                c1.itemTotalLabel.text = "R$ \(String(describing: itemInCart!.price)) "
+                cell1.itemNameLabel.text = "\(String(describing: itemInCart!.quantity)) \(itemInCart!.name)"
+                cell1.itemTotalLabel.text = "R$ \(String(describing: itemInCart!.price)) "
                 
-                return c1
+                return cell1
             } else {
-                guard let c2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
+                guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                c2.selectionStyle = .none
-                c2.subTotalLabel.text = "Subtotal:"
-                c2.subTotalValueLabel.text = "R$ \(itemOrderListViewModel!.totalPrice)"
-                c2.feeLabel.text = "Taxa de entrega:"
-                c2.feeValueLabel.text =  "R$ 0.00"
-                c2.totalLabel.text = "Total:"
-                c2.totalValueLabel.text = "R$ \(itemOrderListViewModel!.totalPrice)"
-                return c2
+                cell2.selectionStyle = .none
+                cell2.subTotalLabel.text = "Subtotal:"
+                cell2.subTotalValueLabel.text = "R$ \(itemOrderListViewModel!.total)"
+                cell2.feeLabel.text = "Taxa de entrega:"
+                cell2.feeValueLabel.text =  "R$ 0.00"
+                cell2.totalLabel.text = "Total:"
+                cell2.totalValueLabel.text = "R$ \(itemOrderListViewModel!.total)"
+                return cell2
             }
         case 2:
-            guard let c3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
+            guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
-            c3.selectionStyle = .none
-            c3.placeDescriptionLabel.text = "Estrada dos Tres Rios 9000 - apt 908 - bl 2"
-            c3.goToPaymentButton.setTitle("Concluir o pedido", for: .normal)
-            return c3
+            if let address = orderViewModel?.order.address {
+                cell3.placeDescriptionLabel.text = "\(address)"
+            } else {
+                cell3.placeDescriptionLabel.text = "Não existe endereço cadastrado"
+            }
+            cell3.selectionStyle = .none
+            cell3.delegate = self
+            cell3.goToPaymentButton.setTitle("Concluir o pedido", for: .normal)
+            return cell3
         default:
             return UITableViewCell()
         }
+    }
+}
+extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
+    func goToNextScreen() {
+        if let itemListOrderVM = itemOrderListViewModel {
+            orderViewModel?.order.total = Double(itemListOrderVM.total)!
+            orderViewModel?.order.dateWasRequest = Date()
+            orderViewModel?.order.subTotal = Double(itemListOrderVM.total)!
+            orderViewModel?.order.paymentMethod = "1"
+            orderViewModel?.order.isOpen = false
+            orderViewModel?.order.paymentMethod = paymentSelected
+        }
+        CoreDataHelper().updateOrder(orderViewModel: orderViewModel)
+        goToMenuScreen()
+    }
+    func goToMenuScreen() {
+        coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
+    }
+    
+    func goToDeliveryLocationScreen() {
+        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
+    }
+}
+
+extension PaymentViewController: PaymentMethodTableViewCellDelegate {
+    func getPaymentSelected(id: String) {
+        paymentSelected = id
     }
 }

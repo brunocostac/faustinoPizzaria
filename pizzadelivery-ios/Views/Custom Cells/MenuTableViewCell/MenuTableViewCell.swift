@@ -17,11 +17,11 @@ class MenuTableViewCell: UITableViewCell {
         return dishImage
     }()
     
-    let titleLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 16)!, textColor: .black, numberOfLines: 1)
+    let titleLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 16)!, textColor: .black, numberOfLines: 1)
     
     let descriptionLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .gray, numberOfLines: 2)
     
-    let priceLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 18)!, textColor: .black, numberOfLines: 0)
+    let priceLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 16)!, textColor: .black, numberOfLines: 0)
     
     // MARK: - Initialization
     
