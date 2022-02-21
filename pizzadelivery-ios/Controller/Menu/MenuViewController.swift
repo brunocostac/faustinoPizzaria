@@ -37,9 +37,11 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         fetchMenu()
         fetchOrder()
         loadCartButton()
-        myCartButton.isHidden = true
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        myCartButton.isHidden = true
+    }
     // MARK: - Initialization
     
     required init(coordinator: MenuBaseCoordinator) {
