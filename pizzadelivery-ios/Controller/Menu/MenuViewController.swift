@@ -37,9 +37,6 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         fetchMenu()
         fetchOrder()
         loadCartButton()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
         myCartButton.isHidden = true
     }
     
@@ -59,7 +56,10 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     private func fetchMenu() {
         MockApiClient().fetchMenu { [self] (_, menuData) in
             self.menuListViewModel.menuViewModel = menuData.map(MenuViewModel.init)
-            self.tableView.reloadData()
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -73,6 +73,12 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         if currentOrder != nil {
             orderViewModel = currentOrder
             itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+        }
+    }
+    
+    func createOrder() {
+        if orderViewModel == nil {
+            CoreDataHelper().createOrder()
         }
     }
     
@@ -221,12 +227,6 @@ extension MenuViewController: UITableViewDataSource {
 // MARK: - User Actions
 
 extension MenuViewController {
-    
-    func createOrder() {
-        if orderViewModel == nil {
-            CoreDataHelper().createOrder()
-        }
-    }
     
     func goToDishDetailsScreen(item: ItemMenu) {
         createOrder()

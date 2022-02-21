@@ -24,15 +24,14 @@ class CampaignCoordinator: CampaignBaseCoordinator {
         case .campaign(let screen):
             handleCampaignFlow(for: screen, data: data)
         default:
-            let date = Date()
-            parentCoordinator?.moveTo(flow: flow, data: date)
+            parentCoordinator?.moveTo(flow: flow, data: [])
         }
     }
     
     private func handleCampaignFlow<T: Any>(for screen: CampaignScreen, data: T) {
         switch screen {
         case .campaignScreen:
-            print("OK")
+            break
         }
     }
     

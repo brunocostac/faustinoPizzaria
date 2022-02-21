@@ -17,7 +17,9 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     var coordinator: MenuBaseCoordinator?
     
     private let logoView = LogoView()
+    
     private let tableHeaderView = HeaderView()
+    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         return tableView

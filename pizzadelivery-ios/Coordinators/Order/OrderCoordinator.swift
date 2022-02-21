@@ -31,11 +31,11 @@ class OrderCoordinator: OrderBaseCoordinator {
     private func handleOrderFlow<T: Any>(for screen: OrderScreen, data: T) {
         switch screen {
         case .lastOrdersScreen:
-            print("Ok")
+            break
         case .detailsScreen:
-            print("Ok")
+            break
         case .confirmationScreen:
-            print("Ok")
+            break
         }
     }
     

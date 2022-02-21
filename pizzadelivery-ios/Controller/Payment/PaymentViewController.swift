@@ -209,13 +209,15 @@ extension PaymentViewController: UITableViewDataSource {
         }
     }
 }
+
+// MARK: - User Actions
+
 extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
     func goToNextScreen() {
         if let itemListOrderVM = itemOrderListViewModel {
             orderViewModel?.order.total = Double(itemListOrderVM.total)!
             orderViewModel?.order.dateWasRequest = Date()
             orderViewModel?.order.subTotal = Double(itemListOrderVM.total)!
-            orderViewModel?.order.paymentMethod = "1"
             orderViewModel?.order.isOpen = false
             orderViewModel?.order.paymentMethod = paymentSelected
         }
@@ -230,6 +232,8 @@ extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
         coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
     }
 }
+
+// MARK: - PaymentMethodTableViewCellDelegate
 
 extension PaymentViewController: PaymentMethodTableViewCellDelegate {
     func getPaymentSelected(id: String) {

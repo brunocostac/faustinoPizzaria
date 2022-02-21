@@ -39,11 +39,11 @@ class MainCoordinator: MainBaseCoordinator {
     func moveTo<T>(flow: AppFlow, data: T ) { 
         switch flow {
         case .menu:
-           print("ok")
+            break
         case .campaign:
-           print("ok")
+            break
         case .order:
-           print("ok")
+            break
         }
     }
 }
