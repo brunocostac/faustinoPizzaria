@@ -19,6 +19,14 @@ extension MenuListViewModel {
     func menuViewModel(at section: Int) -> MenuViewModel {
         return menuViewModel[section]
     }
+
+    var numberOfSections: Int {
+        return menuViewModel.count
+    }
+    
+    func numberOfRowsInSection(_ section: Int) -> Int {
+        return self.menuViewModel[section].items.count
+    }
 }
 
 struct MenuViewModel {
@@ -32,5 +40,10 @@ extension MenuViewModel {
     
     var items: [ItemMenu] {
         return self.menu.items
+    }
+    
+    func itemMenuAtIndex(_ index: Int) -> ItemMenuViewModel {
+        let itemMenu = self.menu.items[index]
+        return ItemMenuViewModel(itemMenu: itemMenu)
     }
 }

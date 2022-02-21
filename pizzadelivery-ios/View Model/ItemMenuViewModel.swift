@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct ItemMenuViewModel {
     let itemMenu: ItemMenu
@@ -14,5 +15,23 @@ struct ItemMenuViewModel {
 extension ItemMenuViewModel {
     init(_ itemMenu: ItemMenu) {
         self.itemMenu = itemMenu
+    }
+}
+
+extension ItemMenuViewModel {
+    var name: String {
+        return self.itemMenu.name
+    }
+    
+    var description: String {
+        return self.itemMenu.description
+    }
+    
+    var image: UIImage {
+        return UIImage(named: self.itemMenu.imageUrl)!
+    }
+    
+    var price: String {
+        return "R$ \(self.itemMenu.price)"
     }
 }

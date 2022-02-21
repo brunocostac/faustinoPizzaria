@@ -23,11 +23,7 @@ extension OrderListViewModel {
 
 extension OrderListViewModel {
     var count: Int {
-        if self.orderViewModel != nil {
-            return self.orderViewModel.count
-        } else {
-            return 0
-        }
+        return self.orderViewModel.count
     }
 }
 

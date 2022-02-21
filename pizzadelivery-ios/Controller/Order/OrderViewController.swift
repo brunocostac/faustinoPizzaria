@@ -10,16 +10,14 @@ import UIKit
 class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     // MARK: - View Models
+    
     var orderListViewModel: OrderListViewModel?
     
     // MARK: - Views
     
     var coordinator: OrderBaseCoordinator?
-    
     private let logoView = LogoView()
-    
     private let tableHeaderView = HeaderView()
-    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         return tableView
@@ -40,8 +38,18 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     // MARK: - Initialization
     
     func fetchOrders() {
-        if let orders = CoreDataHelper().fetchOrders() {
-            orderListViewModel = orders
+        CoreDataHelper().fetchOrders { [self] orders in
+            var orderVM = [OrderViewModel]()
+            if let orders = orders {
+                for order in orders {
+                    let viewModel = OrderViewModel(order: order)
+                    orderVM.append(viewModel)
+                }
+                orderListViewModel = OrderListViewModel(orders: orderVM)
+            }
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
     
@@ -62,10 +70,10 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
         tableView.tableHeaderView = tableHeaderView
         tableView.rowHeight = 100.0
         tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.reloadData()
     }
     
     // MARK: - Setup Constraints
+    
     private func setupLogoViewConstraints() {
         logoView.translatesAutoresizingMaskIntoConstraints = false
         

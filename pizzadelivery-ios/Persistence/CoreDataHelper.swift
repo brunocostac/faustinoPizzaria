@@ -33,22 +33,22 @@ class CoreDataHelper {
         }
     }
     
-    public func fetchCurrentOrder() -> OrderViewModel? {
+    public func fetchCurrentOrder(completion: @escaping (Order?) -> Void) {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == true")
-        var orderVM: OrderViewModel?
+        var order: Order?
         request.predicate = predicate
         request.fetchLimit = 1
         
         do {
             let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
             if orders != [] {
-                orderVM = OrderViewModel(orders[0])
+                order = orders[0]
             }
         } catch {
             print("Error fetching data from context \(error)")
         }
-        return orderVM
+        completion(order)
     }
     
     public func updateOrder(orderViewModel: OrderViewModel?) {
@@ -64,27 +64,20 @@ class CoreDataHelper {
         }
     }
     
-    public func fetchOrders() -> OrderListViewModel? {
+    public func fetchOrders(completion: @escaping ([Order]?) -> Void) {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == false")
-        var orderListVM: OrderListViewModel?
-        var orderVM = [OrderViewModel]()
+        var orderList = [Order]()
         
         request.predicate = predicate
         
         do {
             let orders: [Order] = try coreDataStack.managedObjectContext.fetch(request)
-            if orders != [] {
-                for order in orders {
-                    let viewModel = OrderViewModel(order: order)
-                    orderVM.append(viewModel)
-                }
-                orderListVM = OrderListViewModel(orders: orderVM)
-            }
+            orderList = orders
         } catch {
             print("Error fetching data from context \(error)")
         }
-        return orderListVM
+        completion(orderList)
     }
     
     // MARK: - ItemOrder functions

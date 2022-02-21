@@ -10,20 +10,19 @@ import UIKit
 class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModels
+    
     var orderViewModel: OrderViewModel?
     var itemOrderListViewModel: ItemOrderListViewModel?
     
     // MARK: - Variables
+    
     var paymentSelected: String?
     
     // MARK: - Views
     
     var coordinator: MenuBaseCoordinator?
-    
     private let logoView = LogoView()
-    
     private let tableHeaderView = HeaderView()
-    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         return tableView
@@ -51,14 +50,20 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     }
     
     func fetchOrder() {
-        if let currentOrder = CoreDataHelper().fetchCurrentOrder() {
-            orderViewModel = currentOrder
-            if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel) {
-                itemOrderListViewModel = itemOrderListVM
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+                self.fetchItems()
             }
         }
     }
     
+    func fetchItems() {
+        if orderViewModel != nil {
+            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+        }
+    }
+   
     // MARK: - Functions
     
     private func configureTableView() {
@@ -69,7 +74,6 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
         tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
-        tableView.reloadData()
     }
 
     // MARK: - Setup Constraints

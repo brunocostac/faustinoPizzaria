@@ -29,21 +29,6 @@ final class MockApiClient: Api {
         
     }
     
-    func fetchPromotionalCampaign(completion: @escaping (Bool, [Menu]) -> Void) {
-        
-        let filePath = "promotionalCampaign"
-        MockApiClient.loadJsonDataFromFile(filePath, completion: { data in
-            if let json = data {
-                do {
-                   // let menuData = try JSONDecoder().decode([Menu].self, from: json)
-                   // completion(true, menuData)
-                } catch _ as NSError {
-                    fatalError("Couldn't load data from \(filePath)")
-                }
-            }
-        })
-    }
-    
     private static func loadJsonDataFromFile(_ path: String, completion: (Data?) -> Void) {
         if let fileUrl = Bundle.main.url(forResource: path, withExtension: "json") {
             do {

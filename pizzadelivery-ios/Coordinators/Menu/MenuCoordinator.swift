@@ -33,9 +33,8 @@ class MenuCoordinator: MenuBaseCoordinator {
         case .menuScreen:
             navigationRootViewController?.popToRootViewController(animated: true)
         case .dishDetailsScreen:
-            guard let itemMenu = data as? ItemMenu else { return }
-            let itemVM = ItemMenuViewModel(itemMenu)
-            goToDishDetailsScreenWith(itemVM)
+            guard let itemMenuVM = data as? ItemMenuViewModel else { return }
+            goToDishDetailsScreenWith(itemMenuVM)
         case .cartScreen:
             goToCartScreen()
         case .paymentScreen:

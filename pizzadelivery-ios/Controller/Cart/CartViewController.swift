@@ -10,16 +10,15 @@ import UIKit
 class CartViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
-    var orderViewModel: OrderViewModel?
-    var itemOrderListViewModel: ItemOrderListViewModel?
+    
+    private var orderViewModel: OrderViewModel?
+    private var itemOrderListViewModel: ItemOrderListViewModel?
     
     // MARK: - Views
+    
     var coordinator: MenuBaseCoordinator?
-    
     private let logoView = LogoView()
-    
     private let tableHeaderView = HeaderView()
-    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         return tableView
@@ -36,7 +35,7 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
         fetchOrder()
         configureTableView()
     }
-
+    
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
@@ -47,11 +46,21 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     }
     
     func fetchOrder() {
-        if let currentOrder = CoreDataHelper().fetchCurrentOrder() {
-            orderViewModel = currentOrder
-            if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel) {
-                itemOrderListViewModel = itemOrderListVM
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+                self.fetchItems(self.orderViewModel!)
             }
+        }
+    }
+    
+    func fetchItems(_ orderViewModel: OrderViewModel) {
+        if let items = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel) {
+            itemOrderListViewModel = items
+        }
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
     
@@ -142,7 +151,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return itemOrderListViewModel!.count + 1 ?? 1
+            return itemOrderListViewModel!.count + 1  ?? 0
         case 1:
             return 1
         default:

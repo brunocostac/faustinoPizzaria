@@ -11,9 +11,9 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
     
-    var menuListViewModel = MenuListViewModel()
-    var orderViewModel: OrderViewModel?
-    var itemOrderListViewModel: ItemOrderListViewModel?
+    private var menuListViewModel = MenuListViewModel()
+    private var orderViewModel: OrderViewModel?
+    private var itemOrderListViewModel: ItemOrderListViewModel?
     
     // MARK: - Views
     
@@ -33,9 +33,9 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         setupViewConfiguration()
     }
     override func viewDidAppear(_ animated: Bool) {
-        clearViewModels()
         fetchMenu()
         fetchOrder()
+        fetchItems()
         loadCartButton()
     }
     
@@ -56,24 +56,23 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     // MARK: - Functions
     
     private func fetchMenu() {
-        MockApiClient().fetchMenu { [self] (_, menuData) in
+        MockApiClient().fetchMenu { (_, menuData) in
             self.menuListViewModel.menuViewModel = menuData.map(MenuViewModel.init)
-            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
     }
     
-    func clearViewModels() {
-        orderViewModel = nil
-        itemOrderListViewModel = nil
-    }
-    
     func fetchOrder() {
-        let currentOrder = CoreDataHelper().fetchCurrentOrder()
-        if currentOrder != nil {
-            orderViewModel = currentOrder
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
+    }
+    func fetchItems() {
+        if orderViewModel != nil {
             itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
         }
     }
@@ -85,9 +84,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     
     func loadCartButton() {
-        myCartButton.isHidden = true
-        if let itemListVM = itemOrderListViewModel {
-            myCartButton.configureLayout(quantity: itemListVM.quantity, totalPrice: itemListVM.total)
+        if let items = itemOrderListViewModel {
+            myCartButton.configureLayout(quantity: items.quantity, totalPrice: items.total)
             myCartButton.isHidden = false
         }
     }
@@ -172,9 +170,9 @@ extension MenuViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewModel = self.menuListViewModel.menuViewModel(at: indexPath.section)
+        let itemMenuVM = self.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
+        goToDishDetailsScreen(item: itemMenuVM)
         tableView.deselectRow(at: indexPath, animated: false)
-        goToDishDetailsScreen(item: viewModel.items[indexPath.row])
     }
 }
 
@@ -182,30 +180,28 @@ extension MenuViewController: UITableViewDelegate {
 extension MenuViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let viewModel = self.menuListViewModel.menuViewModel(at: section)
+        let menuVM = self.menuListViewModel.menuViewModel(at: section)
         
         switch section {
         case 0:
-            return viewModel.category
+            return menuVM.category
         case 1:
-            return viewModel.category
+            return menuVM.category
         default:
             return "Não existem categorias cadastradas"
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return menuListViewModel.menuViewModel.count
+        return menuListViewModel.numberOfSections
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let menuViewModel = self.menuListViewModel.menuViewModel(at: section)
-        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
         switch section {
         case 0:
-            return menuViewModel.items.count
+            return menuListViewModel.numberOfRowsInSection(section)
         case 1:
-            return menuViewModel.items.count
+            return menuListViewModel.numberOfRowsInSection(section)
         default:
             return 0
         }
@@ -216,12 +212,13 @@ extension MenuViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let menuViewModel = self.menuListViewModel.menuViewModel(at: indexPath.section)
+        let itemMenuVM = self.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
         
-        cell.titleLabel.text = menuViewModel.items[indexPath.row].name
-        cell.dishImage.image = UIImage(named: menuViewModel.items[indexPath.row].imageUrl)
-        cell.descriptionLabel.text = menuViewModel.items[indexPath.row].description
-        cell.priceLabel.text = "R$ \(menuViewModel.items[indexPath.row].price)"
+        cell.titleLabel.text = itemMenuVM.name
+        cell.dishImage.image = itemMenuVM.image
+        cell.descriptionLabel.text = itemMenuVM.description
+        cell.priceLabel.text = itemMenuVM.price
+        
         return cell
     }
 }
@@ -230,7 +227,7 @@ extension MenuViewController: UITableViewDataSource {
 
 extension MenuViewController {
     
-    func goToDishDetailsScreen(item: ItemMenu) {
+    func goToDishDetailsScreen(item: ItemMenuViewModel) {
         createOrder()
         coordinator?.moveTo(flow: .menu(.dishDetailsScreen), data: item)
     }

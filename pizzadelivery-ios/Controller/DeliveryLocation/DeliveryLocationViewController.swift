@@ -10,6 +10,7 @@ import UIKit
 class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
+    
     var orderViewModel: OrderViewModel?
     
     // MARK: - Views
@@ -41,7 +42,11 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     }
     
     func fetchOrder() {
-        orderViewModel = CoreDataHelper().fetchCurrentOrder()
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
     }
     
     func populateTextFields() {

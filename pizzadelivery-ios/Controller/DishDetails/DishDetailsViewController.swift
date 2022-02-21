@@ -12,12 +12,14 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
     
-    var itemMenuViewModel: ItemMenuViewModel?
-    var orderViewModel: OrderViewModel?
-    var itemOrderViewModel: ItemOrderViewModel?
-    var itemOrderListViewModel: ItemOrderListViewModel?
+    public var itemMenuViewModel: ItemMenuViewModel?
+    private var orderViewModel: OrderViewModel?
+    private var itemOrderViewModel: ItemOrderViewModel?
+    private var itemOrderListViewModel: ItemOrderListViewModel?
     
-    var initialFlag = ItemOrderStatus.create
+    // MARK: - Variables
+    
+    private var initialFlag = ItemOrderStatus.create
     
     // MARK: - Views
     
@@ -38,6 +40,8 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidAppear(_ animated: Bool) {
         fetchOrder()
+        fetchItems()
+        fetchCurrentItem()
         configureMenuDetails()
     }
     
@@ -54,10 +58,21 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     func fetchOrder() {
-        let currentOrder = CoreDataHelper().fetchCurrentOrder()
-        if currentOrder != nil {
-            orderViewModel = currentOrder
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
+    }
+    
+    func fetchItems() {
+        if orderViewModel != nil {
             itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+        }
+    }
+    
+    func fetchCurrentItem() {
+        if orderViewModel != nil {
             itemOrderViewModel = CoreDataHelper().fetchCurrentItem(itemMenuViewModel: itemMenuViewModel, orderViewModel: orderViewModel)
         }
     }
