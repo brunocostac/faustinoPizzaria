@@ -33,6 +33,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         setupViewConfiguration()
     }
     override func viewDidAppear(_ animated: Bool) {
+        clearViewModels()
         fetchMenu()
         fetchOrder()
         fetchItems()
@@ -54,6 +55,10 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     
     // MARK: - Functions
+    private func clearViewModels() {
+        itemOrderListViewModel = nil
+        orderViewModel = nil
+    }
     
     private func fetchMenu() {
         MockApiClient().fetchMenu { (_, menuData) in
@@ -84,6 +89,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     
     func loadCartButton() {
+        myCartButton.isHidden = true
         if let items = itemOrderListViewModel {
             myCartButton.configureLayout(quantity: items.quantity, totalPrice: items.total)
             myCartButton.isHidden = false
@@ -193,7 +199,7 @@ extension MenuViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return menuListViewModel.numberOfSections
+        return menuListViewModel.numberOfSections ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        

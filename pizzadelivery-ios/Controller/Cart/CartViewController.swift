@@ -151,7 +151,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return itemOrderListViewModel!.count + 1  ?? 0
+            return itemOrderListViewModel!.count + 1  
         case 1:
             return 1
         default:

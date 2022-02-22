@@ -38,14 +38,14 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     // MARK: - Initialization
     
     func fetchOrders() {
-        CoreDataHelper().fetchOrders { [self] orders in
+        CoreDataHelper().fetchOrders { orders in
             var orderVM = [OrderViewModel]()
             if let orders = orders {
                 for order in orders {
                     let viewModel = OrderViewModel(order: order)
                     orderVM.append(viewModel)
                 }
-                orderListViewModel = OrderListViewModel(orders: orderVM)
+                self.orderListViewModel = OrderListViewModel(orders: orderVM)
             }
         }
         DispatchQueue.main.async {
@@ -147,11 +147,11 @@ extension OrderViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return orderListViewModel?.numberOfSections ?? 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return orderListViewModel?.orderViewModel.count ?? 0
+        return orderListViewModel?.numberOfRowsInSection ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -159,15 +159,12 @@ extension OrderViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if let orderListVM = self.orderListViewModel?.orderViewModel(at: indexPath.row) {
-            if let dateWasRequest = orderListVM.order.dateWasRequest {
-                cell.titleLabel.text = "Data do pedido: \(String(describing: dateWasRequest.getFormattedDate(format: "dd-MM-yyyy HH:mm:ss")))"
+        if let orderVM = orderListViewModel?.orderAtIndex(indexPath.row) {
+            cell.titleLabel.text = orderVM.dateRequest
+            if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderVM) {
+                cell.descriptionLabel.text = itemOrderListVM.itemsDescription
+                cell.priceLabel.text = "Valor Total: R$ \(itemOrderListVM.total)"
             }
-        }
-        
-        if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderListViewModel?.orderViewModel[indexPath.row]) {
-            cell.descriptionLabel.text = "\(itemOrderListVM.itemsDescription)"
-            cell.priceLabel.text = "Valor Total: R$ \(itemOrderListVM.total)"
         }
         return cell
     }

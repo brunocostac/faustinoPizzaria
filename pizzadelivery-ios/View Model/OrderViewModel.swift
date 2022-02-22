@@ -19,10 +19,16 @@ extension OrderListViewModel {
     func orderViewModel(at indexPath: Int) -> OrderViewModel {
         return orderViewModel[indexPath]
     }
+    func orderAtIndex(_ index: Int) -> OrderViewModel {
+        return self.orderViewModel[index]
+    }
 }
 
 extension OrderListViewModel {
-    var count: Int {
+    var numberOfSections: Int {
+        return 1
+    }
+    var numberOfRowsInSection: Int {
         return self.orderViewModel.count
     }
 }
@@ -34,5 +40,11 @@ struct OrderViewModel {
 extension OrderViewModel {
     init(_ order: Order) {
         self.order = order
+    }
+}
+
+extension OrderViewModel {
+    var dateRequest: String {
+        return "Data do pedido: \(String(describing: self.order.dateWasRequest!.getFormattedDate(format: "dd-MM-yyyy HH:mm:ss")))"
     }
 }
