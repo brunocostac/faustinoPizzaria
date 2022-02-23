@@ -91,9 +91,11 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         if flag == ItemOrderStatus.create || flag == ItemOrderStatus.update {
             quantityView.quantityLabel.text = String(describing: quantity)
             quantityView.configureAddToCartButtonWith(flag: flag, price: calculateItems(quantity, price: itemPrice))
+            quantityView.decreaseButton.isEnabled = true
         } else if flag == ItemOrderStatus.remove {
             quantityView.quantityLabel.text = "0"
             quantityView.configureAddToCartButtonWith(flag: flag, price: String(describing: itemPrice))
+            quantityView.decreaseButton.isEnabled = false
         }
     }
     
@@ -105,7 +107,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     private func configureButtons() {
         quantityView.addToCartButton.addTarget(self, action: #selector(addToCartButtonPressed(_:)), for: .touchUpInside)
         myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
-        quantityView.increaseButton.addTarget(self, action: #selector(addQuantityButtonPressed(_:)), for: .touchUpInside)
+        quantityView.increaseButton.addTarget(self, action: #selector(increaseQuantityButtonPressed(_:)), for: .touchUpInside)
         quantityView.decreaseButton.addTarget(self, action: #selector(decreaseQuantityButtonPressed(_:)), for: .touchUpInside)
     }
     
@@ -239,7 +241,7 @@ extension DishDetailsViewController {
 // MARK: - User Actions
 
 extension DishDetailsViewController {
-    @objc func addQuantityButtonPressed(_ sender: UIButton) {
+    @objc func increaseQuantityButtonPressed(_ sender: UIButton) {
         var quantity = Int(quantityView.quantityLabel.text!)
         quantity = quantity! + 1
         updateQuantityView(quantity: quantity!, flag: flag)
@@ -251,7 +253,7 @@ extension DishDetailsViewController {
         
         if flag == ItemOrderStatus.create && quantity! > 1 {
             quantity = quantity! - 1
-        } else if flag == ItemOrderStatus.update {
+        } else if flag == ItemOrderStatus.update && quantity! > 0 {
             quantity = quantity! - 1
             if quantity == 0 {
                 temporaryFlag = ItemOrderStatus.remove
