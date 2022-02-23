@@ -91,7 +91,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     func loadCartButton() {
         myCartButton.isHidden = true
         if let items = itemOrderListViewModel {
-            myCartButton.configureLayout(quantity: items.quantity, totalPrice: items.total)
+            myCartButton.configureLayout(quantity: items.quantity, totalPrice: items.totalOrder)
             myCartButton.isHidden = false
         }
     }
@@ -199,7 +199,7 @@ extension MenuViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return menuListViewModel.numberOfSections ?? 0
+        return menuListViewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        

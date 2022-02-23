@@ -12,7 +12,6 @@ class DishCommentView: UIView {
     // MARK: - Views
     
     private let commentLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 20)!, textColor: .black, numberOfLines: 0)
-    
     let commentTextField: UITextField = {
         let commentTextField = UITextField()
         commentTextField.borderStyle = .bezel

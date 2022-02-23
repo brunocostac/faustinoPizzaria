@@ -12,9 +12,7 @@ class OrderTableViewCell: UITableViewCell {
     // MARK: - Views
     
     let titleLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .black, numberOfLines: 0)
-    
     let descriptionLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .black, numberOfLines: 2)
-    
     let priceLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 14)!, textColor: .black, numberOfLines: 0)
     
     // MARK: - Initialization

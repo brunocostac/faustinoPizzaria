@@ -10,10 +10,9 @@ import UIKit
 class DishInfoView: UIView {
     
     // MARK: - Views
+    
     let nameLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 21)!, textColor: .black, numberOfLines: 0)
-    
     let descriptionLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 18)!, textColor: .lightGray, numberOfLines: 0)
-    
     let priceLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 18)!, textColor: .lightGray, numberOfLines: 0)
     
     // MARK: - Initialization
@@ -40,6 +39,7 @@ class DishInfoView: UIView {
     
     func setupNameLabelConstraints() {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
@@ -48,6 +48,7 @@ class DishInfoView: UIView {
     
     func setupDescriptionLabelConstraints() {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
             descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
@@ -57,6 +58,7 @@ class DishInfoView: UIView {
     
     func setupPriceLabelConstraints() {
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             priceLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
             priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),

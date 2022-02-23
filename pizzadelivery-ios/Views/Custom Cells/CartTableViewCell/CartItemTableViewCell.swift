@@ -12,7 +12,6 @@ class CartItemTableViewCell: UITableViewCell {
     // MARK: - Views
     
     let itemNameLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .black, numberOfLines: 0)
-    
     let itemTotalLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 16)!, textColor: .black, numberOfLines: 0)
 
     // MARK: - Initialization

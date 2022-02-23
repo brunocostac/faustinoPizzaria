@@ -17,7 +17,11 @@ class ItemOrderListViewModel {
 
 extension ItemOrderListViewModel {
     
-    var total: String {
+    func itemOrderAtIndex(_ index: Int) -> ItemOrderViewModel {
+        return self.itemOrderViewModel[index]
+    }
+    
+    var totalOrder: String {
         var total: Double = 0.0
         for item in itemOrderViewModel {
             total += Double(item.quantity) * item.price
@@ -67,5 +71,14 @@ struct ItemOrderViewModel: Equatable, Decodable {
         self.price = price
         self.quantity = quantity
         self.comment = comment
+    }
+}
+
+extension ItemOrderViewModel {
+    var itemDescription: String {
+        return "\(String(describing: self.quantity)) \(self.name)"
+    }
+    var itemTotal: String {
+        return "R$ \(self.price)"
     }
 }

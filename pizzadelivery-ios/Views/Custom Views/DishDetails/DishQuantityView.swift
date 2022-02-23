@@ -18,9 +18,7 @@ class DishQuantityView: UIView {
         decreaseButton.titleLabel?.textColor = .white
         return decreaseButton
     }()
-    
     let quantityLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 29)!, textColor: .black, numberOfLines: 0)
-    
     let increaseButton: UIButton = {
         let increaseButton = UIButton()
         increaseButton.setTitle("+", for: .normal)
@@ -28,7 +26,6 @@ class DishQuantityView: UIView {
         increaseButton.titleLabel?.textColor = .white
         return increaseButton
     }()
-    
     let addToCartButton: UIButton = {
         let addToCartButton = UIButton()
         addToCartButton.setTitle("Adicionar R$ 35,90", for: .normal)
@@ -54,6 +51,7 @@ class DishQuantityView: UIView {
     
     func setupDecreaseButtonConstraints() {
         decreaseButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             decreaseButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             decreaseButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
@@ -62,6 +60,7 @@ class DishQuantityView: UIView {
     
     func setupQuantityLabelConstraints() {
         quantityLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             quantityLabel.firstBaselineAnchor.constraint(equalTo: decreaseButton.firstBaselineAnchor),
             quantityLabel.centerYAnchor.constraint(equalTo: decreaseButton.centerYAnchor),
@@ -71,6 +70,7 @@ class DishQuantityView: UIView {
     
     func setupIncreaseButtonConstraints() {
         increaseButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             increaseButton.firstBaselineAnchor.constraint(equalTo: quantityLabel.firstBaselineAnchor),
             increaseButton.leadingAnchor.constraint(equalTo: quantityLabel.leadingAnchor, constant: 30)
@@ -79,6 +79,7 @@ class DishQuantityView: UIView {
     
     func setupAddToCartButtonConstraints() {
         addToCartButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             addToCartButton.firstBaselineAnchor.constraint(equalTo: increaseButton.firstBaselineAnchor),
             addToCartButton.leadingAnchor.constraint(equalTo: increaseButton.leadingAnchor, constant: 50),

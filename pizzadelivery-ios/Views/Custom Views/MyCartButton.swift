@@ -11,9 +11,7 @@ class MyCartButton: UIButton {
     // MARK: - Views
     
     private let myCartLabel: UILabel = MyLabel(font: UIFont(name: "Avenir-Heavy", size: 16)!, textColor: .white, numberOfLines: 0)
-    
     private let itemLabel: UILabel = MyLabel(font: UIFont(name: "Avenir-Heavy", size: 16)!, textColor: .white, numberOfLines: 0)
-    
     private let totalPriceLabel: UILabel = MyLabel(font: UIFont(name: "Avenir-Heavy", size: 16)!, textColor: .white, numberOfLines: 0)
     
     // MARK: - Initialization

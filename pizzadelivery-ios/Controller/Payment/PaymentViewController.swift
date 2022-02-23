@@ -11,12 +11,12 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModels
     
-    var orderViewModel: OrderViewModel?
-    var itemOrderListViewModel: ItemOrderListViewModel?
+    private var orderViewModel: OrderViewModel?
+    private var itemOrderListViewModel: ItemOrderListViewModel?
     
     // MARK: - Variables
     
-    var paymentSelected: String?
+    private var paymentSelected: String?
     
     // MARK: - Views
     
@@ -27,6 +27,7 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         let tableView = UITableView(frame: .zero, style: .grouped)
         return tableView
     }()
+    private let tableFooterView = FooterView()
     
     // MARK: - Initialization
     
@@ -37,6 +38,7 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidAppear(_ animated: Bool) {
         fetchOrder()
+        fetchItems()
         configureTableView()
     }
     
@@ -53,7 +55,6 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         CoreDataHelper().fetchCurrentOrder { currentOrder in
             if let currentOrder = currentOrder {
                 self.orderViewModel = OrderViewModel(currentOrder)
-                self.fetchItems()
             }
         }
     }
@@ -63,19 +64,21 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
             itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
         }
     }
-   
+    
     // MARK: - Functions
     
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
+        tableView.tableFooterView = tableFooterView
         tableView.register(PaymentMethodTableViewCell.self, forCellReuseIdentifier: "PaymentMethodTableViewCell")
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
         tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
+        
     }
-
+    
     // MARK: - Setup Constraints
     
     func setupLogoConstraints() {
@@ -116,6 +119,8 @@ extension PaymentViewController: ViewConfiguration {
     
     func configureViews() {
         view.backgroundColor = .white
+        tableFooterView.footerButton.setTitle("Enviar o pedido", for: .normal)
+        tableFooterView.footerButton.addTarget(self, action: #selector(sendOrder), for: .touchUpInside)
     }
 }
 
@@ -132,6 +137,32 @@ extension PaymentViewController: UITableViewDelegate {
             return 60
         }
     }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        switch section {
+        case 0:
+            return nil
+        case 1:
+            return nil
+        case 2:
+            return tableFooterView
+        default:
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        switch section {
+        case 0:
+            return 0
+        case 1:
+            return 0
+        case 2:
+            return 60
+        default:
+            return 0
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -140,12 +171,16 @@ extension PaymentViewController: UITableViewDataSource {
         3
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
+        
+        switch section {
+        case 0:
             return "Forma de pagamento na entrega"
-        } else if  section == 1 {
+        case 1:
             return "Resumo do Pedido"
-        } else {
+        case 2:
             return "Entregar em"
+        default:
+            return nil
         }
     }
     
@@ -176,10 +211,10 @@ extension PaymentViewController: UITableViewDataSource {
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
+                let itemInCart = itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
                 cell1.selectionStyle = .none
-                let itemInCart = itemOrderListViewModel?.itemOrderViewModel[indexPath.row]
-                cell1.itemNameLabel.text = "\(String(describing: itemInCart!.quantity)) \(itemInCart!.name)"
-                cell1.itemTotalLabel.text = "R$ \(String(describing: itemInCart!.price)) "
+                cell1.itemNameLabel.text = itemInCart?.itemDescription
+                cell1.itemTotalLabel.text = itemInCart?.itemTotal
                 
                 return cell1
             } else {
@@ -187,12 +222,9 @@ extension PaymentViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 cell2.selectionStyle = .none
-                cell2.subTotalLabel.text = "Subtotal:"
-                cell2.subTotalValueLabel.text = "R$ \(itemOrderListViewModel!.total)"
-                cell2.feeLabel.text = "Taxa de entrega:"
-                cell2.feeValueLabel.text =  "R$ 0.00"
-                cell2.totalLabel.text = "Total:"
-                cell2.totalValueLabel.text = "R$ \(itemOrderListViewModel!.total)"
+                cell2.subTotalLabel.text = "Subtotal: R$ \(itemOrderListViewModel!.totalOrder)"
+                cell2.feeLabel.text = "Taxa de entrega: R$ 0.00"
+                cell2.totalLabel.text = "Total: R$ \(itemOrderListViewModel!.totalOrder)"
                 return cell2
             }
         case 2:
@@ -200,13 +232,12 @@ extension PaymentViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             if let address = orderViewModel?.order.address {
-                cell3.placeDescriptionLabel.text = "\(address)"
+                cell3.placeDescriptionLabel.text = address
             } else {
                 cell3.placeDescriptionLabel.text = "Não existe endereço cadastrado"
             }
             cell3.selectionStyle = .none
             cell3.delegate = self
-            cell3.goToPaymentButton.setTitle("Concluir o pedido", for: .normal)
             return cell3
         default:
             return UITableViewCell()
@@ -217,11 +248,12 @@ extension PaymentViewController: UITableViewDataSource {
 // MARK: - User Actions
 
 extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
-    func goToNextScreen() {
+    
+    @objc func sendOrder() {
         if let itemListOrderVM = itemOrderListViewModel {
-            orderViewModel?.order.total = Double(itemListOrderVM.total)!
+            orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
             orderViewModel?.order.dateWasRequest = Date()
-            orderViewModel?.order.subTotal = Double(itemListOrderVM.total)!
+            orderViewModel?.order.subTotal = Double(itemListOrderVM.totalOrder)!
             orderViewModel?.order.isOpen = false
             orderViewModel?.order.paymentMethod = paymentSelected
         }

@@ -39,6 +39,7 @@
 		11377A4E2788577800ABBA2D /* MyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11377A4D2788577800ABBA2D /* MyLabel.swift */; };
 		113C0B4A279745C4004C2FAC /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113C0B49279745C4004C2FAC /* Menu.swift */; };
 		113C0B4C27974614004C2FAC /* ItemMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113C0B4B27974614004C2FAC /* ItemMenu.swift */; };
+		113FE77627C564E70056272A /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113FE77527C564E70056272A /* FooterView.swift */; };
 		11449D3327AB0A4100E22997 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11449D3227AB0A4100E22997 /* CoreDataHelper.swift */; };
 		11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */; };
 		11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */; };
@@ -96,6 +97,7 @@
 		11377A4D2788577800ABBA2D /* MyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLabel.swift; sourceTree = "<group>"; };
 		113C0B49279745C4004C2FAC /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		113C0B4B27974614004C2FAC /* ItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMenu.swift; sourceTree = "<group>"; };
+		113FE77527C564E70056272A /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		11449D3227AB0A4100E22997 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationTableViewCell.swift; sourceTree = "<group>"; };
 		11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationViewController.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				11377A4D2788577800ABBA2D /* MyLabel.swift */,
 				111BCCF4278F848100F6E89E /* MyCartButton.swift */,
 				11A0438C27887C5400C0420E /* HeaderView.swift */,
+				113FE77527C564E70056272A /* FooterView.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -570,6 +573,7 @@
 				1119FA722787A8CD00AF25E1 /* CampaignBaseCoordinator.swift in Sources */,
 				117EC0A627A2DBE60003D3EC /* MenuViewModel.swift in Sources */,
 				11627C842790CED900FC4AA0 /* TotalPriceTableViewCell.swift in Sources */,
+				113FE77627C564E70056272A /* FooterView.swift in Sources */,
 				1119FA322787307E00AF25E1 /* AppDelegate.swift in Sources */,
 				1119FA342787307E00AF25E1 /* SceneDelegate.swift in Sources */,
 				112F25382795E0A700A50E11 /* DeliveryLocationView.swift in Sources */,

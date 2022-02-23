@@ -66,6 +66,7 @@ class DeliveryLocationView: UIView {
     
     func setupAddressTextFieldConstraints() {
         addressTextField.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             addressTextField.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             addressTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),

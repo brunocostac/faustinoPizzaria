@@ -10,11 +10,8 @@ import UIKit
 class HeaderView: UIView {
     
     let nameLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 26)!, textColor: .black, numberOfLines: 0)
-    
     let addressLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .systemGray, numberOfLines: 0)
-    
     let timeLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .green, numberOfLines: 0)
-    
     let feeLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .gray, numberOfLines: 0)
     
     // MARK: - Initialization

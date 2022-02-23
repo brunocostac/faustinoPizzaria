@@ -163,7 +163,7 @@ extension OrderViewController: UITableViewDataSource {
             cell.titleLabel.text = orderVM.dateRequest
             if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderVM) {
                 cell.descriptionLabel.text = itemOrderListVM.itemsDescription
-                cell.priceLabel.text = "Valor Total: R$ \(itemOrderListVM.total)"
+                cell.priceLabel.text = "Valor Total: R$ \(itemOrderListVM.totalOrder)"
             }
         }
         return cell

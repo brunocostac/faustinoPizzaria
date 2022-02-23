@@ -23,6 +23,7 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
         let tableView = UITableView(frame: .zero, style: .grouped)
         return tableView
     }()
+    private let tableFooterView = FooterView()
     
     // MARK: - Initialization
     
@@ -33,6 +34,7 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidAppear(_ animated: Bool) {
         fetchOrder()
+        fetchItems()
         configureTableView()
     }
     
@@ -45,31 +47,13 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
-            if let currentOrder = currentOrder {
-                self.orderViewModel = OrderViewModel(currentOrder)
-                self.fetchItems(self.orderViewModel!)
-            }
-        }
-    }
-    
-    func fetchItems(_ orderViewModel: OrderViewModel) {
-        if let items = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel) {
-            itemOrderListViewModel = items
-        }
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
-    
     // MARK: - Functions
     
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
+        tableView.tableFooterView = tableFooterView
         tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
@@ -115,6 +99,7 @@ extension CartViewController: ViewConfiguration {
     
     func configureViews() {
         view.backgroundColor = .white
+        tableFooterView.footerButton.addTarget(self, action: #selector(goToPaymentScreen), for: .touchUpInside)
     }
 }
 
@@ -130,6 +115,28 @@ extension CartViewController: UITableViewDelegate {
             return 160
         } else {
             return 60
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        switch section {
+        case 0:
+            return UIView()
+        case 1:
+            return tableFooterView
+        default:
+            return UIView()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        switch section {
+        case 0:
+            return 0
+        case 1:
+            return 60
+        default:
+            return 0
         }
     }
 }
@@ -151,7 +158,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return itemOrderListViewModel!.count + 1  
+            return itemOrderListViewModel!.count + 1
         case 1:
             return 1
         default:
@@ -163,13 +170,13 @@ extension CartViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             if itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
+                let itemInCart = itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
                 cell1.selectionStyle = .none
-                let itemInCart = itemOrderListViewModel?.itemOrderViewModel[indexPath.row]
-                cell1.itemNameLabel.text = "\(String(describing: itemInCart!.quantity)) \(itemInCart!.name)"
-                cell1.itemTotalLabel.text = "R$ \(String(describing: itemInCart!.price)) "
+                cell1.itemNameLabel.text = itemInCart?.itemDescription
+                cell1.itemTotalLabel.text = itemInCart?.itemTotal
                 
                 return cell1
             } else {
@@ -177,26 +184,23 @@ extension CartViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 cell2.selectionStyle = .none
-                cell2.subTotalLabel.text = "Subtotal:"
-                cell2.subTotalValueLabel.text = "R$ \(itemOrderListViewModel!.total)"
-                cell2.feeLabel.text = "Taxa de entrega:"
-                cell2.feeValueLabel.text =  "R$ 0.00"
-                cell2.totalLabel.text = "Total:"
-                cell2.totalValueLabel.text = "R$ \(itemOrderListViewModel!.total)"
+                cell2.subTotalLabel.text = "Subtotal: R$ \(itemOrderListViewModel!.totalOrder)"
+                cell2.feeLabel.text = "Taxa de entrega: R$ 0.00"
+                cell2.totalLabel.text = "Total: R$ \(itemOrderListViewModel!.totalOrder)"
                 return cell2
             }
         case 1:
             guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
+            cell3.selectionStyle = .none
+            cell3.delegate = self
             
             if let address = orderViewModel?.order.address {
-                cell3.placeDescriptionLabel.text = "\(address)"
+                cell3.placeDescriptionLabel.text = address
             } else {
                 cell3.placeDescriptionLabel.text = "Não existe um endereço cadastrado"
             }
-            cell3.selectionStyle = .none
-            cell3.delegate = self
             return cell3
         default:
             return UITableViewCell()
@@ -204,11 +208,40 @@ extension CartViewController: UITableViewDataSource {
     }
 }
 
-extension CartViewController: DeliveryLocationTableViewCellDelegate {
-    func goToNextScreen() {
-        coordinator?.moveTo(flow: .menu(.paymentScreen), data: [])
+// MARK: - CoreData
+
+extension CartViewController {
+    func fetchOrder() {
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
     }
     
+    func fetchItems() {
+        if orderViewModel != nil {
+            if let items = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel) {
+                itemOrderListViewModel = items
+            }
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+}
+
+// MARK: - User Actions
+
+extension CartViewController {
+    @objc func goToPaymentScreen() {
+        coordinator?.moveTo(flow: .menu(.paymentScreen), data: [])
+    }
+}
+
+// MARK: - DeliveryLocationTableViewCellDelegate
+
+extension CartViewController: DeliveryLocationTableViewCellDelegate {
     func goToDeliveryLocationScreen() {
         coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
     }

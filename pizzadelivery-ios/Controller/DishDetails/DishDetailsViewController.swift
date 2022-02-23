@@ -85,7 +85,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
             quantityView.addToCartButton.setTitle("\(initialFlag.rawValue) R$ \(itemMenuVM.price)", for: .normal)
         }
         if let itemListVM = itemOrderListViewModel {
-            myCartButton.configureLayout(quantity: itemListVM.quantity, totalPrice: itemListVM.total)
+            myCartButton.configureLayout(quantity: itemListVM.quantity, totalPrice: itemListVM.totalOrder)
             myCartButton.isHidden = false
         }
         if let itemOrderVM = itemOrderViewModel {

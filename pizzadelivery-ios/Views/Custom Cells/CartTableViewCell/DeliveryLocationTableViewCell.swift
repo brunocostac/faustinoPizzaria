@@ -8,7 +8,6 @@
 import UIKit
 
 protocol DeliveryLocationTableViewCellDelegate: AnyObject {
-    func goToNextScreen()
     func goToDeliveryLocationScreen()
 }
 
@@ -29,16 +28,6 @@ class DeliveryLocationTableViewCell: UITableViewCell {
         return button
     }()
     
-    let goToPaymentButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Ir para o pagamento", for: .normal)
-        button.backgroundColor = .black
-        button.titleLabel?.textColor = .white
-        button.layer.cornerRadius =  20
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
-        return button
-    }()
-    
     // MARK: - Initialization
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -54,10 +43,6 @@ class DeliveryLocationTableViewCell: UITableViewCell {
     
     @objc func editDeliveryLocationButtonClicked() {
         delegate?.goToDeliveryLocationScreen()
-    }
-    
-    @objc func goToNextScreenButtonClicked() {
-        delegate?.goToNextScreen()
     }
     
     // MARK: - Setup Constraints
@@ -77,15 +62,6 @@ class DeliveryLocationTableViewCell: UITableViewCell {
             editDeliveryLocationButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
         ])
     }
-    
-    func setupGoToPaymentButtonConstraints() {
-        goToPaymentButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            goToPaymentButton.topAnchor.constraint(equalTo: placeDescriptionLabel.bottomAnchor, constant: 20),
-            goToPaymentButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            goToPaymentButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
-        ])
-    }
 }
 
 extension DeliveryLocationTableViewCell: ViewConfiguration {
@@ -93,19 +69,16 @@ extension DeliveryLocationTableViewCell: ViewConfiguration {
     func setupConstraints() {
         setupPlaceDescriptionLabelConstraints()
         setupAddLocalDeliveryButtonConstraints()
-        setupGoToPaymentButtonConstraints()
     }
     
     func buildViewHierarchy() {
         contentView.isUserInteractionEnabled = true
         addSubview(placeDescriptionLabel)
         addSubview(editDeliveryLocationButton)
-        addSubview(goToPaymentButton)
     }
     
     func configureViews() {
         backgroundColor = .white
-        goToPaymentButton.addTarget(self, action: #selector(goToNextScreenButtonClicked), for: .touchUpInside)
         editDeliveryLocationButton.addTarget(self, action: #selector(editDeliveryLocationButtonClicked), for: .touchUpInside)
     }
 }
