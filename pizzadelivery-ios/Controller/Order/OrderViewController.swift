@@ -11,17 +11,14 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     // MARK: - View Models
     
-    var orderListViewModel: OrderListViewModel?
+    private var orderListViewModel: OrderListViewModel?
     
     // MARK: - Views
     
     var coordinator: OrderBaseCoordinator?
     private let logoView = LogoView()
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        return tableView
-    }()
     
     // MARK: - Life Cycle
     
@@ -36,22 +33,6 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     }
     
     // MARK: - Initialization
-    
-    func fetchOrders() {
-        CoreDataHelper().fetchOrders { orders in
-            var orderVM = [OrderViewModel]()
-            if let orders = orders {
-                for order in orders {
-                    let viewModel = OrderViewModel(order: order)
-                    orderVM.append(viewModel)
-                }
-                self.orderListViewModel = OrderListViewModel(orders: orderVM)
-            }
-        }
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
     
     required init(coordinator: OrderBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
@@ -101,7 +82,6 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
 // MARK: - ViewConfiguration
 
 extension OrderViewController: ViewConfiguration {
-    
     func setupConstraints() {
         setupLogoViewConstraints()
         setupTableViewConstraints()
@@ -120,7 +100,6 @@ extension OrderViewController: ViewConfiguration {
 // MARK: - UITableViewDelegate
 
 extension OrderViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
@@ -141,7 +120,6 @@ extension OrderViewController: UITableViewDelegate {
 // MARK: - UITableViewDataSource
 
 extension OrderViewController: UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Pedidos Realizados"
     }
@@ -159,13 +137,29 @@ extension OrderViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if let orderVM = orderListViewModel?.orderAtIndex(indexPath.row) {
-            cell.titleLabel.text = orderVM.dateRequest
-            if let itemOrderListVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderVM) {
-                cell.descriptionLabel.text = itemOrderListVM.itemsDescription
-                cell.priceLabel.text = "Valor Total: R$ \(itemOrderListVM.totalOrder)"
-            }
+        if let orderVM = orderListViewModel?.orderAtIndex(indexPath.row), let itemsOrderVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderVM) {
+            cell.configureWithText(orderVM: orderVM, itemOrderListVM: itemsOrderVM)
         }
         return cell
+    }
+}
+
+// MARK: - CoreData
+
+extension OrderViewController {
+    private func fetchOrders() {
+        CoreDataHelper().fetchOrders { orders in
+            var orderVM = [OrderViewModel]()
+            if let orders = orders {
+                for order in orders {
+                    let viewModel = OrderViewModel(order: order)
+                    orderVM.append(viewModel)
+                }
+                self.orderListViewModel = OrderListViewModel(orders: orderVM)
+            }
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }

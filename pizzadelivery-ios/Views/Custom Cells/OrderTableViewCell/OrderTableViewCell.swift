@@ -26,6 +26,12 @@ class OrderTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configureWithText(orderVM: OrderViewModel, itemOrderListVM: ItemOrderListViewModel) {
+        titleLabel.text = orderVM.dateRequest
+        descriptionLabel.text = itemOrderListVM.itemsDescription
+        priceLabel.text = "Valor Total: R$ \(itemOrderListVM.totalOrder)"
+    }
+    
     // MARK: - Setup Constraints
     
     private func setupTitleLabelConstraints() {

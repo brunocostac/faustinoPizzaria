@@ -56,8 +56,10 @@ class CoreDataHelper {
             let request: NSFetchRequest<Order> = Order.fetchRequest()
             request.fetchLimit = 1
             do {
-                //try self.coreDataStack.managedObjectContext.fetch(request)
-                coreDataStack.saveContext()
+                let result = try self.coreDataStack.managedObjectContext.fetch(request)
+                if result != [] {
+                    coreDataStack.saveContext()
+                }
             } catch {
                 print("Error fetching data from context \(error)")
             }

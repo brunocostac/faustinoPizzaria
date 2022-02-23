@@ -41,15 +41,7 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
-            if let currentOrder = currentOrder {
-                self.orderViewModel = OrderViewModel(currentOrder)
-            }
-        }
-    }
-    
-    func populateTextFields() {
+    private func populateTextFields() {
         if let orderVM = orderViewModel?.order {
             deliveryLocationView.addressTextField.text = orderVM.address
             deliveryLocationView.neighborhoodTextField.text = orderVM.neighborhood
@@ -59,7 +51,7 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Setup Constraints
     
-    func setupDeliveryLocationViewConstraints() {
+    private func setupDeliveryLocationViewConstraints() {
         deliveryLocationView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -84,6 +76,18 @@ extension DeliveryLocationViewController: ViewConfiguration {
         view.backgroundColor = .white
         title = "Local de entrega"
         deliveryLocationView.saveLocationDeliveryButton.addTarget(self, action: #selector(saveButtonPressed), for: .touchUpInside)
+    }
+}
+
+// MARK: - CoreData
+
+extension DeliveryLocationViewController {
+    private func fetchOrder() {
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
     }
 }
 

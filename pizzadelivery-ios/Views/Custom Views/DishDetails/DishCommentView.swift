@@ -33,6 +33,10 @@ class DishCommentView: UIView {
         fatalError("init(coder:) has not been implemeted")
     }
     
+    func configureWith(comment: String) {
+        commentTextField.text = comment
+    }
+    
     // MARK: - Setup Constraints
     private func setupCommentLabelConstraints() {
         commentLabel.translatesAutoresizingMaskIntoConstraints = false

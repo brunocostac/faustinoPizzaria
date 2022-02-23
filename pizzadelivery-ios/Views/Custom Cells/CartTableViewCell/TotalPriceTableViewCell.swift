@@ -15,7 +15,6 @@ class TotalPriceTableViewCell: UITableViewCell {
     let feeLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 16)!, textColor: .black, numberOfLines: 0)
     let totalLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 16)!, textColor: .black, numberOfLines: 0)
     
-
     // MARK: - Initialization
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -25,6 +24,12 @@ class TotalPriceTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configureWithText(subTotalOrder: String, totalOrder: String, fee: String) {
+        subTotalLabel.text = "Subtotal: R$ \(subTotalOrder)"
+        totalLabel.text = "Total: R$ \(totalOrder)"
+        feeLabel.text = "Taxa de entrega: \(fee)"
     }
     
     // MARK: - Setup Constraints

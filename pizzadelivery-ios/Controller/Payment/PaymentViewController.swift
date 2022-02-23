@@ -22,11 +22,8 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     var coordinator: MenuBaseCoordinator?
     private let logoView = LogoView()
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        return tableView
-    }()
     private let tableFooterView = FooterView()
     
     // MARK: - Initialization
@@ -49,20 +46,6 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
-            if let currentOrder = currentOrder {
-                self.orderViewModel = OrderViewModel(currentOrder)
-            }
-        }
-    }
-    
-    func fetchItems() {
-        if orderViewModel != nil {
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
-        }
     }
     
     // MARK: - Functions
@@ -204,39 +187,29 @@ extension PaymentViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell0.delegate = self
-            cell0.selectionStyle = .none
             return cell0
         case 1:
             if itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
+                
                 let itemInCart = itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
-                cell1.selectionStyle = .none
-                cell1.itemNameLabel.text = itemInCart?.itemDescription
-                cell1.itemTotalLabel.text = itemInCart?.itemTotal
+                cell1.configureWithText(itemDescription: itemInCart!.itemDescription, itemTotal: itemInCart!.itemTotal)
                 
                 return cell1
             } else {
                 guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                cell2.selectionStyle = .none
-                cell2.subTotalLabel.text = "Subtotal: R$ \(itemOrderListViewModel!.totalOrder)"
-                cell2.feeLabel.text = "Taxa de entrega: R$ 0.00"
-                cell2.totalLabel.text = "Total: R$ \(itemOrderListViewModel!.totalOrder)"
+                cell2.configureWithText(subTotalOrder: itemOrderListViewModel!.totalOrder, totalOrder: itemOrderListViewModel!.totalOrder, fee: "0.00")
                 return cell2
             }
         case 2:
             guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
-            if let address = orderViewModel?.order.address {
-                cell3.placeDescriptionLabel.text = address
-            } else {
-                cell3.placeDescriptionLabel.text = "Não existe endereço cadastrado"
-            }
-            cell3.selectionStyle = .none
+            cell3.configureWithText(address: orderViewModel?.order.address ?? "Não existe endereço cadastrado")
             cell3.delegate = self
             return cell3
         default:
@@ -247,8 +220,7 @@ extension PaymentViewController: UITableViewDataSource {
 
 // MARK: - User Actions
 
-extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
-    
+extension PaymentViewController {
     @objc func sendOrder() {
         if let itemListOrderVM = itemOrderListViewModel {
             orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
@@ -260,12 +232,33 @@ extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
         CoreDataHelper().updateOrder(orderViewModel: orderViewModel)
         goToMenuScreen()
     }
-    func goToMenuScreen() {
+    
+    private func goToMenuScreen() {
         coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
     }
-    
+}
+
+extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
     func goToDeliveryLocationScreen() {
         coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
+    }
+}
+
+// MARK: - CoreData
+
+extension PaymentViewController {
+    private func fetchOrder() {
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
+    }
+    
+    private func fetchItems() {
+        if orderViewModel != nil {
+            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+        }
     }
 }
 

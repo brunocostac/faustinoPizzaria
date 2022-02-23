@@ -25,6 +25,11 @@ class CartItemTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configureWithText(itemDescription: String, itemTotal: String) {
+        itemNameLabel.text = itemDescription
+        itemTotalLabel.text = itemTotal
+    }
+    
     private func setupItemLabelConstraints() {
         itemNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -56,5 +61,6 @@ extension CartItemTableViewCell: ViewConfiguration {
     
     func configureViews() {
         backgroundColor = .white
+        selectionStyle = .none
     }
 }

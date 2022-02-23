@@ -41,6 +41,10 @@ class DeliveryLocationTableViewCell: UITableViewCell {
     
     // MARK: - Functions
     
+    func configureWithText(address: String) {
+        placeDescriptionLabel.text = address
+    }
+    
     @objc func editDeliveryLocationButtonClicked() {
         delegate?.goToDeliveryLocationScreen()
     }
@@ -79,6 +83,7 @@ extension DeliveryLocationTableViewCell: ViewConfiguration {
     
     func configureViews() {
         backgroundColor = .white
+        selectionStyle = .none
         editDeliveryLocationButton.addTarget(self, action: #selector(editDeliveryLocationButtonClicked), for: .touchUpInside)
     }
 }

@@ -31,6 +31,13 @@ class MenuTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configureWith(name: String, description: String, price: String, image: UIImage) {
+        titleLabel.text = name
+        dishImage.image = image
+        descriptionLabel.text = description
+        priceLabel.text = price
+    }
+    
     // MARK: - Setup Constraints
     
     private func setupDishImageConstraints() {

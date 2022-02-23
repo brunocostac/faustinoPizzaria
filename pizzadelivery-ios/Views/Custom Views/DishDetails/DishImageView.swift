@@ -31,7 +31,7 @@ class DishImageView: UIImageView {
     
     // MARK: - Functions
     
-    func configureLayout(url: String) {
+    func configureWith(url: String) {
         imageView.image = UIImage(named: url)
     }
     

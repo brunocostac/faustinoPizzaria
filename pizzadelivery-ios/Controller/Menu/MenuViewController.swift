@@ -19,11 +19,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     var coordinator: MenuBaseCoordinator?
     private let logoView = LogoView()
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        return tableView
-    }()
     private let myCartButton = MyCartButton()
     
     // MARK: - Life Cycle
@@ -38,6 +35,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         fetchOrder()
         fetchItems()
         loadCartButton()
+        configureTableView()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -69,29 +67,10 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         }
     }
     
-    func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
-            if let currentOrder = currentOrder {
-                self.orderViewModel = OrderViewModel(currentOrder)
-            }
-        }
-    }
-    func fetchItems() {
-        if orderViewModel != nil {
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
-        }
-    }
-    
-    func createOrder() {
-        if orderViewModel == nil {
-            CoreDataHelper().createOrder()
-        }
-    }
-    
-    func loadCartButton() {
+    private func loadCartButton() {
         myCartButton.isHidden = true
         if let items = itemOrderListViewModel {
-            myCartButton.configureLayout(quantity: items.quantity, totalPrice: items.totalOrder)
+            myCartButton.configureWithText(quantity: items.quantity, totalPrice: items.totalOrder)
             myCartButton.isHidden = false
         }
     }
@@ -155,14 +134,12 @@ extension MenuViewController: ViewConfiguration {
     
     func configureViews() {
         view.backgroundColor = .white
-        configureTableView()
         myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
     }
 }
 
 // MARK: - UITableViewDelegate
 extension MenuViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
@@ -184,7 +161,6 @@ extension MenuViewController: UITableViewDelegate {
 
 // MARK: - UITableViewDataSource
 extension MenuViewController: UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let menuVM = self.menuListViewModel.menuViewModel(at: section)
         
@@ -220,20 +196,39 @@ extension MenuViewController: UITableViewDataSource {
         
         let itemMenuVM = self.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
         
-        cell.titleLabel.text = itemMenuVM.name
-        cell.dishImage.image = itemMenuVM.image
-        cell.descriptionLabel.text = itemMenuVM.description
-        cell.priceLabel.text = itemMenuVM.price
+        cell.configureWith(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price, image: itemMenuVM.image)
         
         return cell
+    }
+}
+
+// MARK: - CoreData
+
+extension MenuViewController {
+    private func fetchOrder() {
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
+    }
+    private func fetchItems() {
+        if orderViewModel != nil {
+            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+        }
+    }
+    
+    private func createOrder() {
+        if orderViewModel == nil {
+            CoreDataHelper().createOrder()
+        }
     }
 }
 
 // MARK: - User Actions
 
 extension MenuViewController {
-    
-    func goToDishDetailsScreen(item: ItemMenuViewModel) {
+    private func goToDishDetailsScreen(item: ItemMenuViewModel) {
         createOrder()
         coordinator?.moveTo(flow: .menu(.dishDetailsScreen), data: item)
     }

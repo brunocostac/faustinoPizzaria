@@ -18,11 +18,8 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     
     var coordinator: MenuBaseCoordinator?
     private let logoView = LogoView()
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        return tableView
-    }()
     private let tableFooterView = FooterView()
     
     // MARK: - Initialization
@@ -171,36 +168,30 @@ extension CartViewController: UITableViewDataSource {
         case 0:
             if itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
                 let itemInCart = itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
+                
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
-                cell1.selectionStyle = .none
-                cell1.itemNameLabel.text = itemInCart?.itemDescription
-                cell1.itemTotalLabel.text = itemInCart?.itemTotal
+                
+                cell1.configureWithText(itemDescription: itemInCart!.itemDescription, itemTotal: itemInCart!.itemTotal)
                 
                 return cell1
             } else {
                 guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                cell2.selectionStyle = .none
-                cell2.subTotalLabel.text = "Subtotal: R$ \(itemOrderListViewModel!.totalOrder)"
-                cell2.feeLabel.text = "Taxa de entrega: R$ 0.00"
-                cell2.totalLabel.text = "Total: R$ \(itemOrderListViewModel!.totalOrder)"
+                
+                cell2.configureWithText(subTotalOrder: itemOrderListViewModel!.totalOrder, totalOrder: itemOrderListViewModel!.totalOrder, fee: "0.00")
+               
                 return cell2
             }
         case 1:
             guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
-            cell3.selectionStyle = .none
             cell3.delegate = self
+            cell3.configureWithText(address: orderViewModel?.order.address ?? "Não existe endereço cadastrado")
             
-            if let address = orderViewModel?.order.address {
-                cell3.placeDescriptionLabel.text = address
-            } else {
-                cell3.placeDescriptionLabel.text = "Não existe um endereço cadastrado"
-            }
             return cell3
         default:
             return UITableViewCell()

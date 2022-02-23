@@ -20,7 +20,6 @@ class DishInfoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViewConfiguration()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -29,7 +28,7 @@ class DishInfoView: UIView {
     
     // MARK: - Functions
     
-    func configureLayout(name: String, description: String, price: Double) {
+    func configureWith(name: String, description: String, price: Double) {
         nameLabel.text = name
         descriptionLabel.text = description
         priceLabel.text = "R$ \(price)"
