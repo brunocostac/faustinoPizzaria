@@ -19,17 +19,26 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     private let logoView = LogoView()
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
+    private let noDataLabel = UILabel()
+    private var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.hidesWhenStopped = true
+        spinner.tintColor = .black
+        spinner.style = .large
+        return spinner
+    }()
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViewConfiguration()
+        spinner.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         fetchOrders()
         configureTableView()
+        spinner.stopAnimating()
     }
     
     // MARK: - Initialization
@@ -37,6 +46,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     required init(coordinator: OrderBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
+        setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -48,8 +58,8 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.tableHeaderView = tableHeaderView
         tableView.rowHeight = 100.0
+        tableView.backgroundView = noDataLabel
         tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
@@ -70,10 +80,19 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 40),
+            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 20),
             tableView.leadingAnchor.constraint(equalTo: logoView.leadingAnchor, constant: 0),
             tableView.trailingAnchor.constraint(equalTo: logoView.trailingAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        ])
+    }
+    
+    private func setupSpinnerConstraints() {
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -90,6 +109,7 @@ extension OrderViewController: ViewConfiguration {
     func buildViewHierarchy() {
         view.addSubview(logoView)
         view.addSubview(tableView)
+        view.addSubview(spinner)
     }
     
     func configureViews() {
@@ -100,18 +120,6 @@ extension OrderViewController: ViewConfiguration {
 // MARK: - UITableViewDelegate
 
 extension OrderViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return 60
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 160
-        } else {
-            return 60
-        }
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
@@ -121,11 +129,23 @@ extension OrderViewController: UITableViewDelegate {
 
 extension OrderViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Pedidos Realizados"
+        if orderListViewModel?.numberOfSections == 1 {
+            return "Pedidos realizados"
+        } else {
+           return nil
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return orderListViewModel?.numberOfSections ?? 1
+        if orderListViewModel!.numberOfSections == 0 {
+            let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
+            noDataLabel.font = UIFont(name: "avenir", size: 16)
+            noDataLabel.text = "Faça o seu primeiro pedido :)"
+            noDataLabel.textColor = UIColor.black
+            noDataLabel.textAlignment = .center
+            tableView.backgroundView  = noDataLabel
+        }
+        return orderListViewModel!.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -136,10 +156,10 @@ extension OrderViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? OrderTableViewCell else {
             return UITableViewCell()
         }
+        let orderVM = orderListViewModel?.orderAtIndex(indexPath.row)
+        let itemsOrderVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderVM)
         
-        if let orderVM = orderListViewModel?.orderAtIndex(indexPath.row), let itemsOrderVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderVM) {
-            cell.configureWithText(orderVM: orderVM, itemOrderListVM: itemsOrderVM)
-        }
+        cell.configureWithText(orderVM: orderVM!, itemOrderListVM: itemsOrderVM!)
         return cell
     }
 }

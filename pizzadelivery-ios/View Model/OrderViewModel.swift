@@ -16,9 +16,6 @@ class OrderListViewModel {
 }
 
 extension OrderListViewModel {
-    func orderViewModel(at indexPath: Int) -> OrderViewModel {
-        return orderViewModel[indexPath]
-    }
     func orderAtIndex(_ index: Int) -> OrderViewModel {
         return self.orderViewModel[index]
     }
@@ -26,7 +23,11 @@ extension OrderListViewModel {
 
 extension OrderListViewModel {
     var numberOfSections: Int {
-        return 1
+        if orderViewModel.isEmpty {
+            return 0
+        } else {
+            return 1
+        }
     }
     var numberOfRowsInSection: Int {
         return self.orderViewModel.count

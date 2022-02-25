@@ -26,7 +26,6 @@ class DishCommentView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViewConfiguration()
-        commentLabel.text = "Observação"
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -74,5 +73,6 @@ extension DishCommentView: ViewConfiguration {
     
     func configureViews() {
         backgroundColor = .white
+        commentLabel.text = "Observação"
     }
 }

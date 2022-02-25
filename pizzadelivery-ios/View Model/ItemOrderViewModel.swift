@@ -57,7 +57,6 @@ struct ItemOrderViewModel: Equatable, Decodable {
     var quantity: Int64
     var comment: String
     
-    //quando vem do coredata
     init(itemOrder: ItemOrder) {
         self.name = itemOrder.name!
         self.itemId = itemOrder.itemId
@@ -66,7 +65,6 @@ struct ItemOrderViewModel: Equatable, Decodable {
         self.comment = itemOrder.comment!
     }
     
-    //quando vem do usuario
     init(name: String, itemId: Int64, price: Double, quantity: Int64, comment: String) {
         self.name = name
         self.itemId = itemId

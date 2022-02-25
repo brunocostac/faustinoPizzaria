@@ -40,6 +40,7 @@ class MyCartButton: UIButton {
     
     func setupItemLabelConstraints() {
         itemLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             itemLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             itemLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
@@ -48,6 +49,7 @@ class MyCartButton: UIButton {
     
     func setupMyCartLabelConstraints() {
         myCartLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             myCartLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             myCartLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
@@ -56,6 +58,7 @@ class MyCartButton: UIButton {
     
     func setupTotalPriceConstraints() {
         totalPriceLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             totalPriceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             totalPriceLabel.firstBaselineAnchor.constraint(equalTo: myCartLabel.firstBaselineAnchor)

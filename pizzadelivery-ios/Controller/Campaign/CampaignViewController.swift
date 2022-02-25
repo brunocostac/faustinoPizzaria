@@ -28,13 +28,13 @@ class CampaignViewController: UIViewController, CampaignBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViewConfiguration()
     }
     // MARK: - Initialization
     
     required init(coordinator: CampaignBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
+        setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {

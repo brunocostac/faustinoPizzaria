@@ -22,12 +22,20 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
     private let myCartButton = MyCartButton()
+    private var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.hidesWhenStopped = true
+        spinner.tintColor = .black
+        spinner.style = .large
+        return spinner
+    }()
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViewConfiguration()
+        spinner.startAnimating()
+        
     }
     override func viewDidAppear(_ animated: Bool) {
         clearViewModels()
@@ -36,6 +44,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         fetchItems()
         loadCartButton()
         configureTableView()
+        spinner.stopAnimating()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -46,6 +55,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
+        setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -115,6 +125,15 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
             myCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    
+    private func setupSpinnerConstraints() {
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
 }
 
 // MARK: - ViewConfiguration
@@ -124,12 +143,14 @@ extension MenuViewController: ViewConfiguration {
         setupLogoViewConstraints()
         setupTableViewConstraints()
         setupMyCartButtonConstraints()
+        setupSpinnerConstraints()
     }
     
     func buildViewHierarchy() {
         view.addSubview(logoView)
         view.addSubview(tableView)
         view.addSubview(myCartButton)
+        view.addSubview(spinner)
     }
     
     func configureViews() {

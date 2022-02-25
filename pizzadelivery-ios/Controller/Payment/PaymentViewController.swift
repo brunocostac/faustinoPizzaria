@@ -25,23 +25,32 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
     private let tableFooterView = FooterView()
+    private var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.hidesWhenStopped = true
+        spinner.tintColor = .black
+        spinner.style = .large
+        return spinner
+    }()
     
     // MARK: - Initialization
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViewConfiguration()
+        spinner.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         fetchOrder()
         fetchItems()
         configureTableView()
+        spinner.stopAnimating()
     }
     
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
+        setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -59,7 +68,6 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
         tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
-        
     }
     
     // MARK: - Setup Constraints
@@ -85,6 +93,15 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
+    
+    private func setupSpinnerConstraints() {
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
 }
 
 // MARK: - ViewConfiguration
@@ -93,11 +110,13 @@ extension PaymentViewController: ViewConfiguration {
     func setupConstraints() {
         setupLogoConstraints()
         setupTableViewConstraints()
+        setupSpinnerConstraints()
     }
     
     func buildViewHierarchy() {
         view.addSubview(logoView)
         view.addSubview(tableView)
+        view.addSubview(spinner)
     }
     
     func configureViews() {
@@ -206,14 +225,34 @@ extension PaymentViewController: UITableViewDataSource {
                 return cell2
             }
         case 2:
-            guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
+            guard let cell3 = tableView.dequeueReusableCell(withIdentifier:
+            "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
-            cell3.configureWithText(address: orderViewModel?.order.address ?? "Não existe endereço cadastrado")
             cell3.delegate = self
+            cell3.configureWithText(address: orderViewModel?.order.address ?? "Não existe endereço cadastrado")
+            
             return cell3
         default:
             return UITableViewCell()
+        }
+    }
+}
+
+// MARK: - CoreData
+
+extension PaymentViewController {
+    private func fetchOrder() {
+        CoreDataHelper().fetchCurrentOrder { currentOrder in
+            if let currentOrder = currentOrder {
+                self.orderViewModel = OrderViewModel(currentOrder)
+            }
+        }
+    }
+    
+    private func fetchItems() {
+        if orderViewModel != nil {
+            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
         }
     }
 }
@@ -238,34 +277,18 @@ extension PaymentViewController {
     }
 }
 
-extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
-    func goToDeliveryLocationScreen() {
-        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
-    }
-}
-
-// MARK: - CoreData
-
-extension PaymentViewController {
-    private func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
-            if let currentOrder = currentOrder {
-                self.orderViewModel = OrderViewModel(currentOrder)
-            }
-        }
-    }
-    
-    private func fetchItems() {
-        if orderViewModel != nil {
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
-        }
-    }
-}
-
 // MARK: - PaymentMethodTableViewCellDelegate
 
 extension PaymentViewController: PaymentMethodTableViewCellDelegate {
     func getPaymentSelected(id: String) {
         paymentSelected = id
+    }
+}
+
+// MARK: - DeliveryLocationTableViewCellDelegate
+
+extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
+    func goToDeliveryLocationScreen() {
+        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
     }
 }
