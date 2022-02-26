@@ -9,9 +9,13 @@ import Foundation
 
 protocol Api {
     func fetchMenu(completion: @escaping (Bool, [Menu]) -> Void)
+    func sendOrder(completion: @escaping (Bool) -> Void)
 }
 
 final class MockApiClient: Api {
+    func sendOrder(completion: @escaping (Bool) -> Void) {
+        completion(true)
+    }
     
     func fetchMenu(completion: @escaping (Bool, [Menu]) -> Void) {
         

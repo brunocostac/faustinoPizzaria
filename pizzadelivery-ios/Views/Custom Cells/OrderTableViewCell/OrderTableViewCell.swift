@@ -14,6 +14,7 @@ class OrderTableViewCell: UITableViewCell {
     let titleLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .black, numberOfLines: 0)
     let descriptionLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 14)!, textColor: .black, numberOfLines: 2)
     let priceLabel: UILabel = MyLabel(font: UIFont(name: "avenir-heavy", size: 14)!, textColor: .black, numberOfLines: 0)
+    let statusLabel: UILabel =  MyLabel(font: UIFont(name: "avenir-heavy", size: 16)!, textColor: .gray, numberOfLines: 0)
     
     // MARK: - Initialization
     
@@ -27,9 +28,20 @@ class OrderTableViewCell: UITableViewCell {
     }
     
     func configureWithText(orderVM: OrderViewModel, itemOrderListVM: ItemOrderListViewModel) {
-        titleLabel.text = orderVM.dateRequest
+        titleLabel.text = "Data do pedido: \(orderVM.dateRequest)"
         descriptionLabel.text = itemOrderListVM.itemsDescription
         priceLabel.text = "Valor Total: R$ \(itemOrderListVM.totalOrder)"
+        statusLabel.text = "Status: \(comparingDates(firstDate: Date(), secondDate: orderVM.order.dateCompletion!))"
+    }
+    
+    func comparingDates(firstDate: Date, secondDate: Date) -> String {
+        if firstDate.compare(secondDate) == .orderedAscending {
+            return "Em andamento"
+        } else if firstDate.compare(secondDate) == .orderedDescending {
+          return "Entregue"
+        } else {
+          return "Entregue"
+        }
     }
     
     // MARK: - Setup Constraints
@@ -60,6 +72,15 @@ class OrderTableViewCell: UITableViewCell {
            priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
+    
+    private func setupStatusLabelConstraints() {
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+            
+        NSLayoutConstraint.activate([
+           statusLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 10),
+           statusLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+        ])
+    }
 }
 
 // MARK: - ViewConfiguration
@@ -69,12 +90,14 @@ extension OrderTableViewCell: ViewConfiguration {
         setupTitleLabelConstraints()
         setupDescriptionLabelConstraints()
         setupPriceLabelConstraints()
+        setupStatusLabelConstraints()
     }
     
     func buildViewHierarchy() {
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(priceLabel)
+        addSubview(statusLabel)
     }
     
     func configureViews() {

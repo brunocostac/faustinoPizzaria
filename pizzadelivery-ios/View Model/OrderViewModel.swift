@@ -46,6 +46,10 @@ extension OrderViewModel {
 
 extension OrderViewModel {
     var dateRequest: String {
-        return "Data do pedido: \(String(describing: self.order.dateWasRequest!.getFormattedDate(format: "dd-MM-yyyy HH:mm:ss")))"
+        return "\(self.order.dateWasRequest!.getFormattedDate(format: "dd/MM/yyyy HH:mm"))"
+    }
+    
+    var dateCompletion: String {
+        return "\(self.order.dateCompletion!.getFormattedDate(format: "dd/MM/yyyy HH:mm"))"
     }
 }

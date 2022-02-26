@@ -98,12 +98,17 @@ extension DeliveryLocationViewController {
         if let address = deliveryLocationView.addressTextField.text,
            let neighborhood = deliveryLocationView.neighborhoodTextField.text,
            let customerName = deliveryLocationView.customerNameTextField.text {
+            
             orderViewModel?.order.address = address
             orderViewModel?.order.neighborhood = neighborhood
             orderViewModel?.order.customerName = customerName
-            CoreDataHelper().updateOrder(orderViewModel: orderViewModel)
+            
+            CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
+                if success {
+                    self.goToCartScreen()
+                }
+            })
         }
-        goToCartScreen()
     }
     
     @objc func goToCartScreen() {

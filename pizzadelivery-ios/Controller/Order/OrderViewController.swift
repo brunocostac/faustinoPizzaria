@@ -58,7 +58,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 100.0
+        tableView.rowHeight = 140.0
         tableView.backgroundView = noDataLabel
         tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
     }

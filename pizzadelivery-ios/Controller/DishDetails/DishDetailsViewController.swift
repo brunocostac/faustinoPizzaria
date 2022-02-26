@@ -300,13 +300,18 @@ extension DishDetailsViewController {
                                                 quantity: Int64(quantity!),
                                                 comment: comment)
         if isToRemoveItem! {
-            CoreDataHelper().removeItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
-            goToHomeScreen()
+            CoreDataHelper().removeItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
+                if success {
+                    self.goToHomeScreen()
+                }
+            })
         } else {
-            CoreDataHelper().saveItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
-            goToCartScreen()
+            CoreDataHelper().saveItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
+                if success {
+                    self.goToCartScreen()
+                }
+            })
         }
-        
     }
     
     @objc func goToCartScreen() {

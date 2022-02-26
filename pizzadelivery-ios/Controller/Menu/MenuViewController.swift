@@ -199,7 +199,7 @@ extension MenuViewController: UITableViewDataSource {
         return menuListViewModel.numberOfSections
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return menuListViewModel.numberOfRowsInSection(section)

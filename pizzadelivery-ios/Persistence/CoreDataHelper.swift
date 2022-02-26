@@ -51,7 +51,7 @@ class CoreDataHelper {
         completion(order)
     }
     
-    public func updateOrder(orderViewModel: OrderViewModel?) {
+    public func updateOrder(orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
         if orderViewModel != nil {
             let request: NSFetchRequest<Order> = Order.fetchRequest()
             request.fetchLimit = 1
@@ -59,6 +59,9 @@ class CoreDataHelper {
                 let result = try self.coreDataStack.managedObjectContext.fetch(request)
                 if result != [] {
                     coreDataStack.saveContext()
+                    completion(true)
+                } else {
+                    completion(false)
                 }
             } catch {
                 print("Error fetching data from context \(error)")
@@ -84,7 +87,7 @@ class CoreDataHelper {
     
     // MARK: - ItemOrder functions
     
-    public func saveItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
+    public func saveItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
             let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
@@ -100,6 +103,7 @@ class CoreDataHelper {
                 } else {
                     updateItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
                 }
+                completion(true)
             } catch {
                 print("Error fetching data from context \(error)")
             }
@@ -141,7 +145,7 @@ class CoreDataHelper {
         coreDataStack.saveContext()
     }
     
-    public func removeItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
+    public func removeItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
             let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
@@ -154,6 +158,7 @@ class CoreDataHelper {
                 let currentItem = try coreDataStack.managedObjectContext.fetch(request)
                 coreDataStack.managedObjectContext.delete(currentItem[0])
                 coreDataStack.saveContext()
+                completion(true)
             } catch {
                 print("Error fetching data from context \(error)")
             }

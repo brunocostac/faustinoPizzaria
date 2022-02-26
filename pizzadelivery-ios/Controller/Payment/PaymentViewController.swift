@@ -264,12 +264,20 @@ extension PaymentViewController {
         if let itemListOrderVM = itemOrderListViewModel {
             orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
             orderViewModel?.order.dateWasRequest = Date()
+            orderViewModel?.order.dateCompletion = Date(timeInterval: 60*5, since: Date())
             orderViewModel?.order.subTotal = Double(itemListOrderVM.totalOrder)!
             orderViewModel?.order.isOpen = false
             orderViewModel?.order.paymentMethod = paymentSelected
         }
-        CoreDataHelper().updateOrder(orderViewModel: orderViewModel)
-        goToMenuScreen()
+        CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
+            if success {
+                MockApiClient().sendOrder { response in
+                    if response {
+                        self.goToMenuScreen()
+                    }
+                }
+            }
+        })
     }
     
     private func goToMenuScreen() {
