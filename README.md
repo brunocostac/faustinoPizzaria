@@ -1,4 +1,4 @@
-# pizzariadelivery-IOS
+# pizzaLover
 
 App que simula um aplicativo de uma pizzaria. 
 O objetivo desse app é demonstrar a aplicação das seguintes tecnologias e técnicas de desenvolvimento:
