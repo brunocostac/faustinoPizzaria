@@ -82,6 +82,12 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         }
     }
     
+    private func validateAddress() {
+        if orderViewModel?.order.address == nil && orderViewModel?.order.customerName == nil && orderViewModel?.order.neighborhood == nil {
+            
+        }
+    }
+    
     // MARK: - Setup Constraints
     
     func setupLogoConstraints() {
@@ -281,15 +287,15 @@ extension PaymentViewController {
             orderViewModel?.order.isOpen = false
             orderViewModel?.order.paymentMethod = paymentSelected
         }
-        CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
-            if success {
-                MockApiClient().sendOrder { response in
-                    if response {
+        MockApiClient().sendOrder { [self] response in
+            if response {
+                CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
+                    if success {
                         self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar")
                     }
-                }
+                })
             }
-        })
+        }
     }
     
     private func goToMenuScreen() {

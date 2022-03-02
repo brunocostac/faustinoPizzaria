@@ -103,5 +103,6 @@ extension PaymentMethodTableViewCell: ViewConfiguration {
         selectionStyle = .none
         paymentMethodOneButton.addTarget(self, action: #selector(firstPaymentMethodWasSelected(_:)), for: .touchUpInside)
         paymentMethodTwoButton.addTarget(self, action: #selector(secondPaymentMethodWasSelected(_:)), for: .touchUpInside)
+        paymentMethodOneButton.isSelected = true
     }
 }
