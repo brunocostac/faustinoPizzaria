@@ -70,21 +70,18 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
     }
     
-    private func displayAlert(title: String, message: String) {
+    private func displayAlert(title: String, message: String, actionClosure: @escaping () -> Void) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action: UIAlertAction!) in actionClosure()}))
         
-        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        
-        self.present(alertController, animated: true) { [self] in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                goToMenuScreen()
-            }
-        }
+        self.present(alertController, animated: true)
     }
     
-    private func validateAddress() {
+    private func addressIsValid() -> Bool {
         if orderViewModel?.order.address == nil && orderViewModel?.order.customerName == nil && orderViewModel?.order.neighborhood == nil {
-            
+            return false
+        } else {
+            return true
         }
     }
     
@@ -273,28 +270,42 @@ extension PaymentViewController {
             itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
         }
     }
+    
+    private func saveOrder() {
+        CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
+            if success {
+                self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar", actionClosure: { [self] in
+                    goToMenuScreen()
+                })
+            }
+        })
+    }
 }
 
 // MARK: - User Actions
 
 extension PaymentViewController {
     @objc func sendOrder() {
-        if let itemListOrderVM = itemOrderListViewModel {
-            orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
-            orderViewModel?.order.dateWasRequest = Date()
-            orderViewModel?.order.dateCompletion = Date(timeInterval: 60*5, since: Date())
-            orderViewModel?.order.subTotal = Double(itemListOrderVM.totalOrder)!
-            orderViewModel?.order.isOpen = false
-            orderViewModel?.order.paymentMethod = paymentSelected
-        }
-        MockApiClient().sendOrder { [self] response in
-            if response {
-                CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
-                    if success {
-                        self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar")
-                    }
-                })
+        let addressIsValid = addressIsValid()
+        
+        if addressIsValid {
+            if let itemListOrderVM = itemOrderListViewModel {
+                orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
+                orderViewModel?.order.dateWasRequest = Date()
+                orderViewModel?.order.dateCompletion = Date(timeInterval: 60*5, since: Date())
+                orderViewModel?.order.subTotal = Double(itemListOrderVM.totalOrder)!
+                orderViewModel?.order.isOpen = false
+                orderViewModel?.order.paymentMethod = paymentSelected
             }
+            MockApiClient().sendOrder { [self] response in
+                if response {
+                    saveOrder()
+                }
+            }
+        } else {
+            self.displayAlert(title: "Informação", message: "Por favor, informe o endereço de entrega.", actionClosure: {
+                
+            })
         }
     }
     
