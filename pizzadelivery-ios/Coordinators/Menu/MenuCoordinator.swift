@@ -40,7 +40,8 @@ class MenuCoordinator: MenuBaseCoordinator {
         case .paymentScreen:
             goToPaymentScreen()
         case .deliveryLocationScreen:
-            goToDeliveryLocationScreen()
+            guard let previousScreen = data as? MenuScreen else { return }
+            goToDeliveryLocationScreen(previousScreen: previousScreen)
         }
     }
     
@@ -60,8 +61,9 @@ class MenuCoordinator: MenuBaseCoordinator {
         navigationRootViewController?.pushViewController(paymentViewController, animated: true)
     }
     
-    func goToDeliveryLocationScreen() {
+    func goToDeliveryLocationScreen(previousScreen: MenuScreen) {
         let deliveryLocationViewController = DeliveryLocationViewController(coordinator: self)
+        deliveryLocationViewController.previousScreen = previousScreen 
         navigationRootViewController?.pushViewController(deliveryLocationViewController, animated: true)
     }
     

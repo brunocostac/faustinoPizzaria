@@ -13,6 +13,9 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     var orderViewModel: OrderViewModel?
     
+    // MARK: - Variables
+    var previousScreen: MenuScreen?
+    
     // MARK: - Views
     
     let deliveryLocationView = DeliveryLocationView()
@@ -89,6 +92,14 @@ extension DeliveryLocationViewController {
             }
         }
     }
+    
+    private func saveOrder() {
+        CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
+            if success {
+                self.goToPreviousScreen()
+            }
+        })
+    }
 }
 
 // MARK: - User Actions
@@ -102,16 +113,11 @@ extension DeliveryLocationViewController {
             orderViewModel?.order.address = address
             orderViewModel?.order.neighborhood = neighborhood
             orderViewModel?.order.customerName = customerName
-            
-            CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
-                if success {
-                    self.goToCartScreen()
-                }
-            })
+            saveOrder()
         }
     }
     
-    @objc func goToCartScreen() {
-        coordinator?.moveTo(flow: .menu(.cartScreen), data: [])
+    @objc func goToPreviousScreen() {
+        coordinator?.moveTo(flow: .menu(previousScreen!), data: [])
     }
 }

@@ -250,6 +250,7 @@ extension CartViewController {
 
 extension CartViewController: DeliveryLocationTableViewCellDelegate {
     func goToDeliveryLocationScreen() {
-        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
+        let previousScreen = MenuScreen.cartScreen
+        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: previousScreen)
     }
 }

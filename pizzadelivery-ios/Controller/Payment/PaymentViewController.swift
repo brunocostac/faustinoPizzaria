@@ -326,6 +326,7 @@ extension PaymentViewController: PaymentMethodTableViewCellDelegate {
 
 extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
     func goToDeliveryLocationScreen() {
-        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: [])
+        let previousScreen = MenuScreen.paymentScreen
+        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: previousScreen)
     }
 }
