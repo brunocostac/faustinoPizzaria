@@ -70,6 +70,18 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
     }
     
+    private func displayAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
+        self.present(alertController, animated: true) { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                goToMenuScreen()
+            }
+        }
+    }
+    
     // MARK: - Setup Constraints
     
     func setupLogoConstraints() {
@@ -273,7 +285,7 @@ extension PaymentViewController {
             if success {
                 MockApiClient().sendOrder { response in
                     if response {
-                        self.goToMenuScreen()
+                        self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar")
                     }
                 }
             }
