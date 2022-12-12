@@ -82,7 +82,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 40),
             tableView.leadingAnchor.constraint(equalTo: logoView.leadingAnchor, constant: 0),
             tableView.trailingAnchor.constraint(equalTo: logoView.trailingAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
@@ -124,6 +124,18 @@ extension OrderViewController: ViewConfiguration {
 extension OrderViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 160
+        } else {
+            return 60
+        }
     }
 }
 
