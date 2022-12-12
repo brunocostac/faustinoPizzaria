@@ -60,6 +60,7 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
         tableView.tableFooterView = tableFooterView
+        tableView.backgroundColor = .white
         tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
         tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")

@@ -59,7 +59,9 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 140.0
+        tableView.backgroundColor = .white
         tableView.backgroundView = noDataLabel
+        tableView.tableHeaderView = tableHeaderView
         tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     

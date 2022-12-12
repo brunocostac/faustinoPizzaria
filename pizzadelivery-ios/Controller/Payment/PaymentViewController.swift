@@ -64,6 +64,7 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
         tableView.tableFooterView = tableFooterView
+        tableView.backgroundColor = .white
         tableView.register(PaymentMethodTableViewCell.self, forCellReuseIdentifier: "PaymentMethodTableViewCell")
         tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
         tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")

@@ -89,6 +89,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = tableHeaderView
+        tableView.backgroundColor = .white
         tableView.register(MenuTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     

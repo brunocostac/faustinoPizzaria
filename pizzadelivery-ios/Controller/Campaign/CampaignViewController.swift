@@ -15,13 +15,13 @@ class CampaignViewController: UIViewController, CampaignBaseCoordinated {
     private let logoView = LogoView()
     private let firstPromotionalCampaign: UIImageView = {
         let image = UIImageView(image: UIImage(named: "promo1"))
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleToFill
         image.clipsToBounds = true
         return image
     }()
     private let secondPromotionalCampaign: UIImageView = {
         let image = UIImageView(image: UIImage(named: "promo2"))
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleToFill
         image.clipsToBounds = true
         return image
     }()
