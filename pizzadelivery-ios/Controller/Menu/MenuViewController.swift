@@ -34,28 +34,28 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        spinner.startAnimating()
+        self.spinner.startAnimating()
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        clearViewModels()
-        fetchMenu()
-        fetchOrder()
-        fetchItems()
-        loadCartButton()
-        configureTableView()
-        spinner.stopAnimating()
+        self.clearViewModels()
+        self.fetchMenu()
+        self.fetchOrder()
+        self.fetchItems()
+        self.loadCartButton()
+        self.setupTableView()
+        self.spinner.stopAnimating()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        myCartButton.isHidden = true
+        self.myCartButton.isHidden = true
     }
     // MARK: - Initialization
     
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -64,8 +64,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Functions
     private func clearViewModels() {
-        itemOrderListViewModel = nil
-        orderViewModel = nil
+        self.itemOrderListViewModel = nil
+        self.orderViewModel = nil
     }
     
     private func fetchMenu() {
@@ -78,61 +78,61 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func loadCartButton() {
-        myCartButton.isHidden = true
+        self.myCartButton.isHidden = true
         if let items = itemOrderListViewModel {
-            myCartButton.configureWithText(quantity: items.quantity, totalPrice: items.totalOrder)
-            myCartButton.isHidden = false
+            self.myCartButton.configureWithText(quantity: items.quantity, totalPrice: items.totalOrder)
+            self.myCartButton.isHidden = false
         }
     }
     
-    private func configureTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.tableHeaderView = tableHeaderView
-        tableView.backgroundColor = .white
-        tableView.register(MenuTableViewCell.self, forCellReuseIdentifier: "cell")
+    private func setupTableView() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.tableHeaderView = self.tableHeaderView
+        self.tableView.backgroundColor = .white
+        self.tableView.register(MenuTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     // MARK: - Setup Constraints
     
     private func setupLogoViewConstraints() {
-        logoView.translatesAutoresizingMaskIntoConstraints = false
+        self.logoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            logoView.heightAnchor.constraint(equalToConstant: 140)
+            self.logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            self.logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            self.logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            self.logoView.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
     
     private func setupTableViewConstraints() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 40),
-            tableView.leadingAnchor.constraint(equalTo: logoView.leadingAnchor, constant: 0),
-            tableView.trailingAnchor.constraint(equalTo: logoView.trailingAnchor, constant: 0),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            self.tableView.topAnchor.constraint(equalTo: self.logoView.bottomAnchor, constant: 40),
+            self.tableView.leadingAnchor.constraint(equalTo: self.logoView.leadingAnchor, constant: 0),
+            self.tableView.trailingAnchor.constraint(equalTo: self.logoView.trailingAnchor, constant: 0),
+            self.tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
     
     private func setupMyCartButtonConstraints() {
-        myCartButton.translatesAutoresizingMaskIntoConstraints = false
+        self.myCartButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            myCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            myCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            myCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            self.myCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.myCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.myCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
     private func setupSpinnerConstraints() {
-        spinner.translatesAutoresizingMaskIntoConstraints = false
+        self.spinner.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            self.spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }
@@ -141,22 +141,22 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
 
 extension MenuViewController: ViewConfiguration {
     func setupConstraints() {
-        setupLogoViewConstraints()
-        setupTableViewConstraints()
-        setupMyCartButtonConstraints()
-        setupSpinnerConstraints()
+        self.setupLogoViewConstraints()
+        self.setupTableViewConstraints()
+        self.setupMyCartButtonConstraints()
+        self.setupSpinnerConstraints()
     }
     
     func buildViewHierarchy() {
-        view.addSubview(logoView)
-        view.addSubview(tableView)
-        view.addSubview(myCartButton)
-        view.addSubview(spinner)
+        view.addSubview(self.logoView)
+        view.addSubview(self.tableView)
+        view.addSubview(self.myCartButton)
+        view.addSubview(self.spinner)
     }
     
     func configureViews() {
         view.backgroundColor = .white
-        myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
+        self.myCartButton.addTarget(self, action: #selector(self.goToCartScreen), for: .touchUpInside)
     }
 }
 
@@ -176,8 +176,8 @@ extension MenuViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let itemMenuVM = self.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
-        goToDishDetailsScreen(item: itemMenuVM)
-        tableView.deselectRow(at: indexPath, animated: false)
+        self.goToDishDetailsScreen(item: itemMenuVM)
+        self.tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
@@ -236,7 +236,7 @@ extension MenuViewController {
     }
     private func fetchItems() {
         if orderViewModel != nil {
-            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
+            self.itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
         }
     }
     
@@ -251,7 +251,7 @@ extension MenuViewController {
 
 extension MenuViewController {
     private func goToDishDetailsScreen(item: ItemMenuViewModel) {
-        createOrder()
+        self.createOrder()
         coordinator?.moveTo(flow: .menu(.dishDetailsScreen), data: item)
     }
     

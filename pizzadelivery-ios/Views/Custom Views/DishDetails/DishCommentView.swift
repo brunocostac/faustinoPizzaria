@@ -25,7 +25,7 @@ class DishCommentView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,20 +38,20 @@ class DishCommentView: UIView {
     
     // MARK: - Setup Constraints
     private func setupCommentLabelConstraints() {
-        commentLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.commentLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            commentLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            commentLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.commentLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            self.commentLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
     
     private func setupCommentTextFieldConstraints() {
-        commentTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.commentTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            commentTextField.topAnchor.constraint(equalTo: commentLabel.bottomAnchor, constant: 10),
-            commentTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            commentTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            commentTextField.heightAnchor.constraint(equalToConstant: 80)
+            self.commentTextField.topAnchor.constraint(equalTo: self.commentLabel.bottomAnchor, constant: 10),
+            self.commentTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            self.commentTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            self.commentTextField.heightAnchor.constraint(equalToConstant: 80)
         ])
     }
     
@@ -62,17 +62,17 @@ class DishCommentView: UIView {
 
 extension DishCommentView: ViewConfiguration {
     func setupConstraints() {
-        setupCommentLabelConstraints()
-        setupCommentTextFieldConstraints()
+        self.setupCommentLabelConstraints()
+        self.setupCommentTextFieldConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(commentLabel)
-        addSubview(commentTextField)
+        addSubview(self.commentLabel)
+        addSubview(self.commentTextField)
     }
     
     func configureViews() {
         backgroundColor = .white
-        commentLabel.text = "Observação"
+        self.commentLabel.text = "Observação"
     }
 }

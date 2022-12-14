@@ -18,8 +18,8 @@ class HeaderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setup()
-        setupViewConfiguration()
+        self.setup()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -29,10 +29,10 @@ class HeaderView: UIView {
     // MARK: - Functions
     
     func setup() {
-        nameLabel.text = "Pizza Lover - Freguesia"
-        addressLabel.text = "Rua Araguaia 2000"
-        timeLabel.text = "⏱ Aberto"
-        feeLabel.text = "Entrega a partir de R$ 0,00 ● 45m - 1h"
+        self.nameLabel.text = "Pizza Lover - Freguesia"
+        self.addressLabel.text = "Rua Araguaia 2000"
+        self.timeLabel.text = "⏱ Aberto"
+        self.feeLabel.text = "Entrega a partir de R$ 0,00 ● 45m - 1h"
     }
     
     override var intrinsicContentSize: CGSize {
@@ -42,55 +42,55 @@ class HeaderView: UIView {
     // MARK: - Setup Constraints
     
     private func setupNameLabelConstraints() {
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
+            self.nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            self.nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
         ])
     }
     
     private func setupAddressLabelConstraints() {
-        addressLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addressLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6),
-            addressLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
+            self.addressLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 6),
+            self.addressLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
         ])
     }
     
     private func setupTimeLabelConstraints() {
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.timeLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            timeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 6),
-            timeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
+            self.timeLabel.topAnchor.constraint(equalTo: self.addressLabel.bottomAnchor, constant: 6),
+            self.timeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
         ])
     }
     
     private func setupFeeLabelConstraints() {
-        feeLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.feeLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            feeLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 6),
-            feeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
+            self.feeLabel.topAnchor.constraint(equalTo: self.timeLabel.bottomAnchor, constant: 6),
+            self.feeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12)
         ])
     }
 }
 
 extension HeaderView: ViewConfiguration {
     func setupConstraints() {
-        setupNameLabelConstraints()
-        setupAddressLabelConstraints()
-        setupTimeLabelConstraints()
-        setupFeeLabelConstraints()
+        self.setupNameLabelConstraints()
+        self.setupAddressLabelConstraints()
+        self.setupTimeLabelConstraints()
+        self.setupFeeLabelConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(nameLabel)
-        addSubview(addressLabel)
-        addSubview(timeLabel)
-        addSubview(feeLabel)
+        addSubview(self.nameLabel)
+        addSubview(self.addressLabel)
+        addSubview(self.timeLabel)
+        addSubview(self.feeLabel)
     }
     
     func configureViews() {

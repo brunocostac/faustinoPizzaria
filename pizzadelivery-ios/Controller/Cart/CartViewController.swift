@@ -33,20 +33,20 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        spinner.startAnimating()
+        self.spinner.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        fetchOrder()
-        fetchItems()
-        configureTableView()
-        spinner.stopAnimating()
+        self.fetchOrder()
+        self.fetchItems()
+        self.setupTableView()
+        self.spinner.stopAnimating()
     }
     
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -55,47 +55,47 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Functions
     
-    private func configureTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.tableHeaderView = tableHeaderView
-        tableView.tableFooterView = tableFooterView
-        tableView.backgroundColor = .white
-        tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
-        tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
-        tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
+    private func setupTableView() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.tableHeaderView = tableHeaderView
+        self.tableView.tableFooterView = tableFooterView
+        self.tableView.backgroundColor = .white
+        self.tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
+        self.tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
+        self.tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
     }
     
     // MARK: - Setup Constraints
     
     private func setupLogoViewConstraints() {
-        logoView.translatesAutoresizingMaskIntoConstraints = false
+        self.logoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            logoView.heightAnchor.constraint(equalToConstant: 140)
+            self.logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            self.logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            self.logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            self.logoView.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
     
     private func setupTableViewConstraints() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 40),
-            tableView.leadingAnchor.constraint(equalTo: logoView.leadingAnchor, constant: 0),
-            tableView.trailingAnchor.constraint(equalTo: logoView.trailingAnchor, constant: 0),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            self.tableView.topAnchor.constraint(equalTo: self.logoView.bottomAnchor, constant: 40),
+            self.tableView.leadingAnchor.constraint(equalTo: self.logoView.leadingAnchor, constant: 0),
+            self.tableView.trailingAnchor.constraint(equalTo: self.logoView.trailingAnchor, constant: 0),
+            self.tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
     
     private func setupSpinnerConstraints() {
-        spinner.translatesAutoresizingMaskIntoConstraints = false
+        self.spinner.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            self.spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }
@@ -104,20 +104,20 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
 
 extension CartViewController: ViewConfiguration {
     func setupConstraints() {
-        setupLogoViewConstraints()
-        setupTableViewConstraints()
-        setupSpinnerConstraints()
+        self.setupLogoViewConstraints()
+        self.setupTableViewConstraints()
+        self.setupSpinnerConstraints()
     }
     
     func buildViewHierarchy() {
-        view.addSubview(logoView)
-        view.addSubview(tableView)
-        view.addSubview(spinner)
+        view.addSubview(self.logoView)
+        view.addSubview(self.tableView)
+        view.addSubview(self.spinner)
     }
     
     func configureViews() {
         view.backgroundColor = .white
-        tableFooterView.footerButton.addTarget(self, action: #selector(goToPaymentScreen), for: .touchUpInside)
+        self.tableFooterView.footerButton.addTarget(self, action: #selector(self.goToPaymentScreen), for: .touchUpInside)
     }
 }
 
@@ -141,7 +141,7 @@ extension CartViewController: UITableViewDelegate {
         case 0:
             return UIView()
         case 1:
-            return tableFooterView
+            return self.tableFooterView
         default:
             return UIView()
         }
@@ -176,7 +176,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return itemOrderListViewModel!.count + 1
+            return self.itemOrderListViewModel!.count + 1
         case 1:
             return 1
         default:
@@ -187,8 +187,8 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            if itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
-                let itemInCart = itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
+            if self.itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
+                let itemInCart = self.itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
                 
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
@@ -202,7 +202,7 @@ extension CartViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 
-                cell2.configureWithText(subTotalOrder: itemOrderListViewModel!.totalOrder, totalOrder: itemOrderListViewModel!.totalOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: self.itemOrderListViewModel!.totalOrder, totalOrder: self.itemOrderListViewModel!.totalOrder, fee: "0.00")
                
                 return cell2
             }
@@ -233,8 +233,8 @@ extension CartViewController {
     }
     
     private func fetchItems() {
-        if orderViewModel != nil {
-            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
+        if self.orderViewModel != nil {
+            self.itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: self.orderViewModel)
         }
     }
 }
@@ -243,7 +243,7 @@ extension CartViewController {
 
 extension CartViewController {
     @objc func goToPaymentScreen() {
-        coordinator?.moveTo(flow: .menu(.paymentScreen), data: [])
+        self.coordinator?.moveTo(flow: .menu(.paymentScreen), data: [])
     }
 }
 
@@ -252,6 +252,6 @@ extension CartViewController {
 extension CartViewController: DeliveryLocationTableViewCellDelegate {
     func goToDeliveryLocationScreen() {
         let previousScreen = MenuScreen.cartScreen
-        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: previousScreen)
+        self.coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: previousScreen)
     }
 }

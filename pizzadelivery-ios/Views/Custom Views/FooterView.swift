@@ -24,7 +24,7 @@ class FooterView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,21 +33,21 @@ class FooterView: UIView {
     
     // MARK: - Setup Constraints
     func setupFooterButtonConstraints() {
-       footerButton.translatesAutoresizingMaskIntoConstraints = false
+        self.footerButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            footerButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            footerButton.centerXAnchor.constraint(equalTo: centerXAnchor)
+            self.footerButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            self.footerButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
 }
 
 extension FooterView: ViewConfiguration {
     func setupConstraints() {
-        setupFooterButtonConstraints()
+        self.setupFooterButtonConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(footerButton)
+        addSubview(self.footerButton)
     }
     
     func configureViews() {

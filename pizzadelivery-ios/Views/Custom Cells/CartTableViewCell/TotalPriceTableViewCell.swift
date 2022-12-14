@@ -19,7 +19,7 @@ class TotalPriceTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -27,49 +27,49 @@ class TotalPriceTableViewCell: UITableViewCell {
     }
     
     func configureWithText(subTotalOrder: String, totalOrder: String, fee: String) {
-        subTotalLabel.text = "Subtotal: R$ \(subTotalOrder)"
-        totalLabel.text = "Total: R$ \(totalOrder)"
-        feeLabel.text = "Taxa de entrega: \(fee)"
+        self.subTotalLabel.text = "Subtotal: R$ \(subTotalOrder)"
+        self.totalLabel.text = "Total: R$ \(totalOrder)"
+        self.feeLabel.text = "Taxa de entrega: \(fee)"
     }
     
     // MARK: - Setup Constraints
     private func setupSubTotalLabelConstraints() {
-        subTotalLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.subTotalLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            subTotalLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            subTotalLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20)
+            self.subTotalLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            self.subTotalLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20)
         ])
     }
     
     func setupDeliveryFeeLabelConstraints() {
-        feeLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.feeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            feeLabel.topAnchor.constraint(equalTo: subTotalLabel.bottomAnchor, constant: 10),
-            feeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20)
+            self.feeLabel.topAnchor.constraint(equalTo: self.subTotalLabel.bottomAnchor, constant: 10),
+            self.feeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20)
         ])
     }
     
     func setupTotalLabelConstraints() {
-        totalLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.totalLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            totalLabel.topAnchor.constraint(equalTo: feeLabel.bottomAnchor, constant: 10),
-            totalLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            totalLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+            self.totalLabel.topAnchor.constraint(equalTo: self.feeLabel.bottomAnchor, constant: 10),
+            self.totalLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            self.totalLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
         ])
     }
 }
 
 extension TotalPriceTableViewCell: ViewConfiguration {
     func setupConstraints() {
-        setupSubTotalLabelConstraints()
-        setupDeliveryFeeLabelConstraints()
-        setupTotalLabelConstraints()
+        self.setupSubTotalLabelConstraints()
+        self.setupDeliveryFeeLabelConstraints()
+        self.setupTotalLabelConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(subTotalLabel)
-        addSubview(feeLabel)
-        addSubview(totalLabel)
+        addSubview(self.subTotalLabel)
+        addSubview(self.feeLabel)
+        addSubview(self.totalLabel)
     }
     
     func configureViews() {

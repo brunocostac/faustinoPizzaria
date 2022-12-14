@@ -18,7 +18,9 @@ class DishQuantityView: UIView {
         decreaseButton.titleLabel?.textColor = .white
         return decreaseButton
     }()
+    
     let quantityLabel: UILabel = MyLabel(font: UIFont(name: "avenir", size: 29)!, textColor: .black, numberOfLines: 0)
+    
     let increaseButton: UIButton = {
         let increaseButton = UIButton()
         increaseButton.setTitle("+", for: .normal)
@@ -26,6 +28,7 @@ class DishQuantityView: UIView {
         increaseButton.titleLabel?.textColor = .white
         return increaseButton
     }()
+    
     let addToCartButton: UIButton = {
         let addToCartButton = UIButton()
         addToCartButton.setTitle("Adicionar R$ 35,90", for: .normal)
@@ -40,54 +43,54 @@ class DishQuantityView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViewConfiguration()
-        quantityLabel.text = "1"
+        self.setupViewConfiguration()
+        self.quantityLabel.text = "1"
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemeted")
     }
     
     func configureAddToCartButtonWith(flag: ItemOrderStatus, price: String) {
-        addToCartButton.setTitle("\(flag.rawValue) R$ \(price)", for: .normal)
+        self.addToCartButton.setTitle("\(flag.rawValue) R$ \(price)", for: .normal)
     }
     
     // MARK: - Setup Constraints
     
     func setupDecreaseButtonConstraints() {
-        decreaseButton.translatesAutoresizingMaskIntoConstraints = false
+        self.decreaseButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            decreaseButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            decreaseButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.decreaseButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            self.decreaseButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
     
     func setupQuantityLabelConstraints() {
-        quantityLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.quantityLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            quantityLabel.firstBaselineAnchor.constraint(equalTo: decreaseButton.firstBaselineAnchor),
-            quantityLabel.centerYAnchor.constraint(equalTo: decreaseButton.centerYAnchor),
-            quantityLabel.leadingAnchor.constraint(equalTo: decreaseButton.leadingAnchor, constant: 45)
+            self.quantityLabel.firstBaselineAnchor.constraint(equalTo: self.decreaseButton.firstBaselineAnchor),
+            self.quantityLabel.centerYAnchor.constraint(equalTo: self.decreaseButton.centerYAnchor),
+            self.quantityLabel.leadingAnchor.constraint(equalTo: self.decreaseButton.leadingAnchor, constant: 45)
         ])
     }
     
     func setupIncreaseButtonConstraints() {
-        increaseButton.translatesAutoresizingMaskIntoConstraints = false
+        self.increaseButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            increaseButton.firstBaselineAnchor.constraint(equalTo: quantityLabel.firstBaselineAnchor),
-            increaseButton.leadingAnchor.constraint(equalTo: quantityLabel.leadingAnchor, constant: 30)
+            self.increaseButton.firstBaselineAnchor.constraint(equalTo: self.quantityLabel.firstBaselineAnchor),
+            self.increaseButton.leadingAnchor.constraint(equalTo: self.quantityLabel.leadingAnchor, constant: 30)
         ])
     }
     
     func setupAddToCartButtonConstraints() {
-        addToCartButton.translatesAutoresizingMaskIntoConstraints = false
+        self.addToCartButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            addToCartButton.firstBaselineAnchor.constraint(equalTo: increaseButton.firstBaselineAnchor),
-            addToCartButton.leadingAnchor.constraint(equalTo: increaseButton.leadingAnchor, constant: 50),
-            addToCartButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
+            self.addToCartButton.firstBaselineAnchor.constraint(equalTo: self.increaseButton.firstBaselineAnchor),
+            self.addToCartButton.leadingAnchor.constraint(equalTo: self.increaseButton.leadingAnchor, constant: 50),
+            self.addToCartButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
     }
     
@@ -98,17 +101,17 @@ class DishQuantityView: UIView {
 
 extension DishQuantityView: ViewConfiguration {
     func setupConstraints() {
-        setupDecreaseButtonConstraints()
-        setupQuantityLabelConstraints()
-        setupIncreaseButtonConstraints()
-        setupAddToCartButtonConstraints()
+        self.setupDecreaseButtonConstraints()
+        self.setupQuantityLabelConstraints()
+        self.setupIncreaseButtonConstraints()
+        self.setupAddToCartButtonConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(decreaseButton)
-        addSubview(quantityLabel)
-        addSubview(increaseButton)
-        addSubview(addToCartButton)
+        addSubview(self.decreaseButton)
+        addSubview(self.quantityLabel)
+        addSubview(self.increaseButton)
+        addSubview(self.addToCartButton)
     }
     
     func configureViews() {

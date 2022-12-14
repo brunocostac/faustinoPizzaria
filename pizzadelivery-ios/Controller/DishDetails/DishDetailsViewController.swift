@@ -42,17 +42,17 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        spinner.startAnimating()
+        self.spinner.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        fetchOrder()
-        fetchItems()
-        fetchCurrentItem()
-        setFlag()
-        configureDishDetails()
-        configureMyCartButton()
-        spinner.stopAnimating()
+        self.fetchOrder()
+        self.fetchItems()
+        self.fetchCurrentItem()
+        self.setFlag()
+        self.configureDishDetails()
+        self.configureMyCartButton()
+        self.spinner.stopAnimating()
     }
     
     // MARK: - Initialization
@@ -60,7 +60,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -68,29 +68,29 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func setFlag() {
-        if itemOrderViewModel != nil {
-            flag = ItemOrderStatus.update
+        if self.itemOrderViewModel != nil {
+            self.flag = ItemOrderStatus.update
         }
     }
     
     private func configureDishDetails() {
         if let itemMenuVM = itemMenuViewModel?.itemMenu {
-            dishImageView.configureWith(url: itemMenuVM.imageUrl)
-            infoView.configureWith(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price)
-            quantityView.configureAddToCartButtonWith(flag: flag, price: String(itemMenuVM.price))
+            self.dishImageView.configureWith(url: itemMenuVM.imageUrl)
+            self.infoView.configureWith(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price)
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: String(itemMenuVM.price))
         }
         
         if let itemOrderVM = itemOrderViewModel {
-            commentView.configureWith(comment: itemOrderVM.comment)
-            quantityView.quantityLabel.text = String(describing: itemOrderVM.quantity)
-            quantityView.configureAddToCartButtonWith(flag: flag, price: calculateItems(Int(itemOrderVM.quantity), price: itemOrderVM.price))
+            self.commentView.configureWith(comment: itemOrderVM.comment)
+            self.quantityView.quantityLabel.text = String(describing: itemOrderVM.quantity)
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: calculateItems(Int(itemOrderVM.quantity), price: itemOrderVM.price))
         }
     }
     
     private func configureMyCartButton() {
         if let itemListVM = itemOrderListViewModel {
-            myCartButton.configureWithText(quantity: itemListVM.quantity, totalPrice: itemListVM.totalOrder)
-            myCartButton.isHidden = false
+            self.myCartButton.configureWithText(quantity: itemListVM.quantity, totalPrice: itemListVM.totalOrder)
+            self.myCartButton.isHidden = false
         }
     }
     
@@ -98,16 +98,16 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         let price = itemMenuViewModel?.itemMenu.price
         
         if flag == ItemOrderStatus.create || flag == ItemOrderStatus.update {
-            quantityView.quantityLabel.text = String(describing: quantity)
-            quantityView.configureAddToCartButtonWith(flag: flag, price: calculateItems(quantity, price: price!))
-            quantityView.decreaseButton.alpha = 1
-            quantityView.decreaseButton.isEnabled = true
+            self.quantityView.quantityLabel.text = String(describing: quantity)
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.calculateItems(quantity, price: price!))
+            self.quantityView.decreaseButton.alpha = 1
+            self.quantityView.decreaseButton.isEnabled = true
         } else if flag == ItemOrderStatus.remove {
-            let itemOrderQuantitySaved = Int(itemOrderViewModel!.quantity)
-            quantityView.quantityLabel.text = "0"
-            quantityView.configureAddToCartButtonWith(flag: flag, price: calculateItems(itemOrderQuantitySaved, price: price!))
-            quantityView.decreaseButton.alpha = 0.5
-            quantityView.decreaseButton.isEnabled = false
+            let itemOrderQuantitySaved = Int(self.itemOrderViewModel!.quantity)
+            self.quantityView.quantityLabel.text = "0"
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.calculateItems(itemOrderQuantitySaved, price: price!))
+            self.quantityView.decreaseButton.alpha = 0.5
+            self.quantityView.decreaseButton.isEnabled = false
         }
     }
     
@@ -117,91 +117,91 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func configureButtons() {
-        quantityView.addToCartButton.addTarget(self, action: #selector(addToCartButtonPressed(_:)), for: .touchUpInside)
-        myCartButton.addTarget(self, action: #selector(goToCartScreen), for: .touchUpInside)
-        quantityView.increaseButton.addTarget(self, action: #selector(increaseQuantityButtonPressed(_:)), for: .touchUpInside)
-        quantityView.decreaseButton.addTarget(self, action: #selector(decreaseQuantityButtonPressed(_:)), for: .touchUpInside)
+        self.quantityView.addToCartButton.addTarget(self, action: #selector(self.addToCartButtonPressed(_:)), for: .touchUpInside)
+        self.myCartButton.addTarget(self, action: #selector(self.goToCartScreen), for: .touchUpInside)
+        self.quantityView.increaseButton.addTarget(self, action: #selector(self.increaseQuantityButtonPressed(_:)), for: .touchUpInside)
+        self.quantityView.decreaseButton.addTarget(self, action: #selector(self.decreaseQuantityButtonPressed(_:)), for: .touchUpInside)
     }
     
     private func configureStackView() {
-        stackView.axis = .vertical
-        stackView.distribution = .fill
-        stackView.alignment = .fill
-        stackView.spacing = 2.0
+        self.stackView.axis = .vertical
+        self.stackView.distribution = .fill
+        self.stackView.alignment = .fill
+        self.stackView.spacing = 2.0
     }
     
     // MARK: - Setup Constraints
     
     private func setupScrollViewConstraints() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            self.scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            self.scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
     private func setupStackViewConstraints() {
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        self.stackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor)
+            self.stackView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+            self.stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.stackView.bottomAnchor.constraint(lessThanOrEqualTo: self.scrollView.bottomAnchor)
         ])
     }
     
     private func setupImageViewConstraints() {
-        dishImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.dishImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            dishImageView.heightAnchor.constraint(equalToConstant: 120),
-            dishImageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            self.dishImageView.heightAnchor.constraint(equalToConstant: 120),
+            self.dishImageView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         ])
     }
     private func setupInfoViewConstraints() {
-        infoView.translatesAutoresizingMaskIntoConstraints = false
+        self.infoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            infoView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            self.infoView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         ])
     }
     
     private func setupCommentViewConstraints() {
-        commentView.translatesAutoresizingMaskIntoConstraints = false
+        self.commentView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            commentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            self.commentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         ])
     }
     
     private func setupQuantityViewConstraints() {
-        quantityView.translatesAutoresizingMaskIntoConstraints = false
+        self.quantityView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            quantityView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            self.quantityView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         ])
     }
     
     private func setupMyCartButtonConstraints() {
-        myCartButton.translatesAutoresizingMaskIntoConstraints = false
+        self.myCartButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            myCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            myCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            myCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            self.myCartButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.myCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.myCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
     private func setupSpinnerConstraints() {
-        spinner.translatesAutoresizingMaskIntoConstraints = false
+        self.spinner.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            self.spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }
@@ -209,32 +209,32 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
 // MARK: - ViewConfiguration
 extension DishDetailsViewController: ViewConfiguration {
     func setupConstraints() {
-        setupStackViewConstraints()
-        setupScrollViewConstraints()
-        setupImageViewConstraints()
-        setupInfoViewConstraints()
-        setupCommentViewConstraints()
-        setupQuantityViewConstraints()
-        setupMyCartButtonConstraints()
-        setupSpinnerConstraints()
+        self.setupStackViewConstraints()
+        self.setupScrollViewConstraints()
+        self.setupImageViewConstraints()
+        self.setupInfoViewConstraints()
+        self.setupCommentViewConstraints()
+        self.setupQuantityViewConstraints()
+        self.setupMyCartButtonConstraints()
+        self.setupSpinnerConstraints()
     }
     
     func buildViewHierarchy() {
-        view.addSubview(scrollView)
-        stackView.addArrangedSubview(dishImageView)
-        stackView.addArrangedSubview(infoView)
-        stackView.addArrangedSubview(commentView)
-        stackView.addArrangedSubview(quantityView)
-        scrollView.addSubview(stackView)
-        scrollView.addSubview(myCartButton)
-        view.addSubview(spinner)
+        view.addSubview(self.scrollView)
+        self.stackView.addArrangedSubview(self.dishImageView)
+        self.stackView.addArrangedSubview(self.infoView)
+        self.stackView.addArrangedSubview(self.commentView)
+        self.stackView.addArrangedSubview(self.quantityView)
+        self.scrollView.addSubview(self.stackView)
+        self.scrollView.addSubview(self.myCartButton)
+        view.addSubview(self.spinner)
     }
     
     func configureViews() {
         view.backgroundColor = .white
         title = "Detalhes"
-        configureStackView()
-        configureButtons()
+        self.configureStackView()
+        self.configureButtons()
     }
 }
 
@@ -251,13 +251,13 @@ extension DishDetailsViewController {
     
     private func fetchItems() {
         if orderViewModel != nil {
-            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
+            self.itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: self.orderViewModel)
         }
     }
     
     private func fetchCurrentItem() {
         if orderViewModel != nil {
-            itemOrderViewModel = ItemOrderRepository().fetch(itemMenuViewModel: itemMenuViewModel, orderViewModel: orderViewModel)
+            self.itemOrderViewModel = ItemOrderRepository().fetch(itemMenuViewModel: self.itemMenuViewModel, orderViewModel: self.orderViewModel)
         }
     }
 }
@@ -266,13 +266,13 @@ extension DishDetailsViewController {
 
 extension DishDetailsViewController {
     @objc func increaseQuantityButtonPressed(_ sender: UIButton) {
-        var quantity = Int(quantityView.quantityLabel.text!)
+        var quantity = Int(self.quantityView.quantityLabel.text!)
         quantity = quantity! + 1
         updateQuantityView(quantity: quantity!, flag: flag)
     }
     
     @objc func decreaseQuantityButtonPressed(_ sender: UIButton) {
-        var quantity = Int(quantityView.quantityLabel.text!)
+        var quantity = Int(self.quantityView.quantityLabel.text!)
         var temporaryFlag: ItemOrderStatus = flag
         
         if flag == ItemOrderStatus.create && quantity! > 1 {
@@ -288,25 +288,25 @@ extension DishDetailsViewController {
     
     @objc func addToCartButtonPressed(_ sender: UIButton) {
         let isToRemoveItem = sender.titleLabel?.text!.contains(ItemOrderStatus.remove.rawValue)
-        let name = itemMenuViewModel?.itemMenu.name
-        let itemId = itemMenuViewModel?.itemMenu.itemId
-        let price = itemMenuViewModel?.itemMenu.price
-        let quantity = Int(quantityView.quantityLabel.text!)
-        let comment = commentView.commentTextField.text ?? ""
+        let name = self.itemMenuViewModel?.itemMenu.name
+        let itemId = self.itemMenuViewModel?.itemMenu.itemId
+        let price = self.itemMenuViewModel?.itemMenu.price
+        let quantity = Int(self.quantityView.quantityLabel.text!)
+        let comment = self.commentView.commentTextField.text ?? ""
        
-        itemOrderViewModel = ItemOrderViewModel(name: name!,
+        self.itemOrderViewModel = ItemOrderViewModel(name: name!,
                                                 itemId: Int64(itemId!),
                                                 price: price!,
                                                 quantity: Int64(quantity!),
                                                 comment: comment)
         if isToRemoveItem! {
-            ItemOrderRepository().remove(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
+            ItemOrderRepository().remove(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
                 if success {
                     self.goToHomeScreen()
                 }
             })
         } else {
-            ItemOrderRepository().save(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
+            ItemOrderRepository().save(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
                 if success {
                     self.goToCartScreen()
                 }

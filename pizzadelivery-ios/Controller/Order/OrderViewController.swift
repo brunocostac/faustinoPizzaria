@@ -32,13 +32,13 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        spinner.startAnimating()
+        self.spinner.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        fetchOrders()
-        configureTableView()
-        spinner.stopAnimating()
+        self.fetchAllOrders()
+        self.setupTableView()
+        self.spinner.stopAnimating()
     }
     
     // MARK: - Initialization
@@ -46,7 +46,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     required init(coordinator: OrderBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -55,46 +55,46 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     // MARK: - Functions
     
-    private func configureTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.rowHeight = 140.0
-        tableView.backgroundColor = .white
-        tableView.backgroundView = noDataLabel
-        tableView.tableHeaderView = tableHeaderView
-        tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
+    private func setupTableView() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.rowHeight = 140.0
+        self.tableView.backgroundColor = .white
+        self.tableView.backgroundView = self.noDataLabel
+        self.tableView.tableHeaderView = self.tableHeaderView
+        self.tableView.register(OrderTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     // MARK: - Setup Constraints
     
     private func setupLogoViewConstraints() {
-        logoView.translatesAutoresizingMaskIntoConstraints = false
+        self.logoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            logoView.heightAnchor.constraint(equalToConstant: 140)
+            self.logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            self.logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            self.logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            self.logoView.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
     
     private func setupTableViewConstraints() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 40),
-            tableView.leadingAnchor.constraint(equalTo: logoView.leadingAnchor, constant: 0),
-            tableView.trailingAnchor.constraint(equalTo: logoView.trailingAnchor, constant: 0),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            self.tableView.topAnchor.constraint(equalTo: self.logoView.bottomAnchor, constant: 40),
+            self.tableView.leadingAnchor.constraint(equalTo: self.logoView.leadingAnchor, constant: 0),
+            self.tableView.trailingAnchor.constraint(equalTo: self.logoView.trailingAnchor, constant: 0),
+            self.tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
     
     private func setupSpinnerConstraints() {
-        spinner.translatesAutoresizingMaskIntoConstraints = false
+        self.spinner.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            self.spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -104,14 +104,14 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
 
 extension OrderViewController: ViewConfiguration {
     func setupConstraints() {
-        setupLogoViewConstraints()
-        setupTableViewConstraints()
+        self.setupLogoViewConstraints()
+        self.setupTableViewConstraints()
     }
     
     func buildViewHierarchy() {
-        view.addSubview(logoView)
-        view.addSubview(tableView)
-        view.addSubview(spinner)
+        view.addSubview(self.logoView)
+        view.addSubview(self.tableView)
+        view.addSubview(self.spinner)
     }
     
     func configureViews() {
@@ -143,7 +143,7 @@ extension OrderViewController: UITableViewDelegate {
 
 extension OrderViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if orderListViewModel?.numberOfSections == 1 {
+        if self.orderListViewModel?.numberOfSections == 1 {
             return "Pedidos realizados"
         } else {
            return nil
@@ -151,7 +151,7 @@ extension OrderViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if orderListViewModel!.numberOfSections == 0 {
+        if self.orderListViewModel!.numberOfSections == 0 {
             let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
             noDataLabel.font = UIFont(name: "avenir", size: 16)
             noDataLabel.text = "Faça o seu primeiro pedido :)"
@@ -159,19 +159,20 @@ extension OrderViewController: UITableViewDataSource {
             noDataLabel.textAlignment = .center
             tableView.backgroundView  = noDataLabel
         }
-        return orderListViewModel!.numberOfSections
+        return self.orderListViewModel!.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return orderListViewModel?.numberOfRowsInSection ?? 0
+        return self.orderListViewModel?.numberOfRowsInSection ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? OrderTableViewCell else {
             return UITableViewCell()
         }
-        let orderVM = orderListViewModel?.orderAtIndex(indexPath.row)
-        let itemsOrderVM = ItemOrderRepository().fetchAll(orderViewModel: orderVM)
+        
+        let orderVM = self.orderListViewModel?.orderAtIndex(indexPath.row)
+        let itemsOrderVM = self.fetchAllItems(orderViewModel: orderVM!)
         
         cell.configureWithText(orderVM: orderVM!, itemOrderListVM: itemsOrderVM!)
         return cell
@@ -181,15 +182,13 @@ extension OrderViewController: UITableViewDataSource {
 // MARK: - CoreData
 
 extension OrderViewController {
-    private func fetchOrders() {
-        OrderRepository().fetchAll { orders in
-            var orderVM = [OrderViewModel]()
-            if let orders = orders {
-                for order in orders {
-                    let viewModel = OrderViewModel(order: order)
-                    orderVM.append(viewModel)
-                }
-                self.orderListViewModel = OrderListViewModel(orders: orderVM)
+    private func fetchAllItems(orderViewModel: OrderViewModel) -> ItemOrderListViewModel? {
+       return ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
+    }
+    private func fetchAllOrders() {
+        OrderRepository().fetchAll{ orders in
+            if let ordersVM = orders {
+                self.orderListViewModel = OrderListViewModel(orders: ordersVM)
             }
         }
         DispatchQueue.main.async {

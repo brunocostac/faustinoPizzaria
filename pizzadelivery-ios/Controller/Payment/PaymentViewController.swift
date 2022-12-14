@@ -37,20 +37,20 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        spinner.startAnimating()
+        self.spinner.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        fetchOrder()
-        fetchItems()
-        configureTableView()
-        spinner.stopAnimating()
+        self.fetchOrder()
+        self.fetchItems()
+        self.setupTableView()
+        self.spinner.stopAnimating()
     }
     
     required init(coordinator: MenuBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -59,16 +59,16 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Functions
     
-    private func configureTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.tableHeaderView = tableHeaderView
-        tableView.tableFooterView = tableFooterView
-        tableView.backgroundColor = .white
-        tableView.register(PaymentMethodTableViewCell.self, forCellReuseIdentifier: "PaymentMethodTableViewCell")
-        tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
-        tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
-        tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
+    private func setupTableView() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.tableHeaderView = self.tableHeaderView
+        self.tableView.tableFooterView = self.tableFooterView
+        self.tableView.backgroundColor = .white
+        self.tableView.register(PaymentMethodTableViewCell.self, forCellReuseIdentifier: "PaymentMethodTableViewCell")
+        self.tableView.register(CartItemTableViewCell.self, forCellReuseIdentifier: "CartItemTableViewCell")
+        self.tableView.register(TotalPriceTableViewCell.self, forCellReuseIdentifier: "TotalPriceTableViewCell")
+        self.tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
     }
     
     private func displayAlert(title: String, message: String, actionClosure: @escaping () -> Void) {
@@ -79,7 +79,7 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func addressIsValid() -> Bool {
-        if orderViewModel?.order.address == nil && orderViewModel?.order.customerName == nil && orderViewModel?.order.neighborhood == nil {
+        if self.orderViewModel?.order.address == nil && self.orderViewModel?.order.customerName == nil && self.orderViewModel?.order.neighborhood == nil {
             return false
         } else {
             return true
@@ -89,33 +89,33 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     // MARK: - Setup Constraints
     
     func setupLogoConstraints() {
-        logoView.translatesAutoresizingMaskIntoConstraints = false
+        self.logoView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            logoView.heightAnchor.constraint(equalToConstant: 140)
+            self.logoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            self.logoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            self.logoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            self.logoView.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
     
     private func setupTableViewConstraints() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 40),
-            tableView.leadingAnchor.constraint(equalTo: logoView.leadingAnchor, constant: 0),
-            tableView.trailingAnchor.constraint(equalTo: logoView.trailingAnchor, constant: 0),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            self.tableView.topAnchor.constraint(equalTo: self.logoView.bottomAnchor, constant: 40),
+            self.tableView.leadingAnchor.constraint(equalTo: self.logoView.leadingAnchor, constant: 0),
+            self.tableView.trailingAnchor.constraint(equalTo: self.logoView.trailingAnchor, constant: 0),
+            self.tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
     
     private func setupSpinnerConstraints() {
-        spinner.translatesAutoresizingMaskIntoConstraints = false
+        self.spinner.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            self.spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            self.spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }
@@ -124,21 +124,21 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
 
 extension PaymentViewController: ViewConfiguration {
     func setupConstraints() {
-        setupLogoConstraints()
-        setupTableViewConstraints()
-        setupSpinnerConstraints()
+        self.setupLogoConstraints()
+        self.setupTableViewConstraints()
+        self.setupSpinnerConstraints()
     }
     
     func buildViewHierarchy() {
-        view.addSubview(logoView)
-        view.addSubview(tableView)
-        view.addSubview(spinner)
+        view.addSubview(self.logoView)
+        view.addSubview(self.tableView)
+        view.addSubview(self.spinner)
     }
     
     func configureViews() {
         view.backgroundColor = .white
-        tableFooterView.footerButton.setTitle("Enviar o pedido", for: .normal)
-        tableFooterView.footerButton.addTarget(self, action: #selector(sendOrder), for: .touchUpInside)
+        self.tableFooterView.footerButton.setTitle("Enviar o pedido", for: .normal)
+        self.tableFooterView.footerButton.addTarget(self, action: #selector(sendOrder), for: .touchUpInside)
     }
 }
 
@@ -163,7 +163,7 @@ extension PaymentViewController: UITableViewDelegate {
         case 1:
             return nil
         case 2:
-            return tableFooterView
+            return self.tableFooterView
         default:
             return nil
         }
@@ -267,8 +267,8 @@ extension PaymentViewController {
     }
     
     private func fetchItems() {
-        if orderViewModel != nil {
-            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
+        if self.orderViewModel != nil {
+            self.itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: self.orderViewModel)
         }
     }
     
@@ -287,16 +287,16 @@ extension PaymentViewController {
 
 extension PaymentViewController {
     @objc func sendOrder() {
-        let addressIsValid = addressIsValid()
+        let addressIsValid = self.addressIsValid()
         
         if addressIsValid {
             if let itemListOrderVM = itemOrderListViewModel {
-                orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
-                orderViewModel?.order.dateWasRequest = Date()
-                orderViewModel?.order.dateCompletion = Date(timeInterval: 60*5, since: Date())
-                orderViewModel?.order.subTotal = Double(itemListOrderVM.totalOrder)!
-                orderViewModel?.order.isOpen = false
-                orderViewModel?.order.paymentMethod = paymentSelected
+                self.orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
+                self.orderViewModel?.order.dateWasRequest = Date()
+                self.orderViewModel?.order.dateCompletion = Date(timeInterval: 60*5, since: Date())
+                self.orderViewModel?.order.subTotal = Double(itemListOrderVM.totalOrder)!
+                self.orderViewModel?.order.isOpen = false
+                self.orderViewModel?.order.paymentMethod = self.paymentSelected
             }
             MockApiClient().sendOrder { [self] response in
                 if response {
@@ -319,7 +319,7 @@ extension PaymentViewController {
 
 extension PaymentViewController: PaymentMethodTableViewCellDelegate {
     func getPaymentSelected(id: String) {
-        paymentSelected = id
+        self.paymentSelected = id
     }
 }
 

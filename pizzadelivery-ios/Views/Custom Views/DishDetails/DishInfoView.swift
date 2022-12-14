@@ -19,7 +19,7 @@ class DishInfoView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -29,39 +29,39 @@ class DishInfoView: UIView {
     // MARK: - Functions
     
     func configureWith(name: String, description: String, price: Double) {
-        nameLabel.text = name
-        descriptionLabel.text = description
-        priceLabel.text = "R$ \(price)"
+        self.nameLabel.text = name
+        self.descriptionLabel.text = description
+        self.priceLabel.text = "R$ \(price)"
     }
     
     // MARK: - Setup Constraints
     
     func setupNameLabelConstraints() {
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            self.nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
     
     func setupDescriptionLabelConstraints() {
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+            self.descriptionLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 10),
+            self.descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            self.descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
         ])
     }
     
     func setupPriceLabelConstraints() {
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.priceLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            priceLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
-            priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+            self.priceLabel.topAnchor.constraint(equalTo: self.descriptionLabel.bottomAnchor, constant: 10),
+            self.priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            self.priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
         ])
     }
     
@@ -72,15 +72,15 @@ class DishInfoView: UIView {
 
 extension DishInfoView: ViewConfiguration {
     func setupConstraints() {
-        setupNameLabelConstraints()
-        setupDescriptionLabelConstraints()
-        setupPriceLabelConstraints()
+        self.setupNameLabelConstraints()
+        self.setupDescriptionLabelConstraints()
+        self.setupPriceLabelConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(nameLabel)
-        addSubview(descriptionLabel)
-        addSubview(priceLabel)
+        addSubview(self.nameLabel)
+        addSubview(self.descriptionLabel)
+        addSubview(self.priceLabel)
     }
     
     func configureViews() {

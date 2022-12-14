@@ -18,7 +18,7 @@ class MyCartButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -26,8 +26,8 @@ class MyCartButton: UIButton {
     }
     
     func configureWithText(quantity: String, totalPrice: String) {
-        itemLabel.text = "\(Int(quantity)! == 1 ? "\(quantity) item" : " \(quantity) itens")"
-        totalPriceLabel.text = "R$ \(totalPrice)"
+        self.itemLabel.text = "\(Int(quantity)! == 1 ? "\(quantity) item" : " \(quantity) itens")"
+        self.totalPriceLabel.text = "R$ \(totalPrice)"
     }
     
     // MARK: - Setup Constraints
@@ -39,50 +39,50 @@ class MyCartButton: UIButton {
     }
     
     func setupItemLabelConstraints() {
-        itemLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.itemLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            itemLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            itemLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            self.itemLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            self.itemLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     
     func setupMyCartLabelConstraints() {
-        myCartLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.myCartLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            myCartLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            myCartLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+            self.myCartLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            self.myCartLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
     
     func setupTotalPriceConstraints() {
-        totalPriceLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.totalPriceLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            totalPriceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            totalPriceLabel.firstBaselineAnchor.constraint(equalTo: myCartLabel.firstBaselineAnchor)
+            self.totalPriceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            self.totalPriceLabel.firstBaselineAnchor.constraint(equalTo: self.myCartLabel.firstBaselineAnchor)
         ])
     }
 }
 
 extension MyCartButton: ViewConfiguration {
     func setupConstraints() {
-        setupButtonConstraints()
-        setupItemLabelConstraints()
-        setupMyCartLabelConstraints()
-        setupTotalPriceConstraints()
+        self.setupButtonConstraints()
+        self.setupItemLabelConstraints()
+        self.setupMyCartLabelConstraints()
+        self.setupTotalPriceConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(itemLabel)
-        addSubview(myCartLabel)
-        addSubview(totalPriceLabel)
+        addSubview(self.itemLabel)
+        addSubview(self.myCartLabel)
+        addSubview(self.totalPriceLabel)
     }
     
     func configureViews() {
         backgroundColor = .red
         isHidden = true
-        myCartLabel.text = "Meu carrinho"
+        self.myCartLabel.text = "Meu carrinho"
     }
 }

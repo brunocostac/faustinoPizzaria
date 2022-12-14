@@ -25,12 +25,12 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        fetchOrder()
-        populateTextFields()
+        self.fetchOrder()
+        self.populateTextFields()
     }
     
     // MARK: - Initialization
@@ -46,39 +46,39 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     private func populateTextFields() {
         if let orderVM = orderViewModel?.order {
-            deliveryLocationView.addressTextField.text = orderVM.address
-            deliveryLocationView.neighborhoodTextField.text = orderVM.neighborhood
-            deliveryLocationView.customerNameTextField.text = orderVM.customerName
+            self.deliveryLocationView.addressTextField.text = orderVM.address
+            self.deliveryLocationView.neighborhoodTextField.text = orderVM.neighborhood
+            self.deliveryLocationView.customerNameTextField.text = orderVM.customerName
         }
     }
     
     // MARK: - Setup Constraints
     
     private func setupDeliveryLocationViewConstraints() {
-        deliveryLocationView.translatesAutoresizingMaskIntoConstraints = false
+        self.deliveryLocationView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            deliveryLocationView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            deliveryLocationView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            deliveryLocationView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            deliveryLocationView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            self.deliveryLocationView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            self.deliveryLocationView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.deliveryLocationView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.deliveryLocationView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }
 
 extension DeliveryLocationViewController: ViewConfiguration {
     func setupConstraints() {
-        setupDeliveryLocationViewConstraints()
+        self.setupDeliveryLocationViewConstraints()
     }
     
     func buildViewHierarchy() {
-        view.addSubview(deliveryLocationView)
+        view.addSubview(self.deliveryLocationView)
     }
     
     func configureViews() {
         view.backgroundColor = .white
         title = "Local de entrega"
-        deliveryLocationView.saveLocationDeliveryButton.addTarget(self, action: #selector(saveButtonPressed), for: .touchUpInside)
+        self.deliveryLocationView.saveLocationDeliveryButton.addTarget(self, action: #selector(self.saveButtonPressed), for: .touchUpInside)
     }
 }
 
@@ -106,14 +106,14 @@ extension DeliveryLocationViewController {
 
 extension DeliveryLocationViewController {
     @objc func saveButtonPressed() {
-        if let address = deliveryLocationView.addressTextField.text,
-           let neighborhood = deliveryLocationView.neighborhoodTextField.text,
-           let customerName = deliveryLocationView.customerNameTextField.text {
+        if let address = self.deliveryLocationView.addressTextField.text,
+           let neighborhood = self.deliveryLocationView.neighborhoodTextField.text,
+           let customerName = self.deliveryLocationView.customerNameTextField.text {
             
-            orderViewModel?.order.address = address
-            orderViewModel?.order.neighborhood = neighborhood
-            orderViewModel?.order.customerName = customerName
-            saveOrder()
+            self.orderViewModel?.order.address = address
+            self.orderViewModel?.order.neighborhood = neighborhood
+            self.orderViewModel?.order.customerName = customerName
+            self.saveOrder()
         }
     }
     

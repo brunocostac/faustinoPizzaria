@@ -34,7 +34,7 @@ class CampaignViewController: UIViewController, CampaignBaseCoordinated {
     required init(coordinator: CampaignBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -46,26 +46,26 @@ class CampaignViewController: UIViewController, CampaignBaseCoordinated {
 
 extension CampaignViewController: ViewConfiguration {
     func setupConstraints() {
-        firstPromotionalCampaign.translatesAutoresizingMaskIntoConstraints = false
+        self.firstPromotionalCampaign.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            firstPromotionalCampaign.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            firstPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            firstPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            firstPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
+            self.firstPromotionalCampaign.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            self.firstPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            self.firstPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            self.firstPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
         ])
         
-        secondPromotionalCampaign.translatesAutoresizingMaskIntoConstraints = false
+        self.secondPromotionalCampaign.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            secondPromotionalCampaign.topAnchor.constraint(equalTo: firstPromotionalCampaign.bottomAnchor, constant: 0),
-            secondPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            secondPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            secondPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
+            self.secondPromotionalCampaign.topAnchor.constraint(equalTo: self.firstPromotionalCampaign.bottomAnchor, constant: 0),
+            self.secondPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            self.secondPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            self.secondPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
     
     func buildViewHierarchy() {
-        view.addSubview(firstPromotionalCampaign)
-        view.addSubview(secondPromotionalCampaign)
+        view.addSubview(self.firstPromotionalCampaign)
+        view.addSubview(self.secondPromotionalCampaign)
     }
     
     func configureViews() {

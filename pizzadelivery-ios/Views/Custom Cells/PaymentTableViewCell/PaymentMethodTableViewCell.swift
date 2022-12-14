@@ -45,7 +45,7 @@ class PaymentMethodTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -56,14 +56,14 @@ class PaymentMethodTableViewCell: UITableViewCell {
     
     @objc func firstPaymentMethodWasSelected(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
-        paymentMethodTwoButton.isSelected = false
-        delegate?.getPaymentSelected(id: "0")
+        self.paymentMethodTwoButton.isSelected = false
+        self.delegate?.getPaymentSelected(id: "0")
     }
     
     @objc func secondPaymentMethodWasSelected(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
-        paymentMethodOneButton.isSelected = false
-        delegate?.getPaymentSelected(id: "1")
+        self.paymentMethodOneButton.isSelected = false
+        self.delegate?.getPaymentSelected(id: "1")
     }
     
     // MARK: - Setup Constraints
@@ -71,38 +71,38 @@ class PaymentMethodTableViewCell: UITableViewCell {
         paymentMethodOneButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            paymentMethodOneButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            paymentMethodOneButton.leadingAnchor.constraint(equalTo: leadingAnchor)
+            self.paymentMethodOneButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            self.paymentMethodOneButton.leadingAnchor.constraint(equalTo: leadingAnchor)
         ])
     }
     
     func setupOptionTwoButtonConstraints() {
-        paymentMethodTwoButton.translatesAutoresizingMaskIntoConstraints = false
+        self.paymentMethodTwoButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            paymentMethodTwoButton.firstBaselineAnchor.constraint(equalTo: paymentMethodOneButton.firstBaselineAnchor),
-            paymentMethodTwoButton.leadingAnchor.constraint(equalTo: paymentMethodOneButton.trailingAnchor, constant: 10)
+            self.paymentMethodTwoButton.firstBaselineAnchor.constraint(equalTo: paymentMethodOneButton.firstBaselineAnchor),
+            self.paymentMethodTwoButton.leadingAnchor.constraint(equalTo: self.paymentMethodOneButton.trailingAnchor, constant: 10)
         ])
     }
 }
 
 extension PaymentMethodTableViewCell: ViewConfiguration {
     func setupConstraints() {
-        setupOptionOneButtonConstraints()
-        setupOptionTwoButtonConstraints()
+        self.setupOptionOneButtonConstraints()
+        self.setupOptionTwoButtonConstraints()
     }
     
     func buildViewHierarchy() {
         contentView.isUserInteractionEnabled = true
-        addSubview(paymentMethodOneButton)
-        addSubview(paymentMethodTwoButton)
+        addSubview(self.paymentMethodOneButton)
+        addSubview(self.paymentMethodTwoButton)
     }
     
     func configureViews() {
         backgroundColor = .white
         selectionStyle = .none
-        paymentMethodOneButton.addTarget(self, action: #selector(firstPaymentMethodWasSelected(_:)), for: .touchUpInside)
-        paymentMethodTwoButton.addTarget(self, action: #selector(secondPaymentMethodWasSelected(_:)), for: .touchUpInside)
-        paymentMethodOneButton.isSelected = true
+        self.paymentMethodOneButton.addTarget(self, action: #selector(self.firstPaymentMethodWasSelected(_:)), for: .touchUpInside)
+        self.paymentMethodTwoButton.addTarget(self, action: #selector(self.secondPaymentMethodWasSelected(_:)), for: .touchUpInside)
+        self.paymentMethodOneButton.isSelected = true
     }
 }

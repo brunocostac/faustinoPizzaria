@@ -55,7 +55,7 @@ class DeliveryLocationView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,44 +65,44 @@ class DeliveryLocationView: UIView {
     // MARK: - Setup Constraints
     
     func setupAddressTextFieldConstraints() {
-        addressTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.addressTextField.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            addressTextField.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            addressTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            addressTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            addressTextField.heightAnchor.constraint(equalToConstant: 40)
+            self.addressTextField.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            self.addressTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            self.addressTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            self.addressTextField.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
     func setupNeighborhoodTextFieldConstraints() {
-        neighborhoodTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.neighborhoodTextField.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            neighborhoodTextField.topAnchor.constraint(equalTo: addressTextField.bottomAnchor, constant: 10),
-            neighborhoodTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            neighborhoodTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            neighborhoodTextField.heightAnchor.constraint(equalToConstant: 40)
+            self.neighborhoodTextField.topAnchor.constraint(equalTo: self.addressTextField.bottomAnchor, constant: 10),
+            self.neighborhoodTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            self.neighborhoodTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            self.neighborhoodTextField.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
     func setupCustomerTextFieldConstraints() {
-        customerNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.customerNameTextField.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            customerNameTextField.topAnchor.constraint(equalTo: neighborhoodTextField.bottomAnchor, constant: 10),
-            customerNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            customerNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            customerNameTextField.heightAnchor.constraint(equalToConstant: 40)
+            self.customerNameTextField.topAnchor.constraint(equalTo: self.neighborhoodTextField.bottomAnchor, constant: 10),
+            self.customerNameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            self.customerNameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            self.customerNameTextField.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
     func setupSaveLocationDeliveryButtonConstraints() {
-        saveLocationDeliveryButton.translatesAutoresizingMaskIntoConstraints = false
+        self.saveLocationDeliveryButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            saveLocationDeliveryButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40),
-            saveLocationDeliveryButton.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+            self.saveLocationDeliveryButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40),
+            self.saveLocationDeliveryButton.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
     }
 }
@@ -111,8 +111,8 @@ extension DeliveryLocationView: ViewConfiguration {
     func setupConstraints() {
         setupAddressTextFieldConstraints()
         setupNeighborhoodTextFieldConstraints()
-        setupCustomerTextFieldConstraints()
-        setupSaveLocationDeliveryButtonConstraints()
+        self.setupCustomerTextFieldConstraints()
+        self.setupSaveLocationDeliveryButtonConstraints()
     }
     
     func buildViewHierarchy() {

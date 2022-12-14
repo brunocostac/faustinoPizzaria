@@ -24,7 +24,7 @@ class OrderRepository {
             if orders == [] {
                 orderEntity.isOpen = true
                 orderEntity.orderId = UUID()
-                coreDataStack.saveContext()
+                self.coreDataStack.saveContext()
             }
         } catch {
             print("Error fetching data from context \(error)")
@@ -57,7 +57,7 @@ class OrderRepository {
             do {
                 let result = try self.coreDataStack.managedObjectContext.fetch(request)
                 if result != [] {
-                    coreDataStack.saveContext()
+                    self.coreDataStack.saveContext()
                     completion(true)
                 } else {
                     completion(false)
@@ -68,19 +68,23 @@ class OrderRepository {
         }
     }
     
-    public func fetchAll(completion: @escaping ([Order]?) -> Void) {
+    public func fetchAll(completion: @escaping ([OrderViewModel]?) -> Void) {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == false")
-        var orderList = [Order]()
+        var orderVM = [OrderViewModel]()
         
         request.predicate = predicate
         
         do {
             let orders: [Order] = try coreDataStack.managedObjectContext.fetch(request)
-            orderList = orders
+            
+            for order in orders {
+                let viewModel = OrderViewModel(order: order)
+                orderVM.append(viewModel)
+            }
         } catch {
             print("Error fetching data from context \(error)")
         }
-        completion(orderList)
+        completion(orderVM)
     }
 }
