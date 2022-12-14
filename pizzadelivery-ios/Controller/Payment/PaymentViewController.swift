@@ -276,7 +276,7 @@ extension PaymentViewController {
         OrderRepository().update(orderViewModel: orderViewModel, completion: { success in
             if success {
                 self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar", actionClosure: { [self] in
-                    goToMenuScreen()
+                    self.goToMenuScreen()
                 })
             }
         })

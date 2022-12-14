@@ -29,7 +29,7 @@ class LogoView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,23 +39,23 @@ class LogoView: UIView {
     // MARK: - Setup Constraints
     
     private func setupHeaderImageConstraints() {
-        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
+        self.backgroundImage.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            backgroundImage.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            backgroundImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
-            backgroundImage.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
-            backgroundImage.heightAnchor.constraint(equalToConstant: 150)
+            self.backgroundImage.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            self.backgroundImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
+            self.backgroundImage.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
+            self.backgroundImage.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
     private func setupLogoConstraints() {
-        logoImage.translatesAutoresizingMaskIntoConstraints = false
+        self.logoImage.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            logoImage.centerXAnchor.constraint(equalTo: backgroundImage.centerXAnchor),
-            logoImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 25),
-            logoImage.heightAnchor.constraint(equalToConstant: 80),
-            logoImage.widthAnchor.constraint(equalToConstant: 80)
+            self.logoImage.centerXAnchor.constraint(equalTo: self.backgroundImage.centerXAnchor),
+            self.logoImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 25),
+            self.logoImage.heightAnchor.constraint(equalToConstant: 80),
+            self.logoImage.widthAnchor.constraint(equalToConstant: 80)
         ])
     }
 }
@@ -64,13 +64,13 @@ class LogoView: UIView {
 
 extension LogoView: ViewConfiguration {
     func setupConstraints() {
-        setupHeaderImageConstraints()
-        setupLogoConstraints()
+        self.setupHeaderImageConstraints()
+        self.setupLogoConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(backgroundImage)
-        addSubview(logoImage)
+        addSubview(self.backgroundImage)
+        addSubview(self.logoImage)
     }
     
     func configureViews() {

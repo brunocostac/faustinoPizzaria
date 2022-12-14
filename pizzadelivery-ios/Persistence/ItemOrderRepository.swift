@@ -37,7 +37,7 @@ class ItemOrderRepository {
     }
     
     public func create(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
-        let itemEntity = ItemOrder(context: coreDataStack.managedObjectContext)
+        let itemEntity = ItemOrder(context: self.coreDataStack.managedObjectContext)
         itemEntity.name = itemOrderViewModel!.name
         itemEntity.price = itemOrderViewModel!.price
         itemEntity.itemId = itemOrderViewModel!.itemId
@@ -64,7 +64,7 @@ class ItemOrderRepository {
                 itemEntity.first!.setValue(itemOrderViewModel!.name, forKey: "name")
                 itemEntity.first!.setValue(itemOrderViewModel!.comment, forKey: "comment")
                 
-                coreDataStack.saveContext()
+                self.coreDataStack.saveContext()
             } catch {
                 print("Error fetching data from context \(error)")
             }
@@ -103,7 +103,7 @@ class ItemOrderRepository {
             request.predicate = NSCompoundPredicate(type: .and, subpredicates: [predicateOne, predicateTwo])
             
             do {
-                let currentItem = try coreDataStack.managedObjectContext.fetch(request)
+                let currentItem = try self.coreDataStack.managedObjectContext.fetch(request)
                 if currentItem != [] {
                     itemOrderVM = ItemOrderViewModel(itemOrder: currentItem[0])
                 }
@@ -124,7 +124,7 @@ class ItemOrderRepository {
             request.predicate = predicate
            
             do {
-                let itemOrders: [ItemOrder] = try coreDataStack.managedObjectContext.fetch(request)
+                let itemOrders: [ItemOrder] = try self.coreDataStack.managedObjectContext.fetch(request)
                 if itemOrders != [] {
                     for itemOrder in itemOrders {
                         let viewModel = ItemOrderViewModel(itemOrder: itemOrder)

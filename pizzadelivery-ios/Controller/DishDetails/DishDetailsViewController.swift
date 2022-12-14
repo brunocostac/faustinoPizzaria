@@ -268,7 +268,7 @@ extension DishDetailsViewController {
     @objc func increaseQuantityButtonPressed(_ sender: UIButton) {
         var quantity = Int(self.quantityView.quantityLabel.text!)
         quantity = quantity! + 1
-        updateQuantityView(quantity: quantity!, flag: flag)
+        self.updateQuantityView(quantity: quantity!, flag: flag)
     }
     
     @objc func decreaseQuantityButtonPressed(_ sender: UIButton) {
@@ -283,7 +283,7 @@ extension DishDetailsViewController {
                 temporaryFlag = ItemOrderStatus.remove
             }
         }
-        updateQuantityView(quantity: quantity!, flag: temporaryFlag)
+        self.updateQuantityView(quantity: quantity!, flag: temporaryFlag)
     }
     
     @objc func addToCartButtonPressed(_ sender: UIButton) {
