@@ -47,38 +47,38 @@ class OrderTableViewCell: UITableViewCell {
     // MARK: - Setup Constraints
     
     private func setupTitleLabelConstraints() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            self.titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
     
     private func setupDescriptionLabelConstraints() {
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.descriptionLabel.topAnchor.constraint(equalTo:  self.titleLabel.bottomAnchor, constant: 10),
+            self.descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
     
     private func setupPriceLabelConstraints() {
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.priceLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-           priceLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
-           priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.priceLabel.topAnchor.constraint(equalTo:  self.descriptionLabel.bottomAnchor, constant: 10),
+            self.priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
     
     private func setupStatusLabelConstraints() {
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-           statusLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 10),
-           statusLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.statusLabel.topAnchor.constraint(equalTo:  self.priceLabel.bottomAnchor, constant: 10),
+            self.statusLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
 }
@@ -87,17 +87,17 @@ class OrderTableViewCell: UITableViewCell {
 
 extension OrderTableViewCell: ViewConfiguration {
     func setupConstraints() {
-        setupTitleLabelConstraints()
-        setupDescriptionLabelConstraints()
-        setupPriceLabelConstraints()
-        setupStatusLabelConstraints()
+        self.setupTitleLabelConstraints()
+        self.setupDescriptionLabelConstraints()
+        self.setupPriceLabelConstraints()
+        self.setupStatusLabelConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(titleLabel)
-        addSubview(descriptionLabel)
-        addSubview(priceLabel)
-        addSubview(statusLabel)
+        addSubview(self.titleLabel)
+        addSubview(self.descriptionLabel)
+        addSubview(self.priceLabel)
+        addSubview(self.statusLabel)
     }
     
     func configureViews() {

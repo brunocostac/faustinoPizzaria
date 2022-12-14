@@ -207,7 +207,7 @@ extension PaymentViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return itemOrderListViewModel!.count + 1
+            return  self.itemOrderListViewModel!.count + 1
         case 2:
             return 1
         default:
@@ -300,7 +300,7 @@ extension PaymentViewController {
             }
             MockApiClient().sendOrder { [self] response in
                 if response {
-                    saveOrder()
+                    self.saveOrder()
                 }
             }
         } else {

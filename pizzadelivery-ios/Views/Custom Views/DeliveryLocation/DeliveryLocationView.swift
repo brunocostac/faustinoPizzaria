@@ -109,17 +109,17 @@ class DeliveryLocationView: UIView {
 
 extension DeliveryLocationView: ViewConfiguration {
     func setupConstraints() {
-        setupAddressTextFieldConstraints()
-        setupNeighborhoodTextFieldConstraints()
+        self.setupAddressTextFieldConstraints()
+        self.setupNeighborhoodTextFieldConstraints()
         self.setupCustomerTextFieldConstraints()
         self.setupSaveLocationDeliveryButtonConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(addressTextField)
-        addSubview(neighborhoodTextField)
-        addSubview(customerNameTextField)
-        addSubview(saveLocationDeliveryButton)
+        addSubview(self.addressTextField)
+        addSubview(self.neighborhoodTextField)
+        addSubview(self.customerNameTextField)
+        addSubview(self.saveLocationDeliveryButton)
     }
     
     func configureViews() {

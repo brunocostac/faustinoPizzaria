@@ -22,7 +22,7 @@ class DishImageView: UIImageView {
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,29 +32,29 @@ class DishImageView: UIImageView {
     // MARK: - Functions
     
     func configureWith(url: String) {
-        imageView.image = UIImage(named: url)
+        self.imageView.image = UIImage(named: url)
     }
     
     // MARK: - Setup Constraints
     
     private func setupDishImageViewConstraints() {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        self.imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-            imageView.heightAnchor.constraint(equalToConstant: 120)
+            self.imageView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            self.imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            self.imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            self.imageView.heightAnchor.constraint(equalToConstant: 120)
         ])
     }
 }
 
 extension DishImageView: ViewConfiguration {
     func setupConstraints() {
-        setupDishImageViewConstraints()
+        self.setupDishImageViewConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(imageView)
+        addSubview(self.imageView)
     }
     
     func configureViews() {

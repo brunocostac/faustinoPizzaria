@@ -32,7 +32,7 @@ class DeliveryLocationTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -42,28 +42,28 @@ class DeliveryLocationTableViewCell: UITableViewCell {
     // MARK: - Functions
     
     func configureWithText(address: String) {
-        placeDescriptionLabel.text = address
+        self.placeDescriptionLabel.text = address
     }
     
     @objc func editDeliveryLocationButtonClicked() {
-        delegate?.goToDeliveryLocationScreen()
+        self.delegate?.goToDeliveryLocationScreen()
     }
     
     // MARK: - Setup Constraints
     
     func setupPlaceDescriptionLabelConstraints() {
-        placeDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.placeDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            placeDescriptionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            placeDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
+            self.placeDescriptionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            self.placeDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10)
         ])
     }
     
     func setupAddLocalDeliveryButtonConstraints() {
-        editDeliveryLocationButton.translatesAutoresizingMaskIntoConstraints = false
+        self.editDeliveryLocationButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            editDeliveryLocationButton.firstBaselineAnchor.constraint(equalTo: placeDescriptionLabel.firstBaselineAnchor),
-            editDeliveryLocationButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+            self.editDeliveryLocationButton.firstBaselineAnchor.constraint(equalTo: self.placeDescriptionLabel.firstBaselineAnchor),
+            self.editDeliveryLocationButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
         ])
     }
 }
@@ -71,19 +71,19 @@ class DeliveryLocationTableViewCell: UITableViewCell {
 extension DeliveryLocationTableViewCell: ViewConfiguration {
     
     func setupConstraints() {
-        setupPlaceDescriptionLabelConstraints()
-        setupAddLocalDeliveryButtonConstraints()
+        self.setupPlaceDescriptionLabelConstraints()
+        self.setupAddLocalDeliveryButtonConstraints()
     }
     
     func buildViewHierarchy() {
         contentView.isUserInteractionEnabled = true
-        addSubview(placeDescriptionLabel)
-        addSubview(editDeliveryLocationButton)
+        addSubview(self.placeDescriptionLabel)
+        addSubview(self.editDeliveryLocationButton)
     }
     
     func configureViews() {
         backgroundColor = .white
         selectionStyle = .none
-        editDeliveryLocationButton.addTarget(self, action: #selector(editDeliveryLocationButtonClicked), for: .touchUpInside)
+        self.editDeliveryLocationButton.addTarget(self, action: #selector(self.editDeliveryLocationButtonClicked), for: .touchUpInside)
     }
 }

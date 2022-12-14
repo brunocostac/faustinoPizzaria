@@ -33,7 +33,7 @@ class DishCommentView: UIView {
     }
     
     func configureWith(comment: String) {
-        commentTextField.text = comment
+        self.commentTextField.text = comment
     }
     
     // MARK: - Setup Constraints

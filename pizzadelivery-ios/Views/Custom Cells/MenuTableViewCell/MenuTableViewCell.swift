@@ -24,7 +24,7 @@ class MenuTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViewConfiguration()
+        self.setupViewConfiguration()
     }
     
     required init?(coder: NSCoder) {
@@ -32,54 +32,54 @@ class MenuTableViewCell: UITableViewCell {
     }
     
     func configureWith(name: String, description: String, price: String, image: UIImage) {
-        titleLabel.text = name
-        dishImage.image = image
-        descriptionLabel.text = description
-        priceLabel.text = price
+        self.titleLabel.text = name
+        self.dishImage.image = image
+        self.descriptionLabel.text = description
+        self.priceLabel.text = price
     }
     
     // MARK: - Setup Constraints
     
     private func setupDishImageConstraints() {
-        dishImage.translatesAutoresizingMaskIntoConstraints = false
+        self.dishImage.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            dishImage.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            dishImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            dishImage.heightAnchor.constraint(equalToConstant: 60),
-            dishImage.widthAnchor.constraint(equalTo: dishImage.heightAnchor, multiplier: 16/9)
+            self.dishImage.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            self.dishImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            self.dishImage.heightAnchor.constraint(equalToConstant: 60),
+            self.dishImage.widthAnchor.constraint(equalTo:  self.dishImage.heightAnchor, multiplier: 16/9)
         ])
     }
     
     private func setupTitleLabelConstraints() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            titleLabel.firstBaselineAnchor.constraint(equalTo: dishImage.firstBaselineAnchor, constant: 5),
-            titleLabel.leadingAnchor.constraint(equalTo: dishImage.trailingAnchor, constant: 20),
-            titleLabel.heightAnchor.constraint(equalToConstant: 60),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12)
+            self.titleLabel.firstBaselineAnchor.constraint(equalTo: self.dishImage.firstBaselineAnchor, constant: 5),
+            self.titleLabel.leadingAnchor.constraint(equalTo: self.dishImage.trailingAnchor, constant: 20),
+            self.titleLabel.heightAnchor.constraint(equalToConstant: 60),
+            self.titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12)
         ])
     }
     
     private func setupDescriptionLabelConstraints() {
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: dishImage.bottomAnchor, constant: 10),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18)
+            self.descriptionLabel.topAnchor.constraint(equalTo: self.dishImage.bottomAnchor, constant: 10),
+            self.descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            self.descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18)
         ])
     }
     
     private func setupPriceLabelConstraints() {
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.priceLabel.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            priceLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
-            priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18),
-            priceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+            self.priceLabel.topAnchor.constraint(equalTo:  self.descriptionLabel.bottomAnchor, constant: 10),
+            self.priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            self.priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18),
+            self.priceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
         ])
     }
 }
@@ -88,17 +88,17 @@ class MenuTableViewCell: UITableViewCell {
 
 extension MenuTableViewCell: ViewConfiguration {
     func setupConstraints() {
-        setupDishImageConstraints()
-        setupTitleLabelConstraints()
-        setupDescriptionLabelConstraints()
-        setupPriceLabelConstraints()
+        self.setupDishImageConstraints()
+        self.setupTitleLabelConstraints()
+        self.setupDescriptionLabelConstraints()
+        self.setupPriceLabelConstraints()
     }
     
     func buildViewHierarchy() {
-        addSubview(dishImage)
-        addSubview(titleLabel)
-        addSubview(descriptionLabel)
-        addSubview(priceLabel)
+        addSubview(self.dishImage)
+        addSubview(self.titleLabel)
+        addSubview(self.descriptionLabel)
+        addSubview(self.priceLabel)
     }
     
     func configureViews() {
