@@ -86,7 +86,7 @@ extension DeliveryLocationViewController: ViewConfiguration {
 
 extension DeliveryLocationViewController {
     private func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
+        OrderRepository().fetch{ currentOrder in
             if let currentOrder = currentOrder {
                 self.orderViewModel = OrderViewModel(currentOrder)
             }
@@ -94,7 +94,7 @@ extension DeliveryLocationViewController {
     }
     
     private func saveOrder() {
-        CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
+        OrderRepository().update(orderViewModel: orderViewModel, completion: { success in
             if success {
                 self.goToPreviousScreen()
             }

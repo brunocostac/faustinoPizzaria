@@ -228,7 +228,7 @@ extension MenuViewController: UITableViewDataSource {
 
 extension MenuViewController {
     private func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
+        OrderRepository().fetch { currentOrder in
             if let currentOrder = currentOrder {
                 self.orderViewModel = OrderViewModel(currentOrder)
             }
@@ -236,13 +236,13 @@ extension MenuViewController {
     }
     private func fetchItems() {
         if orderViewModel != nil {
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
         }
     }
     
     private func createOrder() {
         if orderViewModel == nil {
-            CoreDataHelper().createOrder()
+            OrderRepository().create()
         }
     }
 }

@@ -171,7 +171,7 @@ extension OrderViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         let orderVM = orderListViewModel?.orderAtIndex(indexPath.row)
-        let itemsOrderVM = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderVM)
+        let itemsOrderVM = ItemOrderRepository().fetchAll(orderViewModel: orderVM)
         
         cell.configureWithText(orderVM: orderVM!, itemOrderListVM: itemsOrderVM!)
         return cell
@@ -182,7 +182,7 @@ extension OrderViewController: UITableViewDataSource {
 
 extension OrderViewController {
     private func fetchOrders() {
-        CoreDataHelper().fetchOrders { orders in
+        OrderRepository().fetchAll { orders in
             var orderVM = [OrderViewModel]()
             if let orders = orders {
                 for order in orders {

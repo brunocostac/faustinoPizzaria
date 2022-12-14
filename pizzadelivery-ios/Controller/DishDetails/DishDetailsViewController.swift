@@ -242,7 +242,7 @@ extension DishDetailsViewController: ViewConfiguration {
 
 extension DishDetailsViewController {
     private func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
+        OrderRepository().fetch { currentOrder in
             if let currentOrder = currentOrder {
                 self.orderViewModel = OrderViewModel(currentOrder)
             }
@@ -251,13 +251,13 @@ extension DishDetailsViewController {
     
     private func fetchItems() {
         if orderViewModel != nil {
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
         }
     }
     
     private func fetchCurrentItem() {
         if orderViewModel != nil {
-            itemOrderViewModel = CoreDataHelper().fetchCurrentItem(itemMenuViewModel: itemMenuViewModel, orderViewModel: orderViewModel)
+            itemOrderViewModel = ItemOrderRepository().fetch(itemMenuViewModel: itemMenuViewModel, orderViewModel: orderViewModel)
         }
     }
 }
@@ -300,13 +300,13 @@ extension DishDetailsViewController {
                                                 quantity: Int64(quantity!),
                                                 comment: comment)
         if isToRemoveItem! {
-            CoreDataHelper().removeItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
+            ItemOrderRepository().remove(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
                 if success {
                     self.goToHomeScreen()
                 }
             })
         } else {
-            CoreDataHelper().saveItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
+            ItemOrderRepository().save(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel, completion: { success in
                 if success {
                     self.goToCartScreen()
                 }

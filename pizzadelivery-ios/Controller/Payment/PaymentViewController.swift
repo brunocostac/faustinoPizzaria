@@ -259,7 +259,7 @@ extension PaymentViewController: UITableViewDataSource {
 
 extension PaymentViewController {
     private func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
+        OrderRepository().fetch{ currentOrder in
             if let currentOrder = currentOrder {
                 self.orderViewModel = OrderViewModel(currentOrder)
             }
@@ -268,12 +268,12 @@ extension PaymentViewController {
     
     private func fetchItems() {
         if orderViewModel != nil {
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
         }
     }
     
     private func saveOrder() {
-        CoreDataHelper().updateOrder(orderViewModel: orderViewModel, completion: { success in
+        OrderRepository().update(orderViewModel: orderViewModel, completion: { success in
             if success {
                 self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar", actionClosure: { [self] in
                     goToMenuScreen()

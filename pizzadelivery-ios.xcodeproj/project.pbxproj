@@ -40,12 +40,13 @@
 		113C0B4A279745C4004C2FAC /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113C0B49279745C4004C2FAC /* Menu.swift */; };
 		113C0B4C27974614004C2FAC /* ItemMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113C0B4B27974614004C2FAC /* ItemMenu.swift */; };
 		113FE77627C564E70056272A /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113FE77527C564E70056272A /* FooterView.swift */; };
-		11449D3327AB0A4100E22997 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11449D3227AB0A4100E22997 /* CoreDataHelper.swift */; };
 		11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */; };
 		11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */; };
 		11627C842790CED900FC4AA0 /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */; };
 		11627C862790CF0100FC4AA0 /* CartItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */; };
 		116972CB27BD64B000F7A6B2 /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116972CA27BD64AF00F7A6B2 /* Extension+Date.swift */; };
+		1172EBDB294A1D390078F1F1 /* OrderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172EBDA294A1D390078F1F1 /* OrderRepository.swift */; };
+		1172EBDD294A1E500078F1F1 /* ItemOrderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172EBDC294A1E500078F1F1 /* ItemOrderRepository.swift */; };
 		117EC0A627A2DBE60003D3EC /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0A527A2DBE60003D3EC /* MenuViewModel.swift */; };
 		117EC0A827A2DBF50003D3EC /* ItemMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0A727A2DBF50003D3EC /* ItemMenuViewModel.swift */; };
 		117EC0AA27A2DC0B0003D3EC /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0A927A2DC0B0003D3EC /* OrderViewModel.swift */; };
@@ -98,12 +99,13 @@
 		113C0B49279745C4004C2FAC /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		113C0B4B27974614004C2FAC /* ItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMenu.swift; sourceTree = "<group>"; };
 		113FE77527C564E70056272A /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
-		11449D3227AB0A4100E22997 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationTableViewCell.swift; sourceTree = "<group>"; };
 		11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationViewController.swift; sourceTree = "<group>"; };
 		11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
 		11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemTableViewCell.swift; sourceTree = "<group>"; };
 		116972CA27BD64AF00F7A6B2 /* Extension+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Date.swift"; sourceTree = "<group>"; };
+		1172EBDA294A1D390078F1F1 /* OrderRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRepository.swift; sourceTree = "<group>"; };
+		1172EBDC294A1E500078F1F1 /* ItemOrderRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemOrderRepository.swift; sourceTree = "<group>"; };
 		117EC0A527A2DBE60003D3EC /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
 		117EC0A727A2DBF50003D3EC /* ItemMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMenuViewModel.swift; sourceTree = "<group>"; };
 		117EC0A927A2DC0B0003D3EC /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
@@ -408,7 +410,8 @@
 			isa = PBXGroup;
 			children = (
 				117EC0B127A34CCA0003D3EC /* CoreDataStack.swift */,
-				11449D3227AB0A4100E22997 /* CoreDataHelper.swift */,
+				1172EBDA294A1D390078F1F1 /* OrderRepository.swift */,
+				1172EBDC294A1E500078F1F1 /* ItemOrderRepository.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -559,7 +562,6 @@
 				1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */,
 				112F25402796075500A50E11 /* PaymentMethodTableViewCell.swift in Sources */,
 				1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */,
-				11449D3327AB0A4100E22997 /* CoreDataHelper.swift in Sources */,
 				117EC0AF27A2E4160003D3EC /* DataModel.xcdatamodeld in Sources */,
 				118560E3278DF30900B7D149 /* DishCommentView.swift in Sources */,
 				1119FA5027876A3900AF25E1 /* MainCoordinator.swift in Sources */,
@@ -578,6 +580,7 @@
 				1119FA342787307E00AF25E1 /* SceneDelegate.swift in Sources */,
 				112F25382795E0A700A50E11 /* DeliveryLocationView.swift in Sources */,
 				1119FA5227876B7200AF25E1 /* ViewConfiguration.swift in Sources */,
+				1172EBDB294A1D390078F1F1 /* OrderRepository.swift in Sources */,
 				11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */,
 				116972CB27BD64B000F7A6B2 /* Extension+Date.swift in Sources */,
 				118560DF278DC2D900B7D149 /* DishImageView.swift in Sources */,
@@ -587,6 +590,7 @@
 				111BCCF5278F848100F6E89E /* MyCartButton.swift in Sources */,
 				1119FA6E2787A7BA00AF25E1 /* CampaignViewController.swift in Sources */,
 				1119FA6427877F7A00AF25E1 /* MenuCoordinator.swift in Sources */,
+				1172EBDD294A1E500078F1F1 /* ItemOrderRepository.swift in Sources */,
 				1119FA762787A8F900AF25E1 /* OrderCoordinator.swift in Sources */,
 				118560E5278E0A2700B7D149 /* DishQuantityView.swift in Sources */,
 				1119FA4E2787697300AF25E1 /* Enums.swift in Sources */,

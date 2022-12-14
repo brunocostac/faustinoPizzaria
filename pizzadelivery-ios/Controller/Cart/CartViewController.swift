@@ -225,7 +225,7 @@ extension CartViewController: UITableViewDataSource {
 
 extension CartViewController {
     func fetchOrder() {
-        CoreDataHelper().fetchCurrentOrder { currentOrder in
+        OrderRepository().fetch { currentOrder in
             if let currentOrder = currentOrder {
                 self.orderViewModel = OrderViewModel(currentOrder)
             }
@@ -234,7 +234,7 @@ extension CartViewController {
     
     private func fetchItems() {
         if orderViewModel != nil {
-            itemOrderListViewModel = CoreDataHelper().fetchItemsCurrentOrder(orderViewModel: orderViewModel)
+            itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
         }
     }
 }

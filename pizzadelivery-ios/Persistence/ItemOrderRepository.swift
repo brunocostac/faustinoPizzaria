@@ -1,93 +1,19 @@
 //
-//  CoreDataHelper.swift
+//  ItemOrderRepository.swift
 //  pizzadelivery-ios
 //
-//  Created by Bruno Costa on 02/02/22.
+//  Created by Bruno Costa on 14/12/22.
 //
 
 import Foundation
 import CoreData
-import UIKit
 
-class CoreDataHelper {
+
+class ItemOrderRepository {
+    
     private let coreDataStack = CoreDataStack.shared
     
-    // MARK: - Order functions
-    
-    public func createOrder() {
-        let request: NSFetchRequest<Order> = Order.fetchRequest()
-        let predicate = NSPredicate(format: "isOpen == true")
-        let orderEntity = Order(context: self.coreDataStack.managedObjectContext)
-        request.predicate = predicate
-        request.fetchLimit = 1
-        
-        do {
-            let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
-            if orders == [] {
-                orderEntity.isOpen = true
-                orderEntity.orderId = UUID()
-                coreDataStack.saveContext()
-            }
-        } catch {
-            print("Error fetching data from context \(error)")
-        }
-    }
-    
-    public func fetchCurrentOrder(completion: @escaping (Order?) -> Void) {
-        let request: NSFetchRequest<Order> = Order.fetchRequest()
-        let predicate = NSPredicate(format: "isOpen == true")
-        var order: Order?
-        request.predicate = predicate
-        request.fetchLimit = 1
-        
-        do {
-            let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
-            if orders != [] {
-                order = orders[0]
-            }
-        } catch {
-            print("Error fetching data from context \(error)")
-        }
-        completion(order)
-    }
-    
-    public func updateOrder(orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
-        if orderViewModel != nil {
-            let request: NSFetchRequest<Order> = Order.fetchRequest()
-            request.fetchLimit = 1
-            do {
-                let result = try self.coreDataStack.managedObjectContext.fetch(request)
-                if result != [] {
-                    coreDataStack.saveContext()
-                    completion(true)
-                } else {
-                    completion(false)
-                }
-            } catch {
-                print("Error fetching data from context \(error)")
-            }
-        }
-    }
-    
-    public func fetchOrders(completion: @escaping ([Order]?) -> Void) {
-        let request: NSFetchRequest<Order> = Order.fetchRequest()
-        let predicate = NSPredicate(format: "isOpen == false")
-        var orderList = [Order]()
-        
-        request.predicate = predicate
-        
-        do {
-            let orders: [Order] = try coreDataStack.managedObjectContext.fetch(request)
-            orderList = orders
-        } catch {
-            print("Error fetching data from context \(error)")
-        }
-        completion(orderList)
-    }
-    
-    // MARK: - ItemOrder functions
-    
-    public func saveItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
+    public func save(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
             let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
@@ -99,9 +25,9 @@ class CoreDataHelper {
             do {
                 let result = try coreDataStack.managedObjectContext.fetch(request)
                 if result == [] {
-                    createItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
+                    create(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
                 } else {
-                    updateItem(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
+                    update(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
                 }
                 completion(true)
             } catch {
@@ -110,7 +36,19 @@ class CoreDataHelper {
         }
     }
     
-    public func updateItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
+    public func create(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
+        let itemEntity = ItemOrder(context: coreDataStack.managedObjectContext)
+        itemEntity.name = itemOrderViewModel!.name
+        itemEntity.price = itemOrderViewModel!.price
+        itemEntity.itemId = itemOrderViewModel!.itemId
+        itemEntity.comment = itemOrderViewModel!.comment
+        itemEntity.quantity = itemOrderViewModel!.quantity
+        itemEntity.parentOrder = orderViewModel?.order
+        
+        coreDataStack.saveContext()
+    }
+    
+    public func update(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
             let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
@@ -133,19 +71,8 @@ class CoreDataHelper {
         }
     }
     
-    public func createItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
-        let itemEntity = ItemOrder(context: coreDataStack.managedObjectContext)
-        itemEntity.name = itemOrderViewModel!.name
-        itemEntity.price = itemOrderViewModel!.price
-        itemEntity.itemId = itemOrderViewModel!.itemId
-        itemEntity.comment = itemOrderViewModel!.comment
-        itemEntity.quantity = itemOrderViewModel!.quantity
-        itemEntity.parentOrder = orderViewModel?.order
-        
-        coreDataStack.saveContext()
-    }
     
-    public func removeItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
+    public func remove(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
         if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
             let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
@@ -165,7 +92,7 @@ class CoreDataHelper {
         }
     }
     
-    public func fetchCurrentItem(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?) -> ItemOrderViewModel? {
+    public func fetch(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?) -> ItemOrderViewModel? {
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
         let currentItemId = String(describing: itemMenuViewModel!.itemMenu.itemId)
         var itemOrderVM: ItemOrderViewModel?
@@ -187,7 +114,7 @@ class CoreDataHelper {
         return itemOrderVM
     }
     
-    public func fetchItemsCurrentOrder(orderViewModel: OrderViewModel?) -> ItemOrderListViewModel? {
+    public func fetchAll(orderViewModel: OrderViewModel?) -> ItemOrderListViewModel? {
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
         var itemOrderListVM: ItemOrderListViewModel?
         if let currentOrder = orderViewModel?.order {
