@@ -25,9 +25,9 @@ class ItemOrderRepository {
             do {
                 let result = try coreDataStack.managedObjectContext.fetch(request)
                 if result == [] {
-                    create(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
+                    self.create(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
                 } else {
-                    update(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
+                    self.update(itemOrderViewModel: itemOrderViewModel, orderViewModel: orderViewModel)
                 }
                 completion(true)
             } catch {
@@ -45,7 +45,7 @@ class ItemOrderRepository {
         itemEntity.quantity = itemOrderViewModel!.quantity
         itemEntity.parentOrder = orderViewModel?.order
         
-        coreDataStack.saveContext()
+        self.coreDataStack.saveContext()
     }
     
     public func update(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
@@ -83,8 +83,8 @@ class ItemOrderRepository {
             
             do {
                 let currentItem = try coreDataStack.managedObjectContext.fetch(request)
-                coreDataStack.managedObjectContext.delete(currentItem[0])
-                coreDataStack.saveContext()
+                self.coreDataStack.managedObjectContext.delete(currentItem[0])
+                self.coreDataStack.saveContext()
                 completion(true)
             } catch {
                 print("Error fetching data from context \(error)")
