@@ -32,10 +32,11 @@ class OrderRepository {
     }
     
     
-    public func fetch(completion: @escaping (Order?) -> Void) {
+    public func fetch(completion: @escaping (OrderViewModel?) -> Void) {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == true")
         var order: Order?
+        var orderVM: OrderViewModel?
         request.predicate = predicate
         request.fetchLimit = 1
         
@@ -43,11 +44,12 @@ class OrderRepository {
             let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
             if orders != [] {
                 order = orders[0]
+                orderVM = OrderViewModel(order: order!)
             }
         } catch {
             print("Error fetching data from context \(error)")
         }
-        completion(order)
+        completion(orderVM)
     }
     
     public func update(orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {

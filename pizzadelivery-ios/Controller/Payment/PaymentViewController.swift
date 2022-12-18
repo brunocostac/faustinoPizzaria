@@ -259,10 +259,8 @@ extension PaymentViewController: UITableViewDataSource {
 
 extension PaymentViewController {
     private func fetchOrder() {
-        OrderRepository().fetch{ currentOrder in
-            if let currentOrder = currentOrder {
-                self.orderViewModel = OrderViewModel(currentOrder)
-            }
+        OrderRepository().fetch{ orderVM in
+            self.orderViewModel = orderVM
         }
     }
     
