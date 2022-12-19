@@ -9,7 +9,15 @@ import Foundation
 import CoreData
 
 
-class ItemOrderRepository {
+protocol ItemOrderDataSource {
+    func save(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void)
+    func create(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?)
+    func update(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?)
+    func remove(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void)
+    func fetchAll(orderViewModel: OrderViewModel?) -> ItemOrderListViewModel?
+}
+
+class ItemOrderRepository: ItemOrderDataSource {
     
     private let coreDataStack = CoreDataStack.shared
     

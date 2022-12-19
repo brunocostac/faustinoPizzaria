@@ -8,7 +8,15 @@
 import Foundation
 import CoreData
 
-class OrderRepository {
+protocol OrderDataSource {
+    func create() -> Void
+    func update(orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void)
+    func fetch(completion: @escaping (OrderViewModel?) -> Void)
+    func fetchAll(completion: @escaping ([OrderViewModel]?) -> Void)
+}
+
+
+class OrderRepository: OrderDataSource {
     
     private let coreDataStack = CoreDataStack.shared
     
