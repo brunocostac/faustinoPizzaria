@@ -14,11 +14,12 @@ protocol ItemOrderDataSource {
     func create(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?)
     func update(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?)
     func remove(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void)
-    func fetchAll(orderViewModel: OrderViewModel?) -> ItemOrderListViewModel?
+    func fetch(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (ItemOrderViewModel?) -> Void)
+    func fetchAll(orderViewModel: OrderViewModel?, completion: @escaping (ItemOrderListViewModel?) -> Void)
 }
 
 class ItemOrderRepository: ItemOrderDataSource {
-    
+
     private let coreDataStack = CoreDataStack.shared
     
     public func save(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
@@ -100,7 +101,7 @@ class ItemOrderRepository: ItemOrderDataSource {
         }
     }
     
-    public func fetch(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?) -> ItemOrderViewModel? {
+    public func fetch(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (ItemOrderViewModel?) -> Void) {
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
         let currentItemId = String(describing: itemMenuViewModel!.itemMenu.itemId)
         var itemOrderVM: ItemOrderViewModel?
@@ -114,17 +115,20 @@ class ItemOrderRepository: ItemOrderDataSource {
                 let currentItem = try self.coreDataStack.managedObjectContext.fetch(request)
                 if currentItem != [] {
                     itemOrderVM = ItemOrderViewModel(itemOrder: currentItem[0])
+                    completion(itemOrderVM)
                 }
             } catch {
                 print("Error fetching data from context \(error)")
             }
         }
-        return itemOrderVM
+        completion(itemOrderVM)
     }
     
-    public func fetchAll(orderViewModel: OrderViewModel?) -> ItemOrderListViewModel? {
+    func fetchAll(orderViewModel: OrderViewModel?, completion: @escaping (ItemOrderListViewModel?) -> Void) {
+        
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
         var itemOrderListVM: ItemOrderListViewModel?
+        
         if let currentOrder = orderViewModel?.order {
             let predicate = NSPredicate(format: "parentOrder == %@", currentOrder)
             var itemsVM = [ItemOrderViewModel]()
@@ -139,11 +143,12 @@ class ItemOrderRepository: ItemOrderDataSource {
                         itemsVM.append(viewModel)
                     }
                     itemOrderListVM = ItemOrderListViewModel(itemsOrder: itemsVM)
+                    completion(itemOrderListVM)
                 }
             } catch {
                 print("Error fetching data from context \(error)")
             }
         }
-        return itemOrderListVM
+       completion(itemOrderListVM)
     }
 }

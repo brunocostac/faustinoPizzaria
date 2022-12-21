@@ -234,7 +234,9 @@ extension MenuViewController {
     }
     private func fetchItems() {
         if orderViewModel != nil {
-            self.itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
+           ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderVM in
+               self.itemOrderListViewModel = itemOrderVM
+            }
         }
     }
     

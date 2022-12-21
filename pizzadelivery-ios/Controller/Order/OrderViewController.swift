@@ -183,7 +183,11 @@ extension OrderViewController: UITableViewDataSource {
 
 extension OrderViewController {
     private func fetchAllItems(orderViewModel: OrderViewModel) -> ItemOrderListViewModel? {
-       return ItemOrderRepository().fetchAll(orderViewModel: orderViewModel)
+        var itemOrderListViewModel: ItemOrderListViewModel?
+        ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderListVM in
+            itemOrderListViewModel = itemOrderListVM
+        }
+        return itemOrderListViewModel
     }
     private func fetchAllOrders() {
         OrderRepository().fetchAll{ orders in

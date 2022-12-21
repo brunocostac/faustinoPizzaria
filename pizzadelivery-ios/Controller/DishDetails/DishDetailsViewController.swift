@@ -249,13 +249,17 @@ extension DishDetailsViewController {
     
     private func fetchItems() {
         if orderViewModel != nil {
-            self.itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: self.orderViewModel)
+            ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderVM in
+                self.itemOrderListViewModel = itemOrderVM
+             }
         }
     }
     
     private func fetchCurrentItem() {
         if orderViewModel != nil {
-            self.itemOrderViewModel = ItemOrderRepository().fetch(itemMenuViewModel: self.itemMenuViewModel, orderViewModel: self.orderViewModel)
+            ItemOrderRepository().fetch(itemMenuViewModel: self.itemMenuViewModel, orderViewModel: self.orderViewModel) { itemOrderVM in
+                self.itemOrderViewModel = itemOrderVM
+            }
         }
     }
 }

@@ -266,7 +266,9 @@ extension PaymentViewController {
     
     private func fetchItems() {
         if self.orderViewModel != nil {
-            self.itemOrderListViewModel = ItemOrderRepository().fetchAll(orderViewModel: self.orderViewModel)
+            ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderVM in
+                self.itemOrderListViewModel = itemOrderVM
+             }
         }
     }
     
