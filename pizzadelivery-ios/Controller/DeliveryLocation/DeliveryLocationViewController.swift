@@ -25,6 +25,8 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupTextFields()
+        self.setupToHideKeyboardOnTapOnView()
         self.setupViewConfiguration()
     }
     
@@ -43,6 +45,12 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private func setupTextFields() {
+        self.deliveryLocationView.neighborhoodTextField.delegate = self
+        self.deliveryLocationView.customerNameTextField.delegate = self
+    }
+    
     
     private func populateTextFields() {
         if let orderVM = orderViewModel?.order {
@@ -63,6 +71,13 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
             self.deliveryLocationView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             self.deliveryLocationView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+}
+
+extension DeliveryLocationViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
 
@@ -104,14 +119,30 @@ extension DeliveryLocationViewController {
 
 extension DeliveryLocationViewController {
     @objc func saveButtonPressed() {
-        if let address = self.deliveryLocationView.addressTextField.text,
-           let neighborhood = self.deliveryLocationView.neighborhoodTextField.text,
-           let customerName = self.deliveryLocationView.customerNameTextField.text {
-            
-            self.orderViewModel?.order.address = address
-            self.orderViewModel?.order.neighborhood = neighborhood
-            self.orderViewModel?.order.customerName = customerName
-            self.saveOrder()
+        if isValidAddress() {
+            if let address = self.deliveryLocationView.addressTextField.text,
+               let neighborhood = self.deliveryLocationView.neighborhoodTextField.text,
+               let customerName = self.deliveryLocationView.customerNameTextField.text {
+                
+                self.orderViewModel?.order.address = address
+                self.orderViewModel?.order.neighborhood = neighborhood
+                self.orderViewModel?.order.customerName = customerName
+                self.saveOrder()
+            }
+        } else {
+            let alert = UIAlertController(title: "Informação", message: "Favor, Preencher todos os campos", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+            NSLog("The \"OK\" alert occured.")
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func isValidAddress() -> Bool {
+        if self.deliveryLocationView.addressTextField.text != "" && self.deliveryLocationView.neighborhoodTextField.text != "" && self.deliveryLocationView.customerNameTextField.text != "" {
+            return true
+        } else {
+            return false
         }
     }
     

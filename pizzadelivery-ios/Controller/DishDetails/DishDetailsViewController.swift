@@ -42,6 +42,8 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupTextField()
+        self.setupToHideKeyboardOnTapOnView()
         self.spinner.startAnimating()
     }
     
@@ -65,6 +67,10 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupTextField() {
+        self.commentView.commentTextField.delegate = self
     }
     
     private func setFlag() {
@@ -206,6 +212,13 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
 }
 
+extension DishDetailsViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+}
+
 // MARK: - ViewConfiguration
 extension DishDetailsViewController: ViewConfiguration {
     func setupConstraints() {
@@ -288,6 +301,8 @@ extension DishDetailsViewController {
         self.updateQuantityView(quantity: quantity!, flag: temporaryFlag)
     }
     
+    
+    // MARK: TODO - CALL FACADE
     @objc func addToCartButtonPressed(_ sender: UIButton) {
         let isToRemoveItem = sender.titleLabel?.text!.contains(ItemOrderStatus.remove.rawValue)
         let name = self.itemMenuViewModel?.itemMenu.name

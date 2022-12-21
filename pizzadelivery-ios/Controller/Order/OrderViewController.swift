@@ -189,6 +189,7 @@ extension OrderViewController {
         }
         return itemOrderListViewModel
     }
+    
     private func fetchAllOrders() {
         OrderRepository().fetchAll{ orders in
             if let ordersVM = orders {
