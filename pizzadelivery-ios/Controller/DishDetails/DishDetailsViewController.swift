@@ -105,13 +105,13 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         
         if flag == ItemOrderStatus.create || flag == ItemOrderStatus.update {
             self.quantityView.quantityLabel.text = String(describing: quantity)
-            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.calculateItems(quantity, price: price!))
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(quantity, price: price!))
             self.quantityView.decreaseButton.alpha = 1
             self.quantityView.decreaseButton.isEnabled = true
         } else if flag == ItemOrderStatus.remove {
             let itemOrderQuantitySaved = Int(self.itemOrderViewModel!.quantity)
             self.quantityView.quantityLabel.text = "0"
-            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.calculateItems(itemOrderQuantitySaved, price: price!))
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(quantity, price: price!))
             self.quantityView.decreaseButton.alpha = 0.5
             self.quantityView.decreaseButton.isEnabled = false
         }

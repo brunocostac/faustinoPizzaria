@@ -75,6 +75,12 @@ struct ItemOrderViewModel: Equatable, Decodable {
 }
 
 extension ItemOrderViewModel {
+    
+    func calculateTotal(_ quantity: Int, price: Double) -> String {
+        let total = Double(quantity) * Double(price)
+        return String(format: "%.2f", total)
+    }
+    
     var itemDescription: String {
         return "\(String(describing: self.quantity)) \(self.name)"
     }

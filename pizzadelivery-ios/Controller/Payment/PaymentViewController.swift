@@ -305,7 +305,6 @@ extension PaymentViewController {
             }
         } else {
             self.displayAlert(title: "Informação", message: "Por favor, informe o endereço de entrega.", actionClosure: {
-                
             })
         }
     }

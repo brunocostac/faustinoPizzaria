@@ -35,7 +35,6 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.spinner.startAnimating()
-        
     }
     override func viewDidAppear(_ animated: Bool) {
         self.clearViewModels()

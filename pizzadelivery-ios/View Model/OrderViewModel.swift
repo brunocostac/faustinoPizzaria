@@ -52,4 +52,12 @@ extension OrderViewModel {
     var dateCompletion: String {
         return "\(self.order.dateCompletion!.getFormattedDate(format: "dd/MM/yyyy HH:mm"))"
     }
+    
+    func isValidAddress() -> Bool {
+        if self.order.address != "" &&  self.order.neighborhood != "" && self.order.customerName != "" {
+            return true
+        } else {
+            return false
+        }
+    }
 }

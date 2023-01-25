@@ -119,30 +119,19 @@ extension DeliveryLocationViewController {
 
 extension DeliveryLocationViewController {
     @objc func saveButtonPressed() {
-        if isValidAddress() {
-            if let address = self.deliveryLocationView.addressTextField.text,
-               let neighborhood = self.deliveryLocationView.neighborhoodTextField.text,
-               let customerName = self.deliveryLocationView.customerNameTextField.text {
-                
-                self.orderViewModel?.order.address = address
-                self.orderViewModel?.order.neighborhood = neighborhood
-                self.orderViewModel?.order.customerName = customerName
-                self.saveOrder()
-            }
+        
+        self.orderViewModel?.order.address = self.deliveryLocationView.addressTextField.text
+        self.orderViewModel?.order.neighborhood = self.deliveryLocationView.neighborhoodTextField.text
+        self.orderViewModel?.order.customerName = self.deliveryLocationView.customerNameTextField.text
+        
+        if orderViewModel!.isValidAddress() {
+            self.saveOrder()
         } else {
             let alert = UIAlertController(title: "Informação", message: "Favor, Preencher todos os campos", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
             NSLog("The \"OK\" alert occured.")
             }))
             self.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    func isValidAddress() -> Bool {
-        if self.deliveryLocationView.addressTextField.text != "" && self.deliveryLocationView.neighborhoodTextField.text != "" && self.deliveryLocationView.customerNameTextField.text != "" {
-            return true
-        } else {
-            return false
         }
     }
     
