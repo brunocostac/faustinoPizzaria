@@ -287,9 +287,8 @@ extension PaymentViewController {
 
 extension PaymentViewController {
     @objc func sendOrder() {
-        let addressIsValid = self.addressIsValid()
         
-        if addressIsValid {
+        if orderViewModel!.isValidAddress() {
             if let itemListOrderVM = itemOrderListViewModel {
                 self.orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
                 self.orderViewModel?.order.dateWasRequest = Date()
