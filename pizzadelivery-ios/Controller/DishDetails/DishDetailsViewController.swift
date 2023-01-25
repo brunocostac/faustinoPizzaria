@@ -89,7 +89,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         if let itemOrderVM = itemOrderViewModel {
             self.commentView.configureWith(comment: itemOrderVM.comment)
             self.quantityView.quantityLabel.text = String(describing: itemOrderVM.quantity)
-            self.quantityView.configureAddToCartButtonWith(flag: flag, price: calculateItems(Int(itemOrderVM.quantity), price: itemOrderVM.price))
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(Int(itemOrderVM.quantity), price: itemOrderVM.price))
         }
     }
     
@@ -109,19 +109,13 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
             self.quantityView.decreaseButton.alpha = 1
             self.quantityView.decreaseButton.isEnabled = true
         } else if flag == ItemOrderStatus.remove {
-            let itemOrderQuantitySaved = Int(self.itemOrderViewModel!.quantity)
             self.quantityView.quantityLabel.text = "0"
-            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(quantity, price: price!))
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(Int(self.itemOrderViewModel!.quantity), price: price!))
             self.quantityView.decreaseButton.alpha = 0.5
             self.quantityView.decreaseButton.isEnabled = false
         }
     }
-    
-    func calculateItems(_ quantity: Int, price: Double) -> String {
-        let total = Double(quantity) * Double(price)
-        return String(format: "%.2f", total)
-    }
-    
+  
     private func configureButtons() {
         self.quantityView.addToCartButton.addTarget(self, action: #selector(self.addToCartButtonPressed(_:)), for: .touchUpInside)
         self.myCartButton.addTarget(self, action: #selector(self.goToCartScreen), for: .touchUpInside)
