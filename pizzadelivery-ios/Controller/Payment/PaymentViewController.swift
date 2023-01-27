@@ -11,8 +11,8 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModels
     
-    private var orderViewModel: OrderViewModel?
-    private var itemOrderListViewModel: ItemOrderListViewModel?
+    private var orderViewModel = OrderViewModel()
+    private var itemOrderListViewModel = ItemOrderListViewModel()
     
     // MARK: - Variables
     
@@ -76,14 +76,6 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action: UIAlertAction!) in actionClosure()}))
         
         self.present(alertController, animated: true)
-    }
-    
-    private func addressIsValid() -> Bool {
-        if self.orderViewModel?.order.address == nil && self.orderViewModel?.order.customerName == nil && self.orderViewModel?.order.neighborhood == nil {
-            return false
-        } else {
-            return true
-        }
     }
     
     // MARK: - Setup Constraints
@@ -207,7 +199,7 @@ extension PaymentViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return  self.itemOrderListViewModel!.count + 1
+            return  self.itemOrderListViewModel.count + 1
         case 2:
             return 1
         default:
@@ -224,20 +216,20 @@ extension PaymentViewController: UITableViewDataSource {
             cell0.delegate = self
             return cell0
         case 1:
-            if itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
+            if itemOrderListViewModel.count >= indexPath.row + 1 {
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
                 
-                let itemInCart = itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
-                cell1.configureWithText(itemDescription: itemInCart!.itemDescription, itemTotal: itemInCart!.itemTotal)
+                let itemInCart = itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
+                cell1.configureWithText(itemDescription: itemInCart?.itemDescription ?? "", itemTotal: itemInCart?.itemTotal ?? "")
                 
                 return cell1
             } else {
                 guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                cell2.configureWithText(subTotalOrder: itemOrderListViewModel!.totalOrder, totalOrder: itemOrderListViewModel!.totalOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: itemOrderListViewModel.totalOrder, totalOrder: itemOrderListViewModel.totalOrder, fee: "0.00")
                 return cell2
             }
         case 2:
@@ -246,7 +238,7 @@ extension PaymentViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell3.delegate = self
-            cell3.configureWithText(address: orderViewModel?.order.address ?? "Não existe endereço cadastrado")
+            cell3.configureWithText(address: orderViewModel.order?.address ?? "Não existe endereço cadastrado")
             
             return cell3
         default:
@@ -259,27 +251,27 @@ extension PaymentViewController: UITableViewDataSource {
 
 extension PaymentViewController {
     private func fetchOrder() {
-        OrderRepository().fetch{ orderVM in
-            self.orderViewModel = orderVM
-        }
+        orderViewModel.fetchOrder()
     }
     
     private func fetchItems() {
-        if self.orderViewModel != nil {
-            ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderVM in
-                self.itemOrderListViewModel = itemOrderVM
-             }
+        if self.orderViewModel.order != nil {
+            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel)
         }
     }
     
     private func saveOrder() {
-        OrderRepository().update(orderViewModel: orderViewModel, completion: { success in
+        self.orderViewModel.saveOrder(orderViewModel: orderViewModel) { success in
             if success {
                 self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar", actionClosure: { [self] in
                     self.goToMenuScreen()
                 })
+            } else {
+                self.displayAlert(title: "Erro", message: "Não foi possível realizar o pedido, tente novamente mais tarde!", actionClosure: { [self] in
+                    self.goToMenuScreen()
+                })
             }
-        })
+        }
     }
 }
 
@@ -287,15 +279,15 @@ extension PaymentViewController {
 
 extension PaymentViewController {
     @objc func sendOrder() {
-        
-        if orderViewModel!.isValidAddress() {
-            if let itemListOrderVM = itemOrderListViewModel {
-                self.orderViewModel?.order.total = Double(itemListOrderVM.totalOrder)!
-                self.orderViewModel?.order.dateWasRequest = Date()
-                self.orderViewModel?.order.dateCompletion = Date(timeInterval: 60*5, since: Date())
-                self.orderViewModel?.order.subTotal = Double(itemListOrderVM.totalOrder)!
-                self.orderViewModel?.order.isOpen = false
-                self.orderViewModel?.order.paymentMethod = self.paymentSelected
+        if orderViewModel.isValidAddress() {
+            if !(itemOrderListViewModel.itemOrderViewModel?.isEmpty ?? true) {
+                let itemListOrderVM = itemOrderListViewModel
+                self.orderViewModel.order?.total = Double(itemListOrderVM.totalOrder)!
+                self.orderViewModel.order?.dateWasRequest = Date()
+                self.orderViewModel.order?.dateCompletion = Date(timeInterval: 60*5, since: Date())
+                self.orderViewModel.order?.subTotal = Double(itemListOrderVM.totalOrder)!
+                self.orderViewModel.order?.isOpen = false
+                self.orderViewModel.order?.paymentMethod = self.paymentSelected
             }
             MockApiClient().sendOrder { [self] response in
                 if response {

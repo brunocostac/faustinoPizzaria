@@ -6,55 +6,138 @@
 //
 
 import Foundation
+import CoreData
 
 class OrderListViewModel {
-    var orderViewModel: [OrderViewModel]
+    var orderViewModel: [OrderViewModel]?
+    private let coreDataStack = CoreDataStack.shared
     
-    init(orders: [OrderViewModel]) {
+    init(orders: [OrderViewModel]? = []) {
         self.orderViewModel = orders
     }
 }
 
 extension OrderListViewModel {
-    func orderAtIndex(_ index: Int) -> OrderViewModel {
-        return self.orderViewModel[index]
+    func orderAtIndex(_ index: Int) -> OrderViewModel? {
+        return self.orderViewModel?[index] ?? nil
     }
 }
 
 extension OrderListViewModel {
+    func fetchAll() {
+        let request: NSFetchRequest<Order> = Order.fetchRequest()
+        let predicate = NSPredicate(format: "isOpen == false")
+        var orderVM = [OrderViewModel]()
+        
+        request.predicate = predicate
+        
+        do {
+            let orders: [Order] = try coreDataStack.managedObjectContext.fetch(request)
+            
+            for order in orders {
+                let viewModel = OrderViewModel(order: order)
+                orderVM.append(viewModel)
+            }
+            self.orderViewModel = orderVM
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+    }
+    
     var numberOfSections: Int {
-        if orderViewModel.isEmpty {
+        if self.orderViewModel?.count == 0 {
             return 0
         } else {
             return 1
         }
     }
     var numberOfRowsInSection: Int {
-        return self.orderViewModel.count
+        return self.orderViewModel?.count ?? 0
     }
 }
 
 struct OrderViewModel {
-    let order: Order
+    var order: Order?
+    private let coreDataStack = CoreDataStack.shared
 }
 
 extension OrderViewModel {
-    init(_ order: Order) {
+    init(_ order: Order? = nil) {
         self.order = order
     }
 }
 
 extension OrderViewModel {
+    public mutating func createOrder() {
+        let request: NSFetchRequest<Order> = Order.fetchRequest()
+        let predicate = NSPredicate(format: "isOpen == true")
+        let orderCD = Order(context: self.coreDataStack.managedObjectContext)
+        request.predicate = predicate
+        request.fetchLimit = 1
+        
+        do {
+            let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
+            if orders == [] {
+                orderCD.isOpen = true
+                orderCD.orderId = UUID()
+                order = orderCD as! Order
+                self.coreDataStack.saveContext()
+            }
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+    }
+    
+    public mutating func fetchOrder() {
+        let request: NSFetchRequest<Order> = Order.fetchRequest()
+        let predicate = NSPredicate(format: "isOpen == true")
+        request.predicate = predicate
+        request.fetchLimit = 1
+        
+        do {
+            let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
+            if orders != [] {
+                order = orders.first
+            }
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+    }
+    
+    public func saveOrder(orderViewModel: OrderViewModel?,completion: @escaping (Bool) -> Void)  {
+        if orderViewModel?.order != nil {
+            let request: NSFetchRequest<Order> = Order.fetchRequest()
+            request.fetchLimit = 1
+            do {
+                let result = try self.coreDataStack.managedObjectContext.fetch(request)
+                if result != [] {
+                    self.coreDataStack.saveContext()
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } catch {
+                print("Error fetching data from context \(error)")
+            }
+        }
+    }
+
     var dateRequest: String {
-        return "\(self.order.dateWasRequest!.getFormattedDate(format: "dd/MM/yyyy HH:mm"))"
+        if let dateWasRequest = self.order?.dateWasRequest {
+            return "\(String(describing: dateWasRequest.getFormattedDate(format: "dd/MM/yyyy HH:mm")))"
+        }
+        return ""
     }
     
     var dateCompletion: String {
-        return "\(self.order.dateCompletion!.getFormattedDate(format: "dd/MM/yyyy HH:mm"))"
+        if let dateCompletion = self.order?.dateCompletion {
+            return "\(String(describing: dateCompletion.getFormattedDate(format: "dd/MM/yyyy HH:mm")))"
+        }
+        return ""
     }
     
     func isValidAddress() -> Bool {
-        if self.order.address != "" &&  self.order.neighborhood != "" && self.order.customerName != "" {
+        if self.order?.address != nil &&  self.order?.neighborhood != nil && self.order?.customerName != nil {
             return true
         } else {
             return false

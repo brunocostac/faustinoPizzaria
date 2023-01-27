@@ -12,9 +12,9 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     // MARK: - ViewModel
     
     public var itemMenuViewModel: ItemMenuViewModel?
-    private var orderViewModel: OrderViewModel?
-    private var itemOrderViewModel: ItemOrderViewModel?
-    private var itemOrderListViewModel: ItemOrderListViewModel?
+    private var orderViewModel = OrderViewModel()
+    private var itemOrderViewModel = ItemOrderViewModel()
+    private var itemOrderListViewModel = ItemOrderListViewModel()
     
     // MARK: - Variables
     
@@ -74,7 +74,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func setFlag() {
-        if self.itemOrderViewModel != nil {
+        if self.itemOrderViewModel.itemOrder != nil {
             self.flag = ItemOrderStatus.update
         }
     }
@@ -85,16 +85,17 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
             self.infoView.configureWith(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price)
             self.quantityView.configureAddToCartButtonWith(flag: flag, price: String(itemMenuVM.price))
         }
-        
-        if let itemOrderVM = itemOrderViewModel {
-            self.commentView.configureWith(comment: itemOrderVM.comment)
+
+        if let itemOrderVM = itemOrderViewModel.itemOrder {
+            self.commentView.configureWith(comment: itemOrderVM.comment ?? "")
             self.quantityView.quantityLabel.text = String(describing: itemOrderVM.quantity)
-            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(Int(itemOrderVM.quantity), price: itemOrderVM.price))
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel.calculateTotal(Int(itemOrderVM.quantity), price: itemOrderVM.price))
         }
     }
     
     private func configureMyCartButton() {
-        if let itemListVM = itemOrderListViewModel {
+        if itemOrderListViewModel.cartButtonIsEnabled  {
+            let itemListVM = itemOrderListViewModel
             self.myCartButton.configureWithText(quantity: itemListVM.quantity, totalPrice: itemListVM.totalOrder)
             self.myCartButton.isHidden = false
         }
@@ -105,12 +106,12 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         
         if flag == ItemOrderStatus.create || flag == ItemOrderStatus.update {
             self.quantityView.quantityLabel.text = String(describing: quantity)
-            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(quantity, price: price!))
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel.calculateTotal(quantity, price: price!))
             self.quantityView.decreaseButton.alpha = 1
             self.quantityView.decreaseButton.isEnabled = true
         } else if flag == ItemOrderStatus.remove {
             self.quantityView.quantityLabel.text = "0"
-            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel!.calculateTotal(Int(self.itemOrderViewModel!.quantity), price: price!))
+            self.quantityView.configureAddToCartButtonWith(flag: flag, price: self.itemOrderViewModel.calculateTotal(Int(self.itemOrderViewModel.itemOrder?.quantity ?? 0), price: price!))
             self.quantityView.decreaseButton.alpha = 0.5
             self.quantityView.decreaseButton.isEnabled = false
         }
@@ -249,24 +250,18 @@ extension DishDetailsViewController: ViewConfiguration {
 
 extension DishDetailsViewController {
     private func fetchOrder() {
-        OrderRepository().fetch{ orderVM in
-            self.orderViewModel = orderVM
-        }
+        self.orderViewModel.fetchOrder()
     }
     
     private func fetchItems() {
-        if orderViewModel != nil {
-            ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderVM in
-                self.itemOrderListViewModel = itemOrderVM
-             }
+        if orderViewModel.order != nil {
+            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel)
         }
     }
     
     private func fetchCurrentItem() {
-        if orderViewModel != nil {
-            ItemOrderRepository().fetch(itemMenuViewModel: self.itemMenuViewModel, orderViewModel: self.orderViewModel) { itemOrderVM in
-                self.itemOrderViewModel = itemOrderVM
-            }
+        if orderViewModel.order != nil {
+            self.itemOrderViewModel.fetchItem(itemMenuViewModel:  self.itemMenuViewModel, orderViewModel: self.orderViewModel)
         }
     }
 }
@@ -295,8 +290,6 @@ extension DishDetailsViewController {
         self.updateQuantityView(quantity: quantity!, flag: temporaryFlag)
     }
     
-    
-    // MARK: TODO - CALL FACADE
     @objc func addToCartButtonPressed(_ sender: UIButton) {
         let isToRemoveItem = sender.titleLabel?.text!.contains(ItemOrderStatus.remove.rawValue)
         let name = self.itemMenuViewModel?.itemMenu.name
@@ -304,20 +297,21 @@ extension DishDetailsViewController {
         let price = self.itemMenuViewModel?.itemMenu.price
         let quantity = Int(self.quantityView.quantityLabel.text!)
         let comment = self.commentView.commentTextField.text ?? ""
-       
-        self.itemOrderViewModel = ItemOrderViewModel(name: name!,
-                                                itemId: Int64(itemId!),
-                                                price: price!,
-                                                quantity: Int64(quantity!),
-                                                comment: comment)
+
+        self.itemOrderViewModel.itemOrder?.name = name!
+        self.itemOrderViewModel.itemOrder?.itemId = Int64(itemId!)
+        self.itemOrderViewModel.itemOrder?.price = price!
+        self.itemOrderViewModel.itemOrder?.quantity = Int64(quantity!)
+        self.itemOrderViewModel.itemOrder?.comment = comment
+        
         if isToRemoveItem! {
-            ItemOrderRepository().remove(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
+            itemOrderViewModel.removeItem(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
                 if success {
                     self.goToHomeScreen()
                 }
             })
         } else {
-            ItemOrderRepository().save(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
+            itemOrderViewModel.saveItem(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
                 if success {
                     self.goToCartScreen()
                 }

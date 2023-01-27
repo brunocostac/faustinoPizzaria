@@ -28,10 +28,10 @@ class OrderTableViewCell: UITableViewCell {
     }
     
     func configureWithText(orderVM: OrderViewModel, itemOrderListVM: ItemOrderListViewModel) {
-        titleLabel.text = "Data do pedido: \(orderVM.dateRequest)"
-        descriptionLabel.text = itemOrderListVM.itemsDescription
-        priceLabel.text = "Valor Total: R$ \(itemOrderListVM.totalOrder)"
-        statusLabel.text = "Status: \(comparingDates(firstDate: Date(), secondDate: orderVM.order.dateCompletion!))"
+        self.titleLabel.text = "Data do pedido: \(String(describing: orderVM.dateRequest))"
+        self.descriptionLabel.text = itemOrderListVM.itemsDescription
+        self.priceLabel.text = "Valor Total: R$ \(itemOrderListVM.totalOrder)"
+        self.statusLabel.text = "Status: \(comparingDates(firstDate: Date(), secondDate: (orderVM.order?.dateCompletion!)!))"
     }
     
     func comparingDates(firstDate: Date, secondDate: Date) -> String {

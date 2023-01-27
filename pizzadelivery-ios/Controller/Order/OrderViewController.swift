@@ -11,7 +11,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     
     // MARK: - View Models
     
-    private var orderListViewModel: OrderListViewModel?
+    private var orderListViewModel = OrderListViewModel()
     
     // MARK: - Views
     
@@ -143,7 +143,7 @@ extension OrderViewController: UITableViewDelegate {
 
 extension OrderViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if self.orderListViewModel?.numberOfSections == 1 {
+        if self.orderListViewModel.numberOfSections == 1 {
             return "Pedidos realizados"
         } else {
            return nil
@@ -151,7 +151,7 @@ extension OrderViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if self.orderListViewModel!.numberOfSections == 0 {
+        if self.orderListViewModel.numberOfSections == 0 {
             let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
             noDataLabel.font = UIFont(name: "avenir", size: 16)
             noDataLabel.text = "Faça o seu primeiro pedido :)"
@@ -159,11 +159,11 @@ extension OrderViewController: UITableViewDataSource {
             noDataLabel.textAlignment = .center
             tableView.backgroundView  = noDataLabel
         }
-        return self.orderListViewModel!.numberOfSections
+        return self.orderListViewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.orderListViewModel?.numberOfRowsInSection ?? 0
+        return self.orderListViewModel.numberOfRowsInSection
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -171,7 +171,7 @@ extension OrderViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let orderVM = self.orderListViewModel?.orderAtIndex(indexPath.row)
+        let orderVM = self.orderListViewModel.orderAtIndex(indexPath.row)
         let itemsOrderVM = self.fetchAllItems(orderViewModel: orderVM!)
         
         cell.configureWithText(orderVM: orderVM!, itemOrderListVM: itemsOrderVM!)
@@ -183,19 +183,13 @@ extension OrderViewController: UITableViewDataSource {
 
 extension OrderViewController {
     private func fetchAllItems(orderViewModel: OrderViewModel) -> ItemOrderListViewModel? {
-        var itemOrderListViewModel: ItemOrderListViewModel?
-        ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderListVM in
-            itemOrderListViewModel = itemOrderListVM
-        }
+        let itemOrderListViewModel = ItemOrderListViewModel()
+        itemOrderListViewModel.fetchAll(orderViewModel: orderViewModel)
         return itemOrderListViewModel
     }
     
     private func fetchAllOrders() {
-        OrderRepository().fetchAll{ orders in
-            if let ordersVM = orders {
-                self.orderListViewModel = OrderListViewModel(orders: ordersVM)
-            }
-        }
+        self.orderListViewModel.fetchAll()
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

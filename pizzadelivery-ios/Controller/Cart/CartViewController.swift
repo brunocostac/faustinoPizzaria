@@ -11,8 +11,8 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
     
-    private var orderViewModel: OrderViewModel?
-    private var itemOrderListViewModel: ItemOrderListViewModel?
+    private var orderViewModel = OrderViewModel()
+    private var itemOrderListViewModel = ItemOrderListViewModel()
     
     // MARK: - Views
     
@@ -176,7 +176,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return self.itemOrderListViewModel!.count + 1
+            return self.itemOrderListViewModel.count + 1
         case 1:
             return 1
         default:
@@ -187,14 +187,14 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            if self.itemOrderListViewModel?.count ?? 0 >= indexPath.row + 1 {
-                let itemInCart = self.itemOrderListViewModel?.itemOrderAtIndex(indexPath.row)
+            if self.itemOrderListViewModel.count  >= indexPath.row + 1 {
+                let itemInCart = self.itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
                 
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
                 
-                cell1.configureWithText(itemDescription: itemInCart!.itemDescription, itemTotal: itemInCart!.itemTotal)
+                cell1.configureWithText(itemDescription: itemInCart?.itemDescription ?? "", itemTotal: itemInCart?.itemTotal ?? "0.00")
                 
                 return cell1
             } else {
@@ -202,7 +202,7 @@ extension CartViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 
-                cell2.configureWithText(subTotalOrder: self.itemOrderListViewModel!.totalOrder, totalOrder: self.itemOrderListViewModel!.totalOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: self.itemOrderListViewModel.totalOrder, totalOrder: self.itemOrderListViewModel.totalOrder, fee: "0.00")
                
                 return cell2
             }
@@ -212,7 +212,7 @@ extension CartViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell3.delegate = self
-            cell3.configureWithText(address: orderViewModel?.order.address ?? "Não existe endereço cadastrado")
+            cell3.configureWithText(address: orderViewModel.order?.address ?? "Não existe endereço cadastrado")
             
             return cell3
         default:
@@ -225,16 +225,12 @@ extension CartViewController: UITableViewDataSource {
 
 extension CartViewController {
     func fetchOrder() {
-        OrderRepository().fetch{ orderVM in
-            self.orderViewModel = orderVM
-        }
+        self.orderViewModel.fetchOrder()
     }
     
     private func fetchItems() {
-        if self.orderViewModel != nil {
-            ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderVM in
-                self.itemOrderListViewModel = itemOrderVM
-             }
+        if self.orderViewModel.order != nil {
+            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel)
         }
     }
 }

@@ -12,8 +12,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     // MARK: - ViewModel
     
     private var menuListViewModel = MenuListViewModel()
-    private var orderViewModel: OrderViewModel?
-    private var itemOrderListViewModel: ItemOrderListViewModel?
+    private var orderViewModel = OrderViewModel()
+    private var itemOrderListViewModel = ItemOrderListViewModel()
     
     // MARK: - Views
     
@@ -63,8 +63,8 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - Functions
     private func clearViewModels() {
-        self.itemOrderListViewModel = nil
-        self.orderViewModel = nil
+        self.itemOrderListViewModel = ItemOrderListViewModel()
+        self.orderViewModel = OrderViewModel()
     }
     
     private func fetchMenu() {
@@ -77,10 +77,12 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     
     private func loadCartButton() {
-        self.myCartButton.isHidden = true
-        if let items = itemOrderListViewModel {
+        if itemOrderListViewModel.cartButtonIsEnabled {
+            let items = itemOrderListViewModel
             self.myCartButton.configureWithText(quantity: items.quantity, totalPrice: items.totalOrder)
             self.myCartButton.isHidden = false
+        } else {
+            self.myCartButton.isHidden = true
         }
     }
     
@@ -227,21 +229,17 @@ extension MenuViewController: UITableViewDataSource {
 
 extension MenuViewController {
     private func fetchOrder() {
-        OrderRepository().fetch{ orderVM in
-            self.orderViewModel = orderVM
-        }
+        self.orderViewModel.fetchOrder()
     }
     private func fetchItems() {
-        if orderViewModel != nil {
-           ItemOrderRepository().fetchAll(orderViewModel: orderViewModel) { itemOrderVM in
-               self.itemOrderListViewModel = itemOrderVM
-            }
+        if self.orderViewModel.order != nil {
+            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel)
         }
     }
     
     private func createOrder() {
-        if orderViewModel == nil {
-            OrderRepository().create()
+        if self.orderViewModel.order == nil {
+            self.orderViewModel.createOrder()
         }
     }
 }

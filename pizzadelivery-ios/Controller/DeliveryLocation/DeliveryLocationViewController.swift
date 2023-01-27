@@ -10,8 +10,7 @@ import UIKit
 class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
-    
-    var orderViewModel: OrderViewModel?
+    var orderViewModel = OrderViewModel()
     
     // MARK: - Variables
     var previousScreen: MenuScreen?
@@ -53,7 +52,7 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     
     
     private func populateTextFields() {
-        if let orderVM = orderViewModel?.order {
+        if let orderVM = orderViewModel.order {
             self.deliveryLocationView.addressTextField.text = orderVM.address
             self.deliveryLocationView.neighborhoodTextField.text = orderVM.neighborhood
             self.deliveryLocationView.customerNameTextField.text = orderVM.customerName
@@ -101,17 +100,15 @@ extension DeliveryLocationViewController: ViewConfiguration {
 
 extension DeliveryLocationViewController {
     private func fetchOrder() {
-        OrderRepository().fetch{ orderVM in
-            self.orderViewModel = orderVM
-        }
+        self.orderViewModel.fetchOrder()
     }
     
     private func saveOrder() {
-        OrderRepository().update(orderViewModel: orderViewModel, completion: { success in
+        self.orderViewModel.saveOrder(orderViewModel: orderViewModel) { success in
             if success {
                 self.goToPreviousScreen()
             }
-        })
+        }
     }
 }
 
@@ -120,22 +117,26 @@ extension DeliveryLocationViewController {
 extension DeliveryLocationViewController {
     @objc func saveButtonPressed() {
         
-        self.orderViewModel?.order.address = self.deliveryLocationView.addressTextField.text
-        self.orderViewModel?.order.neighborhood = self.deliveryLocationView.neighborhoodTextField.text
-        self.orderViewModel?.order.customerName = self.deliveryLocationView.customerNameTextField.text
+        self.orderViewModel.order?.address = self.deliveryLocationView.addressTextField.text
+        self.orderViewModel.order?.neighborhood = self.deliveryLocationView.neighborhoodTextField.text
+        self.orderViewModel.order?.customerName = self.deliveryLocationView.customerNameTextField.text
         
-        if orderViewModel!.isValidAddress() {
+        if self.orderViewModel.isValidAddress() {
             self.saveOrder()
         } else {
-            let alert = UIAlertController(title: "Informação", message: "Favor, Preencher todos os campos", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-            NSLog("The \"OK\" alert occured.")
-            }))
-            self.present(alert, animated: true, completion: nil)
+            self.displayAlert()
         }
     }
     
     @objc func goToPreviousScreen() {
         coordinator?.moveTo(flow: .menu(previousScreen!), data: [])
+    }
+    
+    func displayAlert() {
+        let alert = UIAlertController(title: "Informação", message: "Favor, Preencher todos os campos", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        NSLog("The \"OK\" alert occured.")
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 }
