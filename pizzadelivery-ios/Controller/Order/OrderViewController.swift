@@ -183,13 +183,21 @@ extension OrderViewController: UITableViewDataSource {
 
 extension OrderViewController {
     private func fetchAllItems(orderViewModel: OrderViewModel) -> ItemOrderListViewModel? {
-        let itemOrderListViewModel = ItemOrderListViewModel()
-        itemOrderListViewModel.fetchAll(orderViewModel: orderViewModel)
+        var itemOrderListViewModel = ItemOrderListViewModel()
+        itemOrderListViewModel.fetchAll(orderViewModel: orderViewModel) { itemOrderListVM in
+            if let itemOrderListVM = itemOrderListVM {
+                itemOrderListViewModel = itemOrderListVM
+            }
+        }
         return itemOrderListViewModel
     }
     
     private func fetchAllOrders() {
-        self.orderListViewModel.fetchAll()
+        self.orderListViewModel.fetchAll{ orders in
+            if let ordersListVM = orders {
+                self.orderListViewModel = OrderListViewModel(orders: ordersListVM)
+            }
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

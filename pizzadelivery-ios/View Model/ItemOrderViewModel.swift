@@ -18,27 +18,31 @@ class ItemOrderListViewModel {
 }
 
 extension ItemOrderListViewModel {
-    func fetchAll(orderViewModel: OrderViewModel?) {
+    func fetchAll(orderViewModel: OrderViewModel?, completion: @escaping (ItemOrderListViewModel?) -> Void) {
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
-        var itemsVM = [ItemOrderViewModel]()
+        var itemOrderListVM: ItemOrderListViewModel?
         
         if let currentOrder = orderViewModel?.order {
             let predicate = NSPredicate(format: "parentOrder == %@", currentOrder)
+            var itemsVM = [ItemOrderViewModel]()
+            
             request.predicate = predicate
-           
+            
             do {
                 let itemOrders: [ItemOrder] = try self.coreDataStack.managedObjectContext.fetch(request)
                 if itemOrders != [] {
                     for itemOrder in itemOrders {
-                        let viewModel = ItemOrderViewModel(itemOrder)
+                        let viewModel = ItemOrderViewModel(itemOrder: itemOrder)
                         itemsVM.append(viewModel)
                     }
+                    itemOrderListVM = ItemOrderListViewModel(itemsOrder: itemsVM)
+                    completion(itemOrderListVM)
                 }
-                self.itemOrderViewModel = itemsVM
             } catch {
                 print("Error fetching data from context \(error)")
             }
         }
+        completion(itemOrderListVM)
     }
     
     func itemOrderAtIndex(_ index: Int) -> ItemOrderViewModel? {
@@ -49,7 +53,7 @@ extension ItemOrderListViewModel {
         var total: Double = 0.0
         if let itemOrder = itemOrderViewModel {
             for item in itemOrder {
-                total += Double(item.itemOrder?.quantity ?? 0) * (item.itemOrder?.price ?? 0.00)
+                total += Double(item.quantity ?? 0) * (item.price ?? 0.00)
             }
         }
         return String(format: "%.2f", total)
@@ -59,7 +63,7 @@ extension ItemOrderListViewModel {
         var total: Int = 0
         if let itemOrderVM = itemOrderViewModel {
             for item in itemOrderVM {
-                total += Int(item.itemOrder?.quantity ?? 0)
+                total += Int(item.quantity!)
             }
         }
         return String(describing: total)
@@ -69,9 +73,7 @@ extension ItemOrderListViewModel {
         var items = ""
         if let itemOrderVM = itemOrderViewModel {
             for item in itemOrderVM {
-                if let quantity = item.itemOrder?.quantity, let name = item.itemOrder?.name {
-                    items += "- \(String(describing: quantity)) \(String(describing: name)) "
-                }
+                items += "- \(item.quantity!) \(item.name!) "
             }
         }
         return items
@@ -82,23 +84,38 @@ extension ItemOrderListViewModel {
     }
     
     var cartButtonIsEnabled: Bool {
-        return !(self.itemOrderViewModel?.isEmpty ?? false)
+        return self.itemOrderViewModel!.isEmpty ? false : true
     }
 }
 
 struct ItemOrderViewModel{
-    var itemOrder: ItemOrder?
+    var name: String?
+    var itemId: Int64?
+    var price: Double?
+    var quantity: Int64?
+    var comment: String?
     private let coreDataStack = CoreDataStack.shared
+    
+    init(itemOrder: ItemOrder? = nil) {
+        self.name = itemOrder?.name! ?? nil
+        self.itemId = itemOrder?.itemId ?? nil
+        self.price = itemOrder?.price ?? nil
+        self.quantity = itemOrder?.quantity ?? nil
+        self.comment = itemOrder?.comment ?? nil
+    }
+    
+    init(name: String, itemId: Int64, price: Double, quantity: Int64, comment: String) {
+        self.name = name
+        self.itemId = itemId
+        self.price = price
+        self.quantity = quantity
+        self.comment = comment
+    }
 }
 
 extension ItemOrderViewModel {
-    init(_ itemOrder: ItemOrder? = nil) {
-        self.itemOrder = itemOrder
-    }
-}
-extension ItemOrderViewModel {
     mutating func saveItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
-       if let currentItemId = itemOrderViewModel?.itemOrder?.itemId, let currentOrder = orderViewModel?.order {
+       if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
            let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
            let itemIdAsString = String(describing: currentItemId)
            let predicateOne = NSPredicate(format: "itemId MATCHES %@", itemIdAsString)
@@ -124,19 +141,18 @@ extension ItemOrderViewModel {
    }
      mutating func createItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
         let itemCd = ItemOrder(context: self.coreDataStack.managedObjectContext)
-        itemCd.name = itemOrderViewModel!.itemOrder?.name
-        itemCd.price = itemOrderViewModel!.itemOrder?.price ?? 0.00
-        itemCd.itemId = itemOrderViewModel!.itemOrder?.itemId ?? 0
-        itemCd.comment = itemOrderViewModel!.itemOrder?.comment ?? ""
-        itemCd.quantity = itemOrderViewModel!.itemOrder?.quantity ?? 0
+         itemCd.name = itemOrderViewModel?.name
+        itemCd.price = itemOrderViewModel?.price ?? 0.00
+        itemCd.itemId = itemOrderViewModel?.itemId ?? 0
+        itemCd.comment = itemOrderViewModel?.comment ?? ""
+        itemCd.quantity = itemOrderViewModel?.quantity ?? 0
         itemCd.parentOrder = orderViewModel?.order
         
-        self.itemOrder = itemCd as! ItemOrder
         self.coreDataStack.saveContext()
     }
     
     mutating func updateItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
-        if let currentItemId = itemOrderViewModel?.itemOrder?.itemId, let currentOrder = orderViewModel?.order {
+        if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
             let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
             let predicateOne = NSPredicate(format: "(itemId MATCHES %@)", itemIdAsString)
@@ -146,12 +162,11 @@ extension ItemOrderViewModel {
             
             do {
                 let itemCd = try coreDataStack.managedObjectContext.fetch(request)
-                itemCd.first!.setValue(itemOrderViewModel!.itemOrder?.price, forKey: "price")
-                itemCd.first!.setValue(itemOrderViewModel!.itemOrder?.quantity, forKey: "quantity")
-                itemCd.first!.setValue(itemOrderViewModel!.itemOrder?.name, forKey: "name")
-                itemCd.first!.setValue(itemOrderViewModel!.itemOrder?.comment, forKey: "comment")
+                itemCd.first!.setValue(itemOrderViewModel!.price, forKey: "price")
+                itemCd.first!.setValue(itemOrderViewModel!.quantity, forKey: "quantity")
+                itemCd.first!.setValue(itemOrderViewModel!.name, forKey: "name")
+                itemCd.first!.setValue(itemOrderViewModel!.comment, forKey: "comment")
                 
-                self.itemOrder = itemCd.first! as! ItemOrder
                 self.coreDataStack.saveContext()
             } catch {
                 print("Error fetching data from context \(error)")
@@ -159,8 +174,8 @@ extension ItemOrderViewModel {
         }
     }
     
-    public mutating func removeItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
-        if let currentItemId = itemOrderViewModel?.itemOrder?.itemId, let currentOrder = orderViewModel?.order {
+    public func removeItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (Bool) -> Void) {
+        if let currentItemId = itemOrderViewModel?.itemId, let currentOrder = orderViewModel?.order {
             let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
             let itemIdAsString = String(describing: currentItemId)
             let predicateOne = NSPredicate(format: "(itemId MATCHES %@)", itemIdAsString)
@@ -172,7 +187,6 @@ extension ItemOrderViewModel {
                 let currentItem = try coreDataStack.managedObjectContext.fetch(request)
                 self.coreDataStack.managedObjectContext.delete(currentItem[0])
                 self.coreDataStack.saveContext()
-                self.itemOrder = nil
                 completion(true)
             } catch {
                 print("Error fetching data from context \(error)")
@@ -180,10 +194,11 @@ extension ItemOrderViewModel {
         }
     }
     
-    public mutating func fetchItem(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?) {
+    public func fetchItem(itemMenuViewModel: ItemMenuViewModel?, orderViewModel: OrderViewModel?, completion: @escaping (ItemOrderViewModel?) -> Void) {
         let request: NSFetchRequest<ItemOrder> = ItemOrder.fetchRequest()
         let currentItemId = String(describing: itemMenuViewModel!.itemMenu.itemId)
-       
+        var itemOrderVM: ItemOrderViewModel?
+        
         if let currentOrder = orderViewModel?.order {
             let predicateOne = NSPredicate(format: "(itemId MATCHES %@)", currentItemId)
             let predicateTwo = NSPredicate(format: "parentOrder == %@", currentOrder)
@@ -191,11 +206,15 @@ extension ItemOrderViewModel {
             
             do {
                 let currentItem = try self.coreDataStack.managedObjectContext.fetch(request)
-                itemOrder = currentItem.first
+                if currentItem != [] {
+                    itemOrderVM = ItemOrderViewModel(itemOrder: currentItem[0])
+                    completion(itemOrderVM)
+                }
             } catch {
                 print("Error fetching data from context \(error)")
             }
         }
+        completion(itemOrderVM)
     }
     
     func calculateTotal(_ quantity: Int, price: Double) -> String {
@@ -204,16 +223,20 @@ extension ItemOrderViewModel {
     }
     
     var itemDescription: String {
-        if let quantity = self.itemOrder?.quantity, let name = self.itemOrder?.name {
-            return "\(String(describing: quantity)) \(String(describing: name))"
-        }
-        return ""
-    }
+        return "\(String(describing: self.quantity!)) \(String(describing: self.name!))"
+     }
     var itemTotal: String {
-        if let price = self.itemOrder?.price {
-          return "R$ \(String(describing: price))"
+        return "R$ \(String(describing: self.price!))"
+    }
+    
+    var flag: ItemOrderStatus {
+        if self.quantity == nil {
+            return ItemOrderStatus.create
+        } else if Int64(self.quantity!) > 0 {
+            return ItemOrderStatus.update
+        } else {
+            return ItemOrderStatus.remove
         }
-        return ""
     }
 }
  

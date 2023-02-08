@@ -100,7 +100,11 @@ extension DeliveryLocationViewController: ViewConfiguration {
 
 extension DeliveryLocationViewController {
     private func fetchOrder() {
-        self.orderViewModel.fetchOrder()
+        self.orderViewModel.fetch { orderViewModel in
+            if let orderVM = orderViewModel {
+                self.orderViewModel = orderVM
+            }
+        }
     }
     
     private func saveOrder() {

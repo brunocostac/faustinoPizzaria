@@ -24,7 +24,7 @@ extension OrderListViewModel {
 }
 
 extension OrderListViewModel {
-    func fetchAll() {
+    public func fetchAll(completion: @escaping ([OrderViewModel]?) -> Void) {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == false")
         var orderVM = [OrderViewModel]()
@@ -38,10 +38,10 @@ extension OrderListViewModel {
                 let viewModel = OrderViewModel(order: order)
                 orderVM.append(viewModel)
             }
-            self.orderViewModel = orderVM
         } catch {
             print("Error fetching data from context \(error)")
         }
+        completion(orderVM)
     }
     
     var numberOfSections: Int {
@@ -68,7 +68,7 @@ extension OrderViewModel {
 }
 
 extension OrderViewModel {
-    public mutating func createOrder() {
+    public func createOrder() {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == true")
         let orderCD = Order(context: self.coreDataStack.managedObjectContext)
@@ -80,7 +80,6 @@ extension OrderViewModel {
             if orders == [] {
                 orderCD.isOpen = true
                 orderCD.orderId = UUID()
-                order = orderCD as! Order
                 self.coreDataStack.saveContext()
             }
         } catch {
@@ -88,20 +87,24 @@ extension OrderViewModel {
         }
     }
     
-    public mutating func fetchOrder() {
+    public func fetch(completion: @escaping (OrderViewModel?) -> Void) {
         let request: NSFetchRequest<Order> = Order.fetchRequest()
         let predicate = NSPredicate(format: "isOpen == true")
+        var order: Order?
+        var orderVM: OrderViewModel?
         request.predicate = predicate
         request.fetchLimit = 1
         
         do {
             let orders: [Order] = try self.coreDataStack.managedObjectContext.fetch(request)
             if orders != [] {
-                order = orders.first
+                order = orders[0]
+                orderVM = OrderViewModel(order: order!)
             }
         } catch {
             print("Error fetching data from context \(error)")
         }
+        completion(orderVM)
     }
     
     public func saveOrder(orderViewModel: OrderViewModel?,completion: @escaping (Bool) -> Void)  {

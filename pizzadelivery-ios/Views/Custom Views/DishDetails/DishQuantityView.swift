@@ -31,7 +31,7 @@ class DishQuantityView: UIView {
     
     let addToCartButton: UIButton = {
         let addToCartButton = UIButton()
-        addToCartButton.setTitle("Adicionar R$ 35,90", for: .normal)
+        addToCartButton.setTitle("", for: .normal)
         addToCartButton.backgroundColor = .red
         addToCartButton.titleLabel?.textColor = .white
         addToCartButton.layer.cornerRadius =  20

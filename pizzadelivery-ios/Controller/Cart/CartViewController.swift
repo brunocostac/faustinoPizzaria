@@ -194,7 +194,7 @@ extension CartViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 
-                cell1.configureWithText(itemDescription: itemInCart?.itemDescription ?? "", itemTotal: itemInCart?.itemTotal ?? "0.00")
+                cell1.configureWithText(itemDescription: itemInCart!.itemDescription , itemTotal: itemInCart!.itemTotal)
                 
                 return cell1
             } else {
@@ -225,12 +225,20 @@ extension CartViewController: UITableViewDataSource {
 
 extension CartViewController {
     func fetchOrder() {
-        self.orderViewModel.fetchOrder()
+        self.orderViewModel.fetch { orderViewModel in
+            if let orderVM = orderViewModel {
+                self.orderViewModel = orderVM
+            }
+        }
     }
     
     private func fetchItems() {
         if self.orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel)
+            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
+                if let itemOrderListVM = itemOrderListVM {
+                    self.itemOrderListViewModel = itemOrderListVM
+                }
+            }
         }
     }
 }

@@ -38,9 +38,9 @@ class OrderTableViewCell: UITableViewCell {
         if firstDate.compare(secondDate) == .orderedAscending {
             return "Em andamento"
         } else if firstDate.compare(secondDate) == .orderedDescending {
-          return "Entregue"
+            return "Entregue"
         } else {
-          return "Entregue"
+            return "Entregue"
         }
     }
     

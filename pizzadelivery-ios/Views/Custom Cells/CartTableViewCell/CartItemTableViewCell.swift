@@ -26,8 +26,8 @@ class CartItemTableViewCell: UITableViewCell {
     }
     
     func configureWithText(itemDescription: String, itemTotal: String) {
-        itemNameLabel.text = itemDescription
-        itemTotalLabel.text = itemTotal
+        self.itemNameLabel.text = String(describing: itemDescription)
+        self.itemTotalLabel.text =  String(describing: itemTotal)
     }
     
     private func setupItemLabelConstraints() {

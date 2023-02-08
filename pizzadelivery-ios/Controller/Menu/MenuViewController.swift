@@ -229,11 +229,19 @@ extension MenuViewController: UITableViewDataSource {
 
 extension MenuViewController {
     private func fetchOrder() {
-        self.orderViewModel.fetchOrder()
+        self.orderViewModel.fetch { orderViewModel in
+            if let orderVM = orderViewModel {
+                self.orderViewModel = orderVM
+            }
+        }
     }
     private func fetchItems() {
         if self.orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel)
+            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
+                if let itemOrderListVM = itemOrderListVM {
+                    self.itemOrderListViewModel = itemOrderListVM
+                }
+            }
         }
     }
     

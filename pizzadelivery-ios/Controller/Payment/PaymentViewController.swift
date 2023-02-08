@@ -222,7 +222,7 @@ extension PaymentViewController: UITableViewDataSource {
                 }
                 
                 let itemInCart = itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
-                cell1.configureWithText(itemDescription: itemInCart?.itemDescription ?? "", itemTotal: itemInCart?.itemTotal ?? "")
+                cell1.configureWithText(itemDescription: itemInCart!.itemDescription, itemTotal: itemInCart!.itemTotal)
                 
                 return cell1
             } else {
@@ -251,12 +251,20 @@ extension PaymentViewController: UITableViewDataSource {
 
 extension PaymentViewController {
     private func fetchOrder() {
-        orderViewModel.fetchOrder()
+        self.orderViewModel.fetch { orderViewModel in
+            if let orderVM = orderViewModel {
+                self.orderViewModel = orderVM
+            }
+        }
     }
     
     private func fetchItems() {
         if self.orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel)
+            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
+                if let itemOrderListVM = itemOrderListVM {
+                    self.itemOrderListViewModel = itemOrderListVM
+                }
+            }
         }
     }
     
@@ -295,7 +303,7 @@ extension PaymentViewController {
                 }
             }
         } else {
-            self.displayAlert(title: "Informação", message: "Por favor, informe o endereço de entrega.", actionClosure: {
+            self.displayAlert(title: "Informação", message: "Por favor, inforeme o endereço de entrega.", actionClosure: {
             })
         }
     }
