@@ -21,8 +21,8 @@ class DeliveryLocationTableViewCell: UITableViewCell {
     let editDeliveryLocationButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "pencil"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .red
+        button.tintColor = .red
+        button.backgroundColor = .white
         button.layer.cornerRadius = 0.5 * button.bounds.size.width
         button.clipsToBounds = true
         return button

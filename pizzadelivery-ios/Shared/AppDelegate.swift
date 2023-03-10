@@ -14,11 +14,11 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
         let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         print(dataFilePath)
         
-        // MARK: UITabBar Customization
+        UITabBar.setGlobalAppearance()
     
-        UITabBar.appearance().tintColor = .black
-        UITabBar.appearance().backgroundColor = .white
-        UITabBar.appearance().isTranslucent = false
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000, vertical: 0), for: .default)
+    
+        UINavigationBar.setGlobalAppearance()
         return true
     }
 

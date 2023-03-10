@@ -29,7 +29,7 @@ class TotalPriceTableViewCell: UITableViewCell {
     func configureWithText(subTotalOrder: String, totalOrder: String, fee: String) {
         self.subTotalLabel.text = "Subtotal: R$ \(subTotalOrder)"
         self.totalLabel.text = "Total: R$ \(totalOrder)"
-        self.feeLabel.text = "Taxa de entrega: \(fee)"
+        self.feeLabel.text = "Taxa de entrega: R$ \(fee)"
     }
     
     // MARK: - Setup Constraints

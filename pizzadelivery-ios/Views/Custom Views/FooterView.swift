@@ -13,7 +13,7 @@ class FooterView: UIView {
     let footerButton: UIButton = {
         let button = UIButton()
         button.setTitle("Ir para o pagamento", for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = .red
         button.titleLabel?.textColor = .white
         button.layer.cornerRadius =  20
         button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
