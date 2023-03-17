@@ -212,8 +212,7 @@ extension CartViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell3.delegate = self
-            cell3.configureWithText(address: orderViewModel.order?.address ?? "Não existe endereço cadastrado")
-            
+            cell3.configureWithText(address: orderViewModel.getAddressMessage())
             return cell3
         default:
             return UITableViewCell()

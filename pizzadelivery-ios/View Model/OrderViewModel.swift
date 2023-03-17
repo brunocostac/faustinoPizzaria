@@ -140,10 +140,15 @@ extension OrderViewModel {
     }
     
     func isValidAddress() -> Bool {
-        if self.order?.address != nil &&  self.order?.neighborhood != nil && self.order?.customerName != nil {
+        if self.order?.address != "" &&  self.order?.neighborhood != "" && self.order?.customerName != "" {
             return true
         } else {
             return false
         }
+    }
+    
+    func getAddressMessage() -> String {
+        let address = self.order?.address != "" ? self.order?.address : "Não existe endereço cadastrado"
+        return address!
     }
 }

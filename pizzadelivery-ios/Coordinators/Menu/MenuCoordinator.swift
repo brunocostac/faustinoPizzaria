@@ -46,25 +46,25 @@ class MenuCoordinator: MenuBaseCoordinator {
     }
     
     func goToDishDetailsScreenWith(_ itemMenuSelected: ItemMenuViewModel) {
-        let dishDetailsViewController = DishDetailsViewController(coordinator: self)
-        dishDetailsViewController.itemMenuViewModel = itemMenuSelected
-        navigationRootViewController?.pushViewController(dishDetailsViewController, animated: true)
+        let dishDetailsVC = DishDetailsViewController(coordinator: self)
+        dishDetailsVC.itemMenuViewModel = itemMenuSelected
+        navigationRootViewController?.pushViewController(dishDetailsVC, animated: true)
     }
     
     func goToCartScreen() {
-        let cartViewController = CartViewController(coordinator: self)
-        navigationRootViewController?.pushViewController(cartViewController, animated: true)
+        let cartVC = CartViewController(coordinator: self)
+        navigationRootViewController?.pushViewController(cartVC, animated: true)
     }
     
     func goToPaymentScreen() {
-        let paymentViewController = PaymentViewController(coordinator: self)
-        navigationRootViewController?.pushViewController(paymentViewController, animated: true)
+        let paymentVC = PaymentViewController(coordinator: self)
+        navigationRootViewController?.pushViewController(paymentVC, animated: true)
     }
     
     func goToDeliveryLocationScreen(previousScreen: MenuScreen) {
-        let deliveryLocationViewController = DeliveryLocationViewController(coordinator: self)
-        deliveryLocationViewController.previousScreen = previousScreen 
-        navigationRootViewController?.pushViewController(deliveryLocationViewController, animated: true)
+        let deliveryLocationVc = DeliveryLocationViewController(coordinator: self)
+        deliveryLocationVc.previousScreen = previousScreen
+        navigationRootViewController?.pushViewController(deliveryLocationVc, animated: true)
     }
     
     func resetToRoot() -> Self {
