@@ -141,7 +141,7 @@ extension ItemOrderViewModel {
    }
      mutating func createItem(itemOrderViewModel: ItemOrderViewModel?, orderViewModel: OrderViewModel?) {
         let itemCd = ItemOrder(context: self.coreDataStack.managedObjectContext)
-         itemCd.name = itemOrderViewModel?.name
+        itemCd.name = itemOrderViewModel?.name
         itemCd.price = itemOrderViewModel?.price ?? 0.00
         itemCd.itemId = itemOrderViewModel?.itemId ?? 0
         itemCd.comment = itemOrderViewModel?.comment ?? ""

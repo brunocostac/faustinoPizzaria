@@ -10,7 +10,7 @@ import UIKit
 class PaymentViewController: UIViewController, MenuBaseCoordinated, PaymentViewModelDelegate {
 
     // MARK: - ViewModels
-    private var paymentViewModel = PaymentViewModel()
+    private var paymentViewModel: PaymentViewModel?
     
     // MARK: - Variables
     
@@ -40,8 +40,8 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated, PaymentViewM
     
     override func viewDidAppear(_ animated: Bool) {
         self.paymentViewModel = PaymentViewModel()
-        self.paymentViewModel.delegate = self
-        self.paymentViewModel.viewDidAppear()
+        self.paymentViewModel?.delegate = self
+        self.paymentViewModel?.viewDidAppear()
         self.setupTableView()
         self.spinner.stopAnimating()
     }
@@ -184,11 +184,11 @@ extension PaymentViewController: UITableViewDataSource {
         
         switch section {
         case 0:
-            return "Forma de pagamento na entrega"
+            return paymentViewModel?.section[section]
         case 1:
-            return "Resumo do Pedido"
+            return paymentViewModel?.section[section]
         case 2:
-            return "Entregar em"
+            return paymentViewModel?.section[section]
         default:
             return nil
         }
@@ -199,7 +199,7 @@ extension PaymentViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return self.paymentViewModel.itemOrderListViewModel.count + 1
+            return (self.paymentViewModel?.itemOrderListViewModel.count)! + 1
         case 2:
             return 1
         default:
@@ -216,12 +216,12 @@ extension PaymentViewController: UITableViewDataSource {
             cell0.delegate = self
             return cell0
         case 1:
-            if self.paymentViewModel.itemOrderListViewModel.count >= indexPath.row + 1 {
+            if (self.paymentViewModel?.itemOrderListViewModel.count)! >= indexPath.row + 1 {
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
                 
-                let itemInCart = self.paymentViewModel.itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
+                let itemInCart = self.paymentViewModel?.itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
                 cell1.configureWithText(itemDescription: itemInCart!.itemDescription, itemTotal: itemInCart!.itemTotal)
                 
                 return cell1
@@ -229,7 +229,7 @@ extension PaymentViewController: UITableViewDataSource {
                 guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                cell2.configureWithText(subTotalOrder: self.paymentViewModel.itemOrderListViewModel.totalItemOrder, totalOrder: self.paymentViewModel.itemOrderListViewModel.totalItemOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: (self.paymentViewModel?.itemOrderListViewModel.totalItemOrder)!, totalOrder: (self.paymentViewModel?.itemOrderListViewModel.totalItemOrder)!, fee: "0.00")
                 return cell2
             }
         case 2:
@@ -238,7 +238,7 @@ extension PaymentViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell3.delegate = self
-            cell3.configureWithText(address: self.paymentViewModel.orderViewModel.getAddressMessage())
+            cell3.configureWithText(address: (self.paymentViewModel?.orderViewModel.getAddressMessage())!)
             
             return cell3
         default:
@@ -251,7 +251,7 @@ extension PaymentViewController: UITableViewDataSource {
 
 extension PaymentViewController {
     @objc func sendButtonPressed() {
-        self.paymentViewModel.sendOrder(paymentSelected:  self.paymentSelected)
+        self.paymentViewModel?.sendOrder(paymentSelected:  self.paymentSelected)
     }
     internal func didGoToMenuScreen() {
         coordinator?.moveTo(flow: .menu(.menuScreen), data: [])

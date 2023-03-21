@@ -14,9 +14,10 @@ protocol PaymentViewModelDelegate: AnyObject {
 }
 
 class PaymentViewModel {
-    
     var orderViewModel = OrderViewModel()
     var itemOrderListViewModel = ItemOrderListViewModel()
+    
+    var section: [String] = ["Forma de pagamento na entrega", "Resumo do Pedido", "Entregar em"]
     
     weak var delegate: PaymentViewModelDelegate?
     
