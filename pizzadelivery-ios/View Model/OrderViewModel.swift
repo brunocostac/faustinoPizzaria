@@ -139,8 +139,20 @@ extension OrderViewModel {
         return ""
     }
     
+    func hasAddress() -> Bool {
+        return self.order?.address != "" && self.order?.address != nil ? true : false
+    }
+    
+    func hasNeighborhood() -> Bool {
+        return self.order?.neighborhood != "" && self.order?.neighborhood != nil ? true : false
+    }
+    
+    func hasName() -> Bool {
+        self.order?.customerName != "" && self.order?.customerName != nil ? true : false
+    }
+    
     func isValidAddress() -> Bool {
-        if self.order?.address != "" &&  self.order?.neighborhood != "" && self.order?.customerName != "" {
+        if hasName() && hasNeighborhood() && hasAddress() {
             return true
         } else {
             return false
@@ -148,7 +160,7 @@ extension OrderViewModel {
     }
     
     func getAddressMessage() -> String {
-        let address = self.order?.address != "" ? self.order?.address : "Não existe endereço cadastrado"
+        let address = self.order?.address != "" && self.order?.address != nil ? self.order?.address : "Não existe endereço cadastrado"
         return address!
     }
 }

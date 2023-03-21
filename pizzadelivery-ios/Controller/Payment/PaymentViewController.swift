@@ -7,16 +7,14 @@
 
 import UIKit
 
-class PaymentViewController: UIViewController, MenuBaseCoordinated {
-    
+class PaymentViewController: UIViewController, MenuBaseCoordinated, PaymentViewModelDelegate {
+
     // MARK: - ViewModels
-    
-    private var orderViewModel = OrderViewModel()
-    private var itemOrderListViewModel = ItemOrderListViewModel()
+    private var paymentViewModel = PaymentViewModel()
     
     // MARK: - Variables
     
-    private var paymentSelected: String?
+    private var paymentSelected: String = "0"
     
     // MARK: - Views
     
@@ -41,8 +39,9 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.fetchOrder()
-        self.fetchItems()
+        self.paymentViewModel = PaymentViewModel()
+        self.paymentViewModel.delegate = self
+        self.paymentViewModel.viewDidAppear()
         self.setupTableView()
         self.spinner.stopAnimating()
     }
@@ -71,7 +70,8 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated {
         self.tableView.register(DeliveryLocationTableViewCell.self, forCellReuseIdentifier: "DeliveryLocationTableViewCell")
     }
     
-    private func displayAlert(title: String, message: String, actionClosure: @escaping () -> Void) {
+    
+    func didDisplayAlert(title: String, message: String, actionClosure: @escaping () -> Void) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: {(action: UIAlertAction!) in actionClosure()}))
         
@@ -130,7 +130,7 @@ extension PaymentViewController: ViewConfiguration {
     func configureViews() {
         view.backgroundColor = .white
         self.tableFooterView.footerButton.setTitle("Enviar o pedido", for: .normal)
-        self.tableFooterView.footerButton.addTarget(self, action: #selector(sendOrder), for: .touchUpInside)
+        self.tableFooterView.footerButton.addTarget(self, action: #selector(sendButtonPressed), for: .touchUpInside)
     }
 }
 
@@ -199,7 +199,7 @@ extension PaymentViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return  self.itemOrderListViewModel.count + 1
+            return self.paymentViewModel.itemOrderListViewModel.count + 1
         case 2:
             return 1
         default:
@@ -216,12 +216,12 @@ extension PaymentViewController: UITableViewDataSource {
             cell0.delegate = self
             return cell0
         case 1:
-            if itemOrderListViewModel.count >= indexPath.row + 1 {
+            if self.paymentViewModel.itemOrderListViewModel.count >= indexPath.row + 1 {
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
                 }
                 
-                let itemInCart = itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
+                let itemInCart = self.paymentViewModel.itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
                 cell1.configureWithText(itemDescription: itemInCart!.itemDescription, itemTotal: itemInCart!.itemTotal)
                 
                 return cell1
@@ -229,7 +229,7 @@ extension PaymentViewController: UITableViewDataSource {
                 guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                cell2.configureWithText(subTotalOrder: itemOrderListViewModel.totalItemOrder, totalOrder: itemOrderListViewModel.totalItemOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: self.paymentViewModel.itemOrderListViewModel.totalItemOrder, totalOrder: self.paymentViewModel.itemOrderListViewModel.totalItemOrder, fee: "0.00")
                 return cell2
             }
         case 2:
@@ -238,7 +238,7 @@ extension PaymentViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell3.delegate = self
-            cell3.configureWithText(address: orderViewModel.getAddressMessage())
+            cell3.configureWithText(address: self.paymentViewModel.orderViewModel.getAddressMessage())
             
             return cell3
         default:
@@ -247,68 +247,13 @@ extension PaymentViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - CoreData
-
-extension PaymentViewController {
-    private func fetchOrder() {
-        self.orderViewModel.fetch { orderViewModel in
-            if let orderVM = orderViewModel {
-                self.orderViewModel = orderVM
-            }
-        }
-    }
-    
-    private func fetchItems() {
-        if self.orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
-                if let itemOrderListVM = itemOrderListVM {
-                    self.itemOrderListViewModel = itemOrderListVM
-                }
-            }
-        }
-    }
-    
-    private func saveOrder() {
-        self.orderViewModel.saveOrder(orderViewModel: orderViewModel) { success in
-            if success {
-                self.displayAlert(title: "Sucesso", message: "Pedido recebido, já começaremos a preparar", actionClosure: { [self] in
-                    self.goToMenuScreen()
-                })
-            } else {
-                self.displayAlert(title: "Erro", message: "Não foi possível realizar o pedido, tente novamente mais tarde!", actionClosure: { [self] in
-                    self.goToMenuScreen()
-                })
-            }
-        }
-    }
-}
-
 // MARK: - User Actions
 
 extension PaymentViewController {
-    @objc func sendOrder() {
-        if orderViewModel.isValidAddress() {
-            if !(itemOrderListViewModel.itemOrderViewModel?.isEmpty ?? true) {
-                let itemListOrderVM = itemOrderListViewModel
-                self.orderViewModel.order?.total = Double(itemListOrderVM.totalItemOrder)!
-                self.orderViewModel.order?.dateWasRequest = Date()
-                self.orderViewModel.order?.dateCompletion = Date(timeInterval: 60*5, since: Date())
-                self.orderViewModel.order?.subTotal = Double(itemListOrderVM.totalItemOrder)!
-                self.orderViewModel.order?.isOpen = false
-                self.orderViewModel.order?.paymentMethod = self.paymentSelected
-            }
-            MockApiClient().sendOrder { [self] response in
-                if response {
-                    self.saveOrder()
-                }
-            }
-        } else {
-            self.displayAlert(title: "Informação", message: "Por favor, informe o endereço de entrega.", actionClosure: {
-            })
-        }
+    @objc func sendButtonPressed() {
+        self.paymentViewModel.sendOrder(paymentSelected:  self.paymentSelected)
     }
-    
-    private func goToMenuScreen() {
+    internal func didGoToMenuScreen() {
         coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
     }
 }
