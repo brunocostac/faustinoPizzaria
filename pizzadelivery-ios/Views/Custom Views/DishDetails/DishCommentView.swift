@@ -32,7 +32,7 @@ class DishCommentView: UIView {
         fatalError("init(coder:) has not been implemeted")
     }
     
-    func configureWith(comment: String) {
+    func configure(comment: String) {
         self.commentTextField.text = comment
     }
     

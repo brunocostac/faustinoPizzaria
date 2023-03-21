@@ -202,7 +202,7 @@ extension CartViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 
-                cell2.configureWithText(subTotalOrder: self.itemOrderListViewModel.totalOrder, totalOrder: self.itemOrderListViewModel.totalOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: self.itemOrderListViewModel.totalItemOrder, totalOrder: self.itemOrderListViewModel.totalItemOrder, fee: "0.00")
                
                 return cell2
             }

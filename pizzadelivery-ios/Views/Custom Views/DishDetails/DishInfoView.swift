@@ -28,7 +28,7 @@ class DishInfoView: UIView {
     
     // MARK: - Functions
     
-    func configureWith(name: String, description: String, price: Double) {
+    func configure(name: String, description: String, price: String) {
         self.nameLabel.text = name
         self.descriptionLabel.text = description
         self.priceLabel.text = "R$ \(price)"

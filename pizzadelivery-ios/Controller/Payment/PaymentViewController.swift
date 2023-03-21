@@ -229,7 +229,7 @@ extension PaymentViewController: UITableViewDataSource {
                 guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "TotalPriceTableViewCell", for: indexPath) as? TotalPriceTableViewCell else {
                     return UITableViewCell()
                 }
-                cell2.configureWithText(subTotalOrder: itemOrderListViewModel.totalOrder, totalOrder: itemOrderListViewModel.totalOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: itemOrderListViewModel.totalItemOrder, totalOrder: itemOrderListViewModel.totalItemOrder, fee: "0.00")
                 return cell2
             }
         case 2:
@@ -290,10 +290,10 @@ extension PaymentViewController {
         if orderViewModel.isValidAddress() {
             if !(itemOrderListViewModel.itemOrderViewModel?.isEmpty ?? true) {
                 let itemListOrderVM = itemOrderListViewModel
-                self.orderViewModel.order?.total = Double(itemListOrderVM.totalOrder)!
+                self.orderViewModel.order?.total = Double(itemListOrderVM.totalItemOrder)!
                 self.orderViewModel.order?.dateWasRequest = Date()
                 self.orderViewModel.order?.dateCompletion = Date(timeInterval: 60*5, since: Date())
-                self.orderViewModel.order?.subTotal = Double(itemListOrderVM.totalOrder)!
+                self.orderViewModel.order?.subTotal = Double(itemListOrderVM.totalItemOrder)!
                 self.orderViewModel.order?.isOpen = false
                 self.orderViewModel.order?.paymentMethod = self.paymentSelected
             }

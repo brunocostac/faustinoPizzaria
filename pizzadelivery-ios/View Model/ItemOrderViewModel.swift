@@ -49,7 +49,7 @@ extension ItemOrderListViewModel {
         return self.itemOrderViewModel?[index] ?? nil
     }
     
-    var totalOrder: String {
+    var totalItemOrder: String {
         var total: Double = 0.0
         if let itemOrder = itemOrderViewModel {
             for item in itemOrder {
@@ -229,7 +229,7 @@ extension ItemOrderViewModel {
         return "R$ \(String(describing: self.price!))"
     }
     
-    var flag: ItemOrderStatus {
+    func getFlag() -> ItemOrderStatus {
         if self.quantity == nil {
             return ItemOrderStatus.create
         } else if Int64(self.quantity!) > 0 {

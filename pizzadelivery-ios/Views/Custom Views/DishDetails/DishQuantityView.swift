@@ -50,7 +50,7 @@ class DishQuantityView: UIView {
         fatalError("init(coder:) has not been implemeted")
     }
     
-    func configureAddToCartButtonWith(flag: ItemOrderStatus, price: String) {
+    func configureAddToCartButton(flag: ItemOrderStatus, price: String) {
         self.addToCartButton.setTitle("\(flag.rawValue) R$ \(price)", for: .normal)
     }
     

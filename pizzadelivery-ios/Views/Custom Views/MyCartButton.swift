@@ -25,7 +25,7 @@ class MyCartButton: UIButton {
         fatalError("init(coder:) has not been implemeted")
     }
     
-    func configureWithText(quantity: String, totalPrice: String) {
+    func configure(quantity: String, totalPrice: String) {
         self.itemLabel.text = "\(Int(quantity)! == 1 ? "\(quantity) item" : " \(quantity) itens")"
         self.totalPriceLabel.text = "R$ \(totalPrice)"
     }

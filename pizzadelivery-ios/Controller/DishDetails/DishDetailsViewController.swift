@@ -7,18 +7,12 @@
 
 import UIKit
 
-class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
-    
+class DishDetailsViewController: UIViewController, MenuBaseCoordinated, DishDetailsViewModelDelegate {
+
     // MARK: - ViewModel
     
     public var itemMenuViewModel: ItemMenuViewModel?
-    private var orderViewModel = OrderViewModel()
-    private var itemOrderViewModel = ItemOrderViewModel()
-    private var itemOrderListViewModel = ItemOrderListViewModel()
-    
-    // MARK: - Variables
-    
-    private var flag: ItemOrderStatus?
+    public var dishDetailsViewModel: DishDetailsViewModel?
     
     // MARK: - Views
     
@@ -48,12 +42,9 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.fetchOrder()
-        self.fetchItems()
-        self.fetchCurrentItem()
-        self.setFlag()
-        self.configureDishDetails()
-        self.configureMyCartButton()
+        self.dishDetailsViewModel = DishDetailsViewModel(itemMenuViewModel: itemMenuViewModel)
+        self.dishDetailsViewModel?.delegate = self
+        self.dishDetailsViewModel?.viewDidAppear()
         self.spinner.stopAnimating()
     }
     
@@ -73,55 +64,28 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated {
         self.commentView.commentTextField.delegate = self
     }
     
-    private func setFlag() {
-        self.flag = self.itemOrderViewModel.flag
+    func didConfigureDishDetails(url: String, itemName: String, description: String, price: String, flag: ItemOrderStatus, comment: String) {
+        self.dishImageView.configureWith(url: url)
+        self.infoView.configure(name: itemName, description: description, price: price)
+        self.quantityView.configureAddToCartButton(flag: flag, price: price)
+        self.commentView.configure(comment: comment)
     }
     
-    private func configureDishDetails() {
-        if self.flag == ItemOrderStatus.create || self.flag == ItemOrderStatus.update {
-            self.dishImageView.configureWith(url: itemMenuViewModel!.itemMenu.imageUrl)
-            self.infoView.configureWith(name: itemMenuViewModel!.itemMenu.name, description: itemMenuViewModel!.itemMenu.description, price: itemMenuViewModel!.itemMenu.price)
-            self.quantityView.configureAddToCartButtonWith(flag: flag!, price: String(itemMenuViewModel!.itemMenu.price))
-        }
-
-        if self.flag == ItemOrderStatus.update {
-            self.commentView.configureWith(comment: itemOrderViewModel.comment ?? "")
-            self.quantityView.quantityLabel.text = String(describing: itemOrderViewModel.quantity ?? 1)
-            self.quantityView.configureAddToCartButtonWith(flag: flag!, price: self.itemOrderViewModel.calculateTotal(Int(itemOrderViewModel.quantity ?? 1), price: Double(itemOrderViewModel.price!)))
-        }
+    func didConfigureMyCartButton(quantity: String, totalItemOrder: String, isHiddenButton: Bool) {
+        self.myCartButton.configure(quantity: quantity, totalPrice: totalItemOrder)
+        self.myCartButton.isHidden = isHiddenButton
     }
     
-    private func configureMyCartButton() {
-        if itemOrderListViewModel.cartButtonIsEnabled  {
-            let itemListVM = itemOrderListViewModel
-            self.myCartButton.configureWithText(quantity: itemListVM.quantity, totalPrice: itemListVM.totalOrder)
-            self.myCartButton.isHidden = false
-        }
+    func didUpdateQuantityView(quantity: String, decreaseButtonAlpha: Double, decreaseButtonIsEnabled: Bool, flag: ItemOrderStatus, total: String) {
+        self.quantityView.quantityLabel.text = quantity
+        self.quantityView.decreaseButton.alpha = decreaseButtonAlpha
+        self.quantityView.decreaseButton.isEnabled = decreaseButtonIsEnabled
+        self.quantityView.configureAddToCartButton(flag: flag, price: total)
     }
-
-    func updateQuantityView(quantity: Int, flag: ItemOrderStatus) {
-        let isCreateOrUpdate = self.flag == ItemOrderStatus.create || self.flag == ItemOrderStatus.update
-        let price = self.itemMenuViewModel?.itemMenu.price
-        let total = self.calculateItemTotal(isCreateOrUpdate: isCreateOrUpdate, quantity: quantity, price: price!)
-        let flag = self.flag!
         
-        self.quantityView.quantityLabel.text = isCreateOrUpdate ? String(describing: quantity) : "0"
-        self.quantityView.decreaseButton.alpha = isCreateOrUpdate ?  1 : 0.5
-        self.quantityView.decreaseButton.isEnabled = isCreateOrUpdate ? true : false
-        self.quantityView.configureAddToCartButtonWith(flag: flag, price: total)
-    }
-    
-    func calculateItemTotal(isCreateOrUpdate: Bool, quantity: Int, price: Double) -> String {
-        if isCreateOrUpdate {
-           return self.itemOrderViewModel.calculateTotal(quantity, price: price)
-        } else {
-            return self.itemOrderViewModel.calculateTotal(Int(self.itemOrderViewModel.quantity ?? 0), price: price)
-        }
-    }
-    
     private func configureButtons() {
         self.quantityView.addToCartButton.addTarget(self, action: #selector(self.addToCartButtonPressed(_:)), for: .touchUpInside)
-        self.myCartButton.addTarget(self, action: #selector(self.goToCartScreen), for: .touchUpInside)
+        self.myCartButton.addTarget(self, action: #selector(self.didGoToCartScreen), for: .touchUpInside)
         self.quantityView.increaseButton.addTarget(self, action: #selector(self.increaseQuantityButtonPressed(_:)), for: .touchUpInside)
         self.quantityView.decreaseButton.addTarget(self, action: #selector(self.decreaseQuantityButtonPressed(_:)), for: .touchUpInside)
     }
@@ -248,97 +212,33 @@ extension DishDetailsViewController: ViewConfiguration {
     }
 }
 
-// MARK: - CoreData
-
-extension DishDetailsViewController {
-    private func fetchOrder() {
-        self.orderViewModel.fetch { orderViewModel in
-            if let orderVM = orderViewModel {
-                self.orderViewModel = orderVM
-            }
-        }
-    }
-    
-    private func fetchItems() {
-        if orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
-                if let itemOrderListVM = itemOrderListVM {
-                    self.itemOrderListViewModel = itemOrderListVM
-                }
-            }
-        }
-    }
-    
-    private func fetchCurrentItem() {
-        if orderViewModel.order != nil {
-            self.itemOrderViewModel.fetchItem(itemMenuViewModel:  self.itemMenuViewModel, orderViewModel: self.orderViewModel) { itemOrderVM in
-                if let itemOrderVM = itemOrderVM {
-                    self.itemOrderViewModel = itemOrderVM
-                }
-            }
-        }
-    }
-}
 
 // MARK: - User Actions
 
 extension DishDetailsViewController {
     @objc func increaseQuantityButtonPressed(_ sender: UIButton) {
-        var quantity = Int(self.quantityView.quantityLabel.text!)!
-        if self.flag == ItemOrderStatus.remove {
-            self.flag = ItemOrderStatus.update
-        }
-        quantity = quantity + 1
-        self.updateQuantityView(quantity: quantity, flag: flag!)
+        let quantity = Int(self.quantityView.quantityLabel.text!)!
+        self.dishDetailsViewModel?.increaseQuantity(quantity: quantity)
     }
     
     @objc func decreaseQuantityButtonPressed(_ sender: UIButton) {
-        var quantity = Int(self.quantityView.quantityLabel.text!)!
-        if self.flag == ItemOrderStatus.create && quantity > 1 {
-            quantity = quantity - 1
-        } else if self.flag == ItemOrderStatus.update && quantity > 0 {
-            quantity = quantity - 1
-            if quantity == 0 {
-                self.flag = ItemOrderStatus.remove
-            }
-        }
-        self.updateQuantityView(quantity: quantity, flag: flag!)
+        let quantity = Int(self.quantityView.quantityLabel.text!)!
+        self.dishDetailsViewModel?.decreaseQuantity(quantity: quantity)
     }
     
     @objc func addToCartButtonPressed(_ sender: UIButton) {
-        let isRemoveItem = sender.titleLabel?.text!.contains(ItemOrderStatus.remove.rawValue)
-        let name = self.itemMenuViewModel?.itemMenu.name
-        let itemId = self.itemMenuViewModel?.itemMenu.itemId
-        let price = self.itemMenuViewModel?.itemMenu.price
-        let quantity = Int(self.quantityView.quantityLabel.text!)
-        let comment = self.commentView.commentTextField.text ?? ""
-
-        self.itemOrderViewModel.name = name!
-        self.itemOrderViewModel.itemId = Int64(itemId!)
-        self.itemOrderViewModel.price = price!
-        self.itemOrderViewModel.quantity = Int64(quantity!)
-        self.itemOrderViewModel.comment = comment
-        
-        if isRemoveItem! {
-            itemOrderViewModel.removeItem(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
-                if success {
-                    self.goToHomeScreen()
-                }
-            })
-        } else {
-            itemOrderViewModel.saveItem(itemOrderViewModel: self.itemOrderViewModel, orderViewModel: self.orderViewModel, completion: { success in
-                if success {
-                    self.goToCartScreen()
-                }
-            })
+        if let isRemoveItem = sender.titleLabel?.text!.contains(ItemOrderStatus.remove.rawValue) {
+            let quantity = Int(self.quantityView.quantityLabel.text!)!
+            let comment = self.commentView.commentTextField.text ?? ""
+            self.dishDetailsViewModel?.addToCart(isRemoveItem: isRemoveItem, quantity: quantity, comment: comment)
         }
     }
     
-    @objc func goToCartScreen() {
-        coordinator?.moveTo(flow: .menu(.cartScreen), data: [])
+    func didGoToHomeScreen() {
+        coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
     }
     
-    @objc func goToHomeScreen() {
-        coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
+    @objc func didGoToCartScreen() {
+        coordinator?.moveTo(flow: .menu(.cartScreen), data: [])
     }
 }

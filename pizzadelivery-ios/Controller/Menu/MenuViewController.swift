@@ -79,7 +79,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     private func loadCartButton() {
         if itemOrderListViewModel.cartButtonIsEnabled {
             let items = itemOrderListViewModel
-            self.myCartButton.configureWithText(quantity: items.quantity, totalPrice: items.totalOrder)
+            self.myCartButton.configure(quantity: items.quantity, totalPrice: items.totalItemOrder)
             self.myCartButton.isHidden = false
         } else {
             self.myCartButton.isHidden = true
