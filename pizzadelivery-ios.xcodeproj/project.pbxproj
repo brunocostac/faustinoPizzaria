@@ -47,6 +47,8 @@
 		11627C862790CF0100FC4AA0 /* CartItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */; };
 		116972CB27BD64B000F7A6B2 /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116972CA27BD64AF00F7A6B2 /* Extension+Date.swift */; };
 		1172B38F29CA48AB004DB6B1 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172B38E29CA48AB004DB6B1 /* PaymentViewModel.swift */; };
+		1172B39129CA6E12004DB6B1 /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172B39029CA6E11004DB6B1 /* CartViewModel.swift */; };
+		1172B39329CA724C004DB6B1 /* DeliveryLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172B39229CA724C004DB6B1 /* DeliveryLocationViewModel.swift */; };
 		117C6B3629C4D122007518D6 /* DishDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C6B3529C4D121007518D6 /* DishDetailsViewModel.swift */; };
 		117EC0A627A2DBE60003D3EC /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0A527A2DBE60003D3EC /* MenuViewModel.swift */; };
 		117EC0A827A2DBF50003D3EC /* ItemMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117EC0A727A2DBF50003D3EC /* ItemMenuViewModel.swift */; };
@@ -120,6 +122,8 @@
 		11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemTableViewCell.swift; sourceTree = "<group>"; };
 		116972CA27BD64AF00F7A6B2 /* Extension+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Date.swift"; sourceTree = "<group>"; };
 		1172B38E29CA48AB004DB6B1 /* PaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModel.swift; sourceTree = "<group>"; };
+		1172B39029CA6E11004DB6B1 /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
+		1172B39229CA724C004DB6B1 /* DeliveryLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationViewModel.swift; sourceTree = "<group>"; };
 		117C6B3529C4D121007518D6 /* DishDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishDetailsViewModel.swift; sourceTree = "<group>"; };
 		117EC0A527A2DBE60003D3EC /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
 		117EC0A727A2DBF50003D3EC /* ItemMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemMenuViewModel.swift; sourceTree = "<group>"; };
@@ -335,6 +339,8 @@
 				117EC0AB27A2DC1D0003D3EC /* ItemOrderViewModel.swift */,
 				117C6B3529C4D121007518D6 /* DishDetailsViewModel.swift */,
 				1172B38E29CA48AB004DB6B1 /* PaymentViewModel.swift */,
+				1172B39029CA6E11004DB6B1 /* CartViewModel.swift */,
+				1172B39229CA724C004DB6B1 /* DeliveryLocationViewModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -605,6 +611,7 @@
 				1119FA7A2787A91C00AF25E1 /* OrderBaseCoordinator.swift in Sources */,
 				1119FA492787586500AF25E1 /* Coordinator.swift in Sources */,
 				118560E1278DCA4E00B7D149 /* DishInfoView.swift in Sources */,
+				1172B39329CA724C004DB6B1 /* DeliveryLocationViewModel.swift in Sources */,
 				110BE64127A4383500691BC0 /* API.swift in Sources */,
 				118560DC278DB9AE00B7D149 /* DishDetailsViewController.swift in Sources */,
 				111BCCF8278FA2D400F6E89E /* CartViewController.swift in Sources */,
@@ -623,6 +630,7 @@
 				1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */,
 				112F25402796075500A50E11 /* PaymentMethodTableViewCell.swift in Sources */,
 				1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */,
+				1172B39129CA6E12004DB6B1 /* CartViewModel.swift in Sources */,
 				1153293529BBBCC600CFEBA0 /* Extension+UITabBar+Appearance.swift in Sources */,
 				117EC0AF27A2E4160003D3EC /* DataModel.xcdatamodeld in Sources */,
 				118560E3278DF30900B7D149 /* DishCommentView.swift in Sources */,

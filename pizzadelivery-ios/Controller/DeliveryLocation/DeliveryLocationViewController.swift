@@ -7,10 +7,10 @@
 
 import UIKit
 
-class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
+class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated, DeliveryLocationViewModelDelegate {
     
     // MARK: - ViewModel
-    var orderViewModel = OrderViewModel()
+    var deliveryLocationVM = DeliveryLocationViewModel()
     
     // MARK: - Variables
     var previousScreen: MenuScreen?
@@ -30,8 +30,9 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.fetchOrder()
-        self.populateTextFields()
+        self.deliveryLocationVM = DeliveryLocationViewModel()
+        self.deliveryLocationVM.delegate = self
+        self.deliveryLocationVM.viewDidAppear()
     }
     
     // MARK: - Initialization
@@ -50,13 +51,10 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated {
         self.deliveryLocationView.customerNameTextField.delegate = self
     }
     
-    
-    private func populateTextFields() {
-        if let orderVM = orderViewModel.order {
-            self.deliveryLocationView.addressTextField.text = orderVM.address
-            self.deliveryLocationView.neighborhoodTextField.text = orderVM.neighborhood
-            self.deliveryLocationView.customerNameTextField.text = orderVM.customerName
-        }
+    internal func didPopulateTextFields(address: String, neighborhood: String, customerName: String) {
+        self.deliveryLocationView.addressTextField.text = address
+        self.deliveryLocationView.neighborhoodTextField.text = neighborhood
+        self.deliveryLocationView.customerNameTextField.text = customerName
     }
     
     // MARK: - Setup Constraints
@@ -95,48 +93,22 @@ extension DeliveryLocationViewController: ViewConfiguration {
         self.deliveryLocationView.saveLocationDeliveryButton.addTarget(self, action: #selector(self.saveButtonPressed), for: .touchUpInside)
     }
 }
-
-// MARK: - CoreData
-
-extension DeliveryLocationViewController {
-    private func fetchOrder() {
-        self.orderViewModel.fetch { orderViewModel in
-            if let orderVM = orderViewModel {
-                self.orderViewModel = orderVM
-            }
-        }
-    }
-    
-    private func saveOrder() {
-        self.orderViewModel.saveOrder(orderViewModel: orderViewModel) { success in
-            if success {
-                self.goToPreviousScreen()
-            }
-        }
-    }
-}
-
 // MARK: - User Actions
 
 extension DeliveryLocationViewController {
     @objc func saveButtonPressed() {
+        let address = self.deliveryLocationView.addressTextField.text
+        let neighborhood = self.deliveryLocationView.neighborhoodTextField.text
+        let customerName = self.deliveryLocationView.customerNameTextField.text
         
-        self.orderViewModel.order?.address = self.deliveryLocationView.addressTextField.text
-        self.orderViewModel.order?.neighborhood = self.deliveryLocationView.neighborhoodTextField.text
-        self.orderViewModel.order?.customerName = self.deliveryLocationView.customerNameTextField.text
-        
-        if self.orderViewModel.isValidAddress() {
-            self.saveOrder()
-        } else {
-            self.displayAlert()
-        }
+        self.deliveryLocationVM.saveOrder(address: address!, neighborhood: neighborhood!, customerName: customerName!)
     }
     
-    @objc func goToPreviousScreen() {
+    @objc func didGoToPreviousScreen() {
         coordinator?.moveTo(flow: .menu(previousScreen!), data: [])
     }
     
-    func displayAlert() {
+    func didDisplayAlert() {
         let alert = UIAlertController(title: "Informação", message: "Favor, Preencher todos os campos", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
         NSLog("The \"OK\" alert occured.")

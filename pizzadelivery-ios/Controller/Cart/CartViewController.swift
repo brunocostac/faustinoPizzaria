@@ -10,9 +10,7 @@ import UIKit
 class CartViewController: UIViewController, MenuBaseCoordinated {
     
     // MARK: - ViewModel
-    
-    private var orderViewModel = OrderViewModel()
-    private var itemOrderListViewModel = ItemOrderListViewModel()
+    var cartViewModel: CartViewModel?
     
     // MARK: - Views
     
@@ -37,8 +35,8 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.fetchOrder()
-        self.fetchItems()
+        self.cartViewModel = CartViewModel()
+        self.cartViewModel?.viewDidAppear()
         self.setupTableView()
         self.spinner.stopAnimating()
     }
@@ -167,16 +165,16 @@ extension CartViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
-            return "Resumo do Pedido"
+            return self.cartViewModel?.section[0]
         } else {
-            return "Local de entrega"
+            return self.cartViewModel?.section[1]
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return self.itemOrderListViewModel.count + 1
+            return (self.cartViewModel?.itemOrderListViewModel.count)! + 1
         case 1:
             return 1
         default:
@@ -187,8 +185,8 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            if self.itemOrderListViewModel.count  >= indexPath.row + 1 {
-                let itemInCart = self.itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
+            if (self.cartViewModel?.itemOrderListViewModel.count)!  >= indexPath.row + 1 {
+                let itemInCart = self.cartViewModel?.itemOrderListViewModel.itemOrderAtIndex(indexPath.row)
                 
                 guard let cell1 = tableView.dequeueReusableCell(withIdentifier: "CartItemTableViewCell", for: indexPath) as? CartItemTableViewCell else {
                     return UITableViewCell()
@@ -202,7 +200,7 @@ extension CartViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 
-                cell2.configureWithText(subTotalOrder: self.itemOrderListViewModel.totalItemOrder, totalOrder: self.itemOrderListViewModel.totalItemOrder, fee: "0.00")
+                cell2.configureWithText(subTotalOrder: (self.cartViewModel?.itemOrderListViewModel.totalItemOrder)!, totalOrder: (self.cartViewModel?.itemOrderListViewModel.totalItemOrder)!, fee: "0.00")
                
                 return cell2
             }
@@ -212,32 +210,10 @@ extension CartViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell3.delegate = self
-            cell3.configureWithText(address: orderViewModel.getAddressMessage())
+            cell3.configureWithText(address: (self.cartViewModel?.orderViewModel.getAddressMessage())!)
             return cell3
         default:
             return UITableViewCell()
-        }
-    }
-}
-
-// MARK: - CoreData
-
-extension CartViewController {
-    func fetchOrder() {
-        self.orderViewModel.fetch { orderViewModel in
-            if let orderVM = orderViewModel {
-                self.orderViewModel = orderVM
-            }
-        }
-    }
-    
-    private func fetchItems() {
-        if self.orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
-                if let itemOrderListVM = itemOrderListVM {
-                    self.itemOrderListViewModel = itemOrderListVM
-                }
-            }
         }
     }
 }
