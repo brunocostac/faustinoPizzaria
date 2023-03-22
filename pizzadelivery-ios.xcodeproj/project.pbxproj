@@ -22,7 +22,7 @@
 		1119FA6627877FC700AF25E1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6527877FC700AF25E1 /* HomeViewController.swift */; };
 		1119FA682787804D00AF25E1 /* HomeBaseCoordinated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA672787804D00AF25E1 /* HomeBaseCoordinated.swift */; };
 		1119FA6A2787974D00AF25E1 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA692787974D00AF25E1 /* LogoView.swift */; };
-		1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6B2787A7A900AF25E1 /* OrderViewController.swift */; };
+		1119FA6C2787A7AA00AF25E1 /* OrderHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6B2787A7A900AF25E1 /* OrderHistoryViewController.swift */; };
 		1119FA6E2787A7BA00AF25E1 /* CampaignViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6D2787A7BA00AF25E1 /* CampaignViewController.swift */; };
 		1119FA702787A8BC00AF25E1 /* CampaignCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA6F2787A8BC00AF25E1 /* CampaignCoordinator.swift */; };
 		1119FA722787A8CD00AF25E1 /* CampaignBaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119FA712787A8CD00AF25E1 /* CampaignBaseCoordinator.swift */; };
@@ -33,6 +33,7 @@
 		111BCCF5278F848100F6E89E /* MyCartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BCCF4278F848100F6E89E /* MyCartButton.swift */; };
 		111BCCF8278FA2D400F6E89E /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BCCF7278FA2D400F6E89E /* CartViewController.swift */; };
 		1124633429CB4B1900A1145D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124633329CB4B1900A1145D /* HomeViewModel.swift */; };
+		1124633629CB5CB400A1145D /* OrderHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124633529CB5CB400A1145D /* OrderHistoryViewModel.swift */; };
 		112F25382795E0A700A50E11 /* DeliveryLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F25372795E0A700A50E11 /* DeliveryLocationView.swift */; };
 		112F253B2795E49200A50E11 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F253A2795E49200A50E11 /* PaymentViewController.swift */; };
 		112F25402796075500A50E11 /* PaymentMethodTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F253F2796075400A50E11 /* PaymentMethodTableViewCell.swift */; };
@@ -97,7 +98,7 @@
 		1119FA6527877FC700AF25E1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		1119FA672787804D00AF25E1 /* HomeBaseCoordinated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCoordinated.swift; sourceTree = "<group>"; };
 		1119FA692787974D00AF25E1 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
-		1119FA6B2787A7A900AF25E1 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
+		1119FA6B2787A7A900AF25E1 /* OrderHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewController.swift; sourceTree = "<group>"; };
 		1119FA6D2787A7BA00AF25E1 /* CampaignViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignViewController.swift; sourceTree = "<group>"; };
 		1119FA6F2787A8BC00AF25E1 /* CampaignCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignCoordinator.swift; sourceTree = "<group>"; };
 		1119FA712787A8CD00AF25E1 /* CampaignBaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignBaseCoordinator.swift; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 		111BCCF4278F848100F6E89E /* MyCartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCartButton.swift; sourceTree = "<group>"; };
 		111BCCF7278FA2D400F6E89E /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		1124633329CB4B1900A1145D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		1124633529CB5CB400A1145D /* OrderHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewModel.swift; sourceTree = "<group>"; };
 		112F25372795E0A700A50E11 /* DeliveryLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationView.swift; sourceTree = "<group>"; };
 		112F253A2795E49200A50E11 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		112F253F2796075400A50E11 /* PaymentMethodTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodTableViewCell.swift; sourceTree = "<group>"; };
@@ -275,7 +277,7 @@
 		1119FA562787763800AF25E1 /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				1119FA6B2787A7A900AF25E1 /* OrderViewController.swift */,
+				1119FA6B2787A7A900AF25E1 /* OrderHistoryViewController.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -439,6 +441,7 @@
 			isa = PBXGroup;
 			children = (
 				117EC0A927A2DC0B0003D3EC /* OrderViewModel.swift */,
+				1124633529CB5CB400A1145D /* OrderHistoryViewModel.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -705,7 +708,7 @@
 				1124633429CB4B1900A1145D /* HomeViewModel.swift in Sources */,
 				1119FA742787A8E800AF25E1 /* CampaignBaseCoordinated.swift in Sources */,
 				112F25402796075500A50E11 /* PaymentMethodTableViewCell.swift in Sources */,
-				1119FA6C2787A7AA00AF25E1 /* OrderViewController.swift in Sources */,
+				1119FA6C2787A7AA00AF25E1 /* OrderHistoryViewController.swift in Sources */,
 				1172B39129CA6E12004DB6B1 /* CartViewModel.swift in Sources */,
 				1153293529BBBCC600CFEBA0 /* Extension+UITabBar+Appearance.swift in Sources */,
 				117EC0AF27A2E4160003D3EC /* DataModel.xcdatamodeld in Sources */,
@@ -725,6 +728,7 @@
 				1119FA322787307E00AF25E1 /* AppDelegate.swift in Sources */,
 				1119FA342787307E00AF25E1 /* SceneDelegate.swift in Sources */,
 				112F25382795E0A700A50E11 /* DeliveryLocationView.swift in Sources */,
+				1124633629CB5CB400A1145D /* OrderHistoryViewModel.swift in Sources */,
 				1119FA5227876B7200AF25E1 /* ViewConfiguration.swift in Sources */,
 				11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */,
 				116972CB27BD64B000F7A6B2 /* Extension+Date.swift in Sources */,

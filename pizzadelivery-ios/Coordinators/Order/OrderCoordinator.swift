@@ -15,7 +15,7 @@ class OrderCoordinator: OrderBaseCoordinator {
     lazy var rootViewController: UIViewController = UIViewController()
     
     func start() -> UIViewController {
-        rootViewController = UINavigationController(rootViewController: OrderViewController(coordinator: self))
+        rootViewController = UINavigationController(rootViewController: OrderHistoryViewController(coordinator: self))
         return rootViewController
     }
     

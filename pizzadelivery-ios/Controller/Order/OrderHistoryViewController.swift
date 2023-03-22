@@ -7,12 +7,11 @@
 
 import UIKit
 
-class OrderViewController: UIViewController, OrderBaseCoordinated {
+class OrderHistoryViewController: UIViewController, OrderBaseCoordinated, OrderHistoryViewModelDelegate {
     
     // MARK: - View Models
-    
-    private var orderListViewModel = OrderListViewModel()
-    
+    private var orderHistoryViewModel = OrderHistoryViewModel()
+  
     // MARK: - Views
     
     var coordinator: OrderBaseCoordinator?
@@ -36,7 +35,8 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.fetchAllOrders()
+        orderHistoryViewModel.viewDidAppear()
+        orderHistoryViewModel.delegate = self
         self.setupTableView()
         self.spinner.stopAnimating()
     }
@@ -102,7 +102,7 @@ class OrderViewController: UIViewController, OrderBaseCoordinated {
 
 // MARK: - ViewConfiguration
 
-extension OrderViewController: ViewConfiguration {
+extension OrderHistoryViewController: ViewConfiguration {
     func setupConstraints() {
         self.setupLogoViewConstraints()
         self.setupTableViewConstraints()
@@ -121,7 +121,7 @@ extension OrderViewController: ViewConfiguration {
 
 // MARK: - UITableViewDelegate
 
-extension OrderViewController: UITableViewDelegate {
+extension OrderHistoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
@@ -141,9 +141,9 @@ extension OrderViewController: UITableViewDelegate {
 
 // MARK: - UITableViewDataSource
 
-extension OrderViewController: UITableViewDataSource {
+extension OrderHistoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if self.orderListViewModel.numberOfSections == 1 {
+        if self.orderHistoryViewModel.orderListViewModel.numberOfSections == 1 {
             return "Pedidos realizados"
         } else {
            return nil
@@ -151,7 +151,7 @@ extension OrderViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if self.orderListViewModel.numberOfSections == 0 {
+        if self.orderHistoryViewModel.orderListViewModel.numberOfSections == 0 {
             let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
             noDataLabel.font = UIFont(name: "avenir", size: 16)
             noDataLabel.text = "Faça o seu primeiro pedido :)"
@@ -159,11 +159,11 @@ extension OrderViewController: UITableViewDataSource {
             noDataLabel.textAlignment = .center
             tableView.backgroundView  = noDataLabel
         }
-        return self.orderListViewModel.numberOfSections
+        return self.orderHistoryViewModel.orderListViewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.orderListViewModel.numberOfRowsInSection
+        return self.orderHistoryViewModel.orderListViewModel.numberOfRowsInSection
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -171,33 +171,17 @@ extension OrderViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let orderVM = self.orderListViewModel.orderAtIndex(indexPath.row)
-        let itemsOrderVM = self.fetchAllItems(orderViewModel: orderVM!)
+        let orderVM =  self.orderHistoryViewModel.orderListViewModel.orderAtIndex(indexPath.row)
+        let itemsOrderVM = self.orderHistoryViewModel.fetchAllItems(orderViewModel: orderVM!)
         
         cell.configureWithText(orderVM: orderVM!, itemOrderListVM: itemsOrderVM!)
         return cell
     }
 }
 
-// MARK: - CoreData
 
-extension OrderViewController {
-    private func fetchAllItems(orderViewModel: OrderViewModel) -> ItemOrderListViewModel? {
-        var itemOrderListViewModel = ItemOrderListViewModel()
-        itemOrderListViewModel.fetchAll(orderViewModel: orderViewModel) { itemOrderListVM in
-            if let itemOrderListVM = itemOrderListVM {
-                itemOrderListViewModel = itemOrderListVM
-            }
-        }
-        return itemOrderListViewModel
-    }
-    
-    private func fetchAllOrders() {
-        self.orderListViewModel.fetchAll{ orders in
-            if let ordersListVM = orders {
-                self.orderListViewModel = OrderListViewModel(orders: ordersListVM)
-            }
-        }
+extension OrderHistoryViewController {
+    internal func didFetchAllOrders() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
