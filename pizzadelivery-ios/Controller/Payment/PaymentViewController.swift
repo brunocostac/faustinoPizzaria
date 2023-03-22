@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PaymentViewController: UIViewController, MenuBaseCoordinated, PaymentViewModelDelegate {
+class PaymentViewController: UIViewController, HomeBaseCoordinated, PaymentViewModelDelegate {
 
     // MARK: - ViewModels
     private var paymentViewModel: PaymentViewModel?
@@ -18,7 +18,8 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated, PaymentViewM
     
     // MARK: - Views
     
-    var coordinator: MenuBaseCoordinator?
+    var coordinator: HomeBaseCoordinator?
+    
     private let logoView = LogoView()
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
@@ -46,7 +47,7 @@ class PaymentViewController: UIViewController, MenuBaseCoordinated, PaymentViewM
         self.spinner.stopAnimating()
     }
     
-    required init(coordinator: MenuBaseCoordinator) {
+    required init(coordinator: HomeBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
         self.setupViewConfiguration()
@@ -254,7 +255,7 @@ extension PaymentViewController {
         self.paymentViewModel?.sendOrder(paymentSelected:  self.paymentSelected)
     }
     internal func didGoToMenuScreen() {
-        coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
+        coordinator?.moveTo(flow: .home(.homeScreen), data: [])
     }
 }
 
@@ -270,7 +271,7 @@ extension PaymentViewController: PaymentMethodTableViewCellDelegate {
 
 extension PaymentViewController: DeliveryLocationTableViewCellDelegate {
     func goToDeliveryLocationScreen() {
-        let previousScreen = MenuScreen.paymentScreen
-        coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: previousScreen)
+        let previousScreen = HomeScreen.paymentScreen
+        coordinator?.moveTo(flow: .home(.deliveryLocationScreen), data: previousScreen)
     }
 }

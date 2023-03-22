@@ -84,7 +84,7 @@ extension ItemOrderListViewModel {
     }
     
     var cartButtonIsEnabled: Bool {
-        return self.itemOrderViewModel!.isEmpty ? false : true
+        return self.itemOrderViewModel?.count != 0 ? true : false
     }
 }
 

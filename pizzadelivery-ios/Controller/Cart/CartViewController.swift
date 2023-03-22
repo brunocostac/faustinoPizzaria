@@ -7,14 +7,14 @@
 
 import UIKit
 
-class CartViewController: UIViewController, MenuBaseCoordinated {
+class CartViewController: UIViewController, HomeBaseCoordinated {
     
     // MARK: - ViewModel
     var cartViewModel: CartViewModel?
     
     // MARK: - Views
     
-    var coordinator: MenuBaseCoordinator?
+    var coordinator: HomeBaseCoordinator?
     private let logoView = LogoView()
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
@@ -41,7 +41,7 @@ class CartViewController: UIViewController, MenuBaseCoordinated {
         self.spinner.stopAnimating()
     }
     
-    required init(coordinator: MenuBaseCoordinator) {
+    required init(coordinator: HomeBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
         self.setupViewConfiguration()
@@ -222,7 +222,7 @@ extension CartViewController: UITableViewDataSource {
 
 extension CartViewController {
     @objc func goToPaymentScreen() {
-        self.coordinator?.moveTo(flow: .menu(.paymentScreen), data: [])
+        self.coordinator?.moveTo(flow: .home(.paymentScreen), data: [])
     }
 }
 
@@ -230,7 +230,7 @@ extension CartViewController {
 
 extension CartViewController: DeliveryLocationTableViewCellDelegate {
     func goToDeliveryLocationScreen() {
-        let previousScreen = MenuScreen.cartScreen
-        self.coordinator?.moveTo(flow: .menu(.deliveryLocationScreen), data: previousScreen)
+        let previousScreen = HomeScreen.cartScreen
+        self.coordinator?.moveTo(flow: .home(.deliveryLocationScreen), data: previousScreen)
     }
 }

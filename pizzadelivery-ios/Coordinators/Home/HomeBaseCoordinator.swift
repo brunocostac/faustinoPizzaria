@@ -7,4 +7,4 @@
 
 import Foundation
 
-protocol MenuBaseCoordinator: Coordinator {}
+protocol HomeBaseCoordinator: Coordinator {}

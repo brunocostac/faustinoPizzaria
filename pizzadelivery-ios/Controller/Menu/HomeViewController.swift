@@ -7,17 +7,15 @@
 
 import UIKit
 
-class MenuViewController: UIViewController, MenuBaseCoordinated {
+class HomeViewController: UIViewController, HomeBaseCoordinated, HomeViewModelDelegate {
+
+    // View Model
     
-    // MARK: - ViewModel
-    
-    private var menuListViewModel = MenuListViewModel()
-    private var orderViewModel = OrderViewModel()
-    private var itemOrderListViewModel = ItemOrderListViewModel()
+    let homeViewModel = HomeViewModel()
     
     // MARK: - Views
     
-    var coordinator: MenuBaseCoordinator?
+    var coordinator: HomeBaseCoordinator?
     private let logoView = LogoView()
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let tableHeaderView = HeaderView()
@@ -36,12 +34,10 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         super.viewDidLoad()
         self.spinner.startAnimating()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
-        self.clearViewModels()
-        self.fetchMenu()
-        self.fetchOrder()
-        self.fetchItems()
-        self.loadCartButton()
+        self.homeViewModel.delegate = self
+        self.homeViewModel.viewDidAppear()
         self.setupTableView()
         self.spinner.stopAnimating()
     }
@@ -51,7 +47,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
     }
     // MARK: - Initialization
     
-    required init(coordinator: MenuBaseCoordinator) {
+    required init(coordinator: HomeBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
         self.setupViewConfiguration()
@@ -61,26 +57,18 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Functions
-    private func clearViewModels() {
-        self.itemOrderListViewModel = ItemOrderListViewModel()
-        self.orderViewModel = OrderViewModel()
-    }
+    // MARK: - Function
     
-    private func fetchMenu() {
-        MockApiClient().fetchMenu { (_, menuData) in
-            self.menuListViewModel.menuViewModel = menuData.map(MenuViewModel.init)
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+    internal func didFetchMenu(menuListViewModel: MenuListViewModel) {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
     
-    private func loadCartButton() {
-        if itemOrderListViewModel.cartButtonIsEnabled {
-            let items = itemOrderListViewModel
-            self.myCartButton.configure(quantity: items.quantity, totalPrice: items.totalItemOrder)
+    internal func didLoadCartButton(quantity: String?, totalItemOrder: String?, cartButtonIsEnabled: Bool) {
+        if cartButtonIsEnabled {
             self.myCartButton.isHidden = false
+            self.myCartButton.configure(quantity: quantity!, totalPrice: totalItemOrder!)
         } else {
             self.myCartButton.isHidden = true
         }
@@ -140,7 +128,7 @@ class MenuViewController: UIViewController, MenuBaseCoordinated {
 
 // MARK: - ViewConfiguration
 
-extension MenuViewController: ViewConfiguration {
+extension HomeViewController: ViewConfiguration {
     func setupConstraints() {
         self.setupLogoViewConstraints()
         self.setupTableViewConstraints()
@@ -162,7 +150,7 @@ extension MenuViewController: ViewConfiguration {
 }
 
 // MARK: - UITableViewDelegate
-extension MenuViewController: UITableViewDelegate {
+extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
@@ -176,17 +164,16 @@ extension MenuViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let itemMenuVM = self.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
+        let itemMenuVM = self.homeViewModel.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
         self.goToDishDetailsScreen(item: itemMenuVM)
         self.tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
 // MARK: - UITableViewDataSource
-extension MenuViewController: UITableViewDataSource {
+extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let menuVM = self.menuListViewModel.menuViewModel(at: section)
-        
+        let menuVM = self.homeViewModel.menuListViewModel.menuViewModel(at: section)
         switch section {
         case 0:
             return menuVM.category
@@ -198,15 +185,15 @@ extension MenuViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return menuListViewModel.numberOfSections
+        return self.homeViewModel.menuListViewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return self.menuListViewModel.numberOfRowsInSection(section)
+            return self.homeViewModel.menuListViewModel.numberOfRowsInSection(section)
         case 1:
-            return self.menuListViewModel.numberOfRowsInSection(section)
+            return self.homeViewModel.menuListViewModel.numberOfRowsInSection(section)
         default:
             return 0
         }
@@ -217,7 +204,7 @@ extension MenuViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let itemMenuVM = self.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
+        let itemMenuVM = self.homeViewModel.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
         
         cell.configureWith(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price, image: itemMenuVM.image)
         
@@ -225,42 +212,15 @@ extension MenuViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - CoreData
-
-extension MenuViewController {
-    private func fetchOrder() {
-        self.orderViewModel.fetch { orderViewModel in
-            if let orderVM = orderViewModel {
-                self.orderViewModel = orderVM
-            }
-        }
-    }
-    private func fetchItems() {
-        if self.orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
-                if let itemOrderListVM = itemOrderListVM {
-                    self.itemOrderListViewModel = itemOrderListVM
-                }
-            }
-        }
-    }
-    
-    private func createOrder() {
-        if self.orderViewModel.order == nil {
-            self.orderViewModel.createOrder()
-        }
-    }
-}
-
 // MARK: - User Actions
 
-extension MenuViewController {
+extension HomeViewController {
     private func goToDishDetailsScreen(item: ItemMenuViewModel) {
-        self.createOrder()
-        coordinator?.moveTo(flow: .menu(.dishDetailsScreen), data: item)
+        self.homeViewModel.createOrder()
+        coordinator?.moveTo(flow: .home(.dishDetailsScreen), data: item)
     }
     
     @objc func goToCartScreen() {
-        coordinator?.moveTo(flow: .menu(.cartScreen), data: [])
+        coordinator?.moveTo(flow: .home(.cartScreen), data: [])
     }
 }

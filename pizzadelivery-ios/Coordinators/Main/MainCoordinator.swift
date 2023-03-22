@@ -14,14 +14,14 @@ class MainCoordinator: MainBaseCoordinator {
     
     var rootViewController: UIViewController  = UITabBarController()
     
-    lazy var menuCoordinator: MenuBaseCoordinator = MenuCoordinator()
+    lazy var homeCoordinator: HomeBaseCoordinator = HomeCoordinator()
     lazy var campaignCoordinator: CampaignBaseCoordinator = CampaignCoordinator()
     lazy var orderCoordinator: OrderBaseCoordinator = OrderCoordinator()
     
     func start() -> UIViewController {
-        let menuViewController = menuCoordinator.start()
-        menuCoordinator.parentCoordinator = self
-        menuViewController.tabBarItem = UITabBarItem(title: "Cardápio", image: UIImage(systemName: "menucard"), tag: 0)
+        let homeViewController = homeCoordinator.start()
+        homeCoordinator.parentCoordinator = self
+        homeViewController.tabBarItem = UITabBarItem(title: "Cardápio", image: UIImage(systemName: "menucard"), tag: 0)
         
         let campaignViewController = campaignCoordinator.start()
         campaignCoordinator.parentCoordinator = self
@@ -31,14 +31,14 @@ class MainCoordinator: MainBaseCoordinator {
         orderCoordinator.parentCoordinator = self
         orderViewController.tabBarItem = UITabBarItem(title: "Pedidos", image: UIImage(systemName: "doc.plaintext"), tag: 2)
         
-        (rootViewController as? UITabBarController)?.viewControllers = [menuViewController, campaignViewController, orderViewController]
+        (rootViewController as? UITabBarController)?.viewControllers = [homeViewController, campaignViewController, orderViewController]
     
         return rootViewController
     }
     
     func moveTo<T>(flow: AppFlow, data: T ) { 
         switch flow {
-        case .menu:
+        case .home:
             break
         case .campaign:
             break

@@ -8,13 +8,13 @@
 import Foundation
 
 enum AppFlow {
-    case menu(MenuScreen)
+    case home(HomeScreen)
     case order(OrderScreen)
     case campaign(CampaignScreen)
 }
 
-enum MenuScreen {
-    case menuScreen
+enum HomeScreen {
+    case homeScreen
     case dishDetailsScreen
     case cartScreen
     case paymentScreen

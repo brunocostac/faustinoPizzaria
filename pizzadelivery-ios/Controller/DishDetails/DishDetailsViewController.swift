@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DishDetailsViewController: UIViewController, MenuBaseCoordinated, DishDetailsViewModelDelegate {
+class DishDetailsViewController: UIViewController, HomeBaseCoordinated, DishDetailsViewModelDelegate {
 
     // MARK: - ViewModel
     
@@ -16,7 +16,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated, DishDeta
     
     // MARK: - Views
     
-    var coordinator: MenuBaseCoordinator?
+    var coordinator: HomeBaseCoordinator?
     private var dishImageView = DishImageView(frame: .zero)
     private let infoView = DishInfoView()
     private let commentView = DishCommentView()
@@ -50,7 +50,7 @@ class DishDetailsViewController: UIViewController, MenuBaseCoordinated, DishDeta
     
     // MARK: - Initialization
     
-    required init(coordinator: MenuBaseCoordinator) {
+    required init(coordinator: HomeBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
         self.setupViewConfiguration()
@@ -235,10 +235,10 @@ extension DishDetailsViewController {
     }
     
     func didGoToHomeScreen() {
-        coordinator?.moveTo(flow: .menu(.menuScreen), data: [])
+        coordinator?.moveTo(flow: .home(.homeScreen), data: [])
     }
     
     @objc func didGoToCartScreen() {
-        coordinator?.moveTo(flow: .menu(.cartScreen), data: [])
+        coordinator?.moveTo(flow: .home(.cartScreen), data: [])
     }
 }

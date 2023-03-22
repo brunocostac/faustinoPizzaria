@@ -7,18 +7,18 @@
 
 import UIKit
 
-class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated, DeliveryLocationViewModelDelegate {
+class DeliveryLocationViewController: UIViewController, HomeBaseCoordinated, DeliveryLocationViewModelDelegate {
     
     // MARK: - ViewModel
     var deliveryLocationVM = DeliveryLocationViewModel()
     
     // MARK: - Variables
-    var previousScreen: MenuScreen?
+    var previousScreen: HomeScreen?
     
     // MARK: - Views
     
     let deliveryLocationView = DeliveryLocationView()
-    var coordinator: MenuBaseCoordinator?
+    var coordinator: HomeBaseCoordinator?
     
     // MARK: - Life Cycle
     
@@ -37,7 +37,7 @@ class DeliveryLocationViewController: UIViewController, MenuBaseCoordinated, Del
     
     // MARK: - Initialization
     
-    required init(coordinator: MenuBaseCoordinator) {
+    required init(coordinator: HomeBaseCoordinator) {
         super.init(nibName: nil, bundle: nil)
         self.coordinator = coordinator
     }
@@ -105,7 +105,7 @@ extension DeliveryLocationViewController {
     }
     
     @objc func didGoToPreviousScreen() {
-        coordinator?.moveTo(flow: .menu(previousScreen!), data: [])
+        coordinator?.moveTo(flow: .home(previousScreen!), data: [])
     }
     
     func didDisplayAlert() {

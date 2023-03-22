@@ -8,29 +8,29 @@
 import Foundation
 import UIKit
 
-class MenuCoordinator: MenuBaseCoordinator {
+class HomeCoordinator: HomeBaseCoordinator {
 
     var parentCoordinator: MainBaseCoordinator?
     
     lazy var rootViewController: UIViewController = UIViewController()
     
     func start() -> UIViewController {
-        rootViewController = UINavigationController(rootViewController: MenuViewController(coordinator: self))
+        rootViewController = UINavigationController(rootViewController: HomeViewController(coordinator: self))
         return rootViewController
     }
     
     func moveTo<T: Any>(flow: AppFlow, data: T) {
         switch flow {
-        case .menu(let screen):
-            handleMenuFlow(for: screen, data: data)
+        case .home(let screen):
+            handleHomeFlow(for: screen, data: data)
         default:
             parentCoordinator?.moveTo(flow: flow, data: data)
         }
     }
     
-    private func handleMenuFlow<T: Any>(for screen: MenuScreen, data: T?) {
+    private func handleHomeFlow<T: Any>(for screen: HomeScreen, data: T?) {
         switch screen {
-        case .menuScreen:
+        case .homeScreen:
             navigationRootViewController?.popToRootViewController(animated: true)
         case .dishDetailsScreen:
             guard let itemMenuVM = data as? ItemMenuViewModel else { return }
@@ -40,7 +40,7 @@ class MenuCoordinator: MenuBaseCoordinator {
         case .paymentScreen:
             goToPaymentScreen()
         case .deliveryLocationScreen:
-            guard let previousScreen = data as? MenuScreen else { return }
+            guard let previousScreen = data as? HomeScreen else { return }
             goToDeliveryLocationScreen(previousScreen: previousScreen)
         }
     }
@@ -61,7 +61,7 @@ class MenuCoordinator: MenuBaseCoordinator {
         navigationRootViewController?.pushViewController(paymentVC, animated: true)
     }
     
-    func goToDeliveryLocationScreen(previousScreen: MenuScreen) {
+    func goToDeliveryLocationScreen(previousScreen: HomeScreen) {
         let deliveryLocationVc = DeliveryLocationViewController(coordinator: self)
         deliveryLocationVc.previousScreen = previousScreen
         navigationRootViewController?.pushViewController(deliveryLocationVc, animated: true)
