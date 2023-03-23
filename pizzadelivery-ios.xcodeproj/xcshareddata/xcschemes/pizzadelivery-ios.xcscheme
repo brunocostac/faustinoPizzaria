@@ -39,6 +39,17 @@
                ReferencedContainer = "container:pizzadelivery-ios.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1161EE1F29CCD9390046C4CD"
+               BuildableName = "pizzadelivery-iosTests.xctest"
+               BlueprintName = "pizzadelivery-iosTests"
+               ReferencedContainer = "container:pizzadelivery-ios.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

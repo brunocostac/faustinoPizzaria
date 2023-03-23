@@ -10,8 +10,8 @@ import UIKit
 class HomeViewController: UIViewController, HomeBaseCoordinated, HomeViewModelDelegate {
 
     // View Model
-    
-    let homeViewModel = HomeViewModel()
+    let apiClient = MockApiClient()
+    var homeViewModel: HomeViewModel?
     
     // MARK: - Views
     
@@ -36,8 +36,9 @@ class HomeViewController: UIViewController, HomeBaseCoordinated, HomeViewModelDe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.homeViewModel.delegate = self
-        self.homeViewModel.viewDidAppear()
+        self.homeViewModel = HomeViewModel(apiClient: apiClient)
+        self.homeViewModel?.delegate = self
+        self.homeViewModel?.viewDidAppear()
         self.setupTableView()
         self.spinner.stopAnimating()
     }
@@ -164,7 +165,7 @@ extension HomeViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let itemMenuVM = self.homeViewModel.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
+        let itemMenuVM = (self.homeViewModel?.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row))!
         self.goToDishDetailsScreen(item: itemMenuVM)
         self.tableView.deselectRow(at: indexPath, animated: false)
     }
@@ -173,27 +174,27 @@ extension HomeViewController: UITableViewDelegate {
 // MARK: - UITableViewDataSource
 extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let menuVM = self.homeViewModel.menuListViewModel.menuViewModel(at: section)
+        let menuVM = self.homeViewModel?.menuListViewModel.menuViewModel(at: section)
         switch section {
         case 0:
-            return menuVM.category
+            return menuVM?.category
         case 1:
-            return menuVM.category
+            return menuVM?.category
         default:
             return "Não existem categorias cadastradas"
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.homeViewModel.menuListViewModel.numberOfSections
+        return (self.homeViewModel?.menuListViewModel.numberOfSections)!
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return self.homeViewModel.menuListViewModel.numberOfRowsInSection(section)
+            return (self.homeViewModel?.menuListViewModel.numberOfRowsInSection(section))!
         case 1:
-            return self.homeViewModel.menuListViewModel.numberOfRowsInSection(section)
+            return (self.homeViewModel?.menuListViewModel.numberOfRowsInSection(section))!
         default:
             return 0
         }
@@ -204,9 +205,9 @@ extension HomeViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let itemMenuVM = self.homeViewModel.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
+        let itemMenuVM = self.homeViewModel?.menuListViewModel.menuViewModel(at: indexPath.section).itemMenuAtIndex(indexPath.row)
         
-        cell.configureWith(name: itemMenuVM.name, description: itemMenuVM.description, price: itemMenuVM.price, image: itemMenuVM.image)
+        cell.configureWith(name: itemMenuVM!.name, description: itemMenuVM!.description, price: itemMenuVM!.price, image: itemMenuVM!.image)
         
         return cell
     }
@@ -216,7 +217,7 @@ extension HomeViewController: UITableViewDataSource {
 
 extension HomeViewController {
     private func goToDishDetailsScreen(item: ItemMenuViewModel) {
-        self.homeViewModel.createOrder()
+        self.homeViewModel?.createOrder()
         coordinator?.moveTo(flow: .home(.dishDetailsScreen), data: item)
     }
     

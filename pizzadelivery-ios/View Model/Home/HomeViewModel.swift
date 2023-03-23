@@ -18,18 +18,23 @@ class HomeViewModel {
     private var orderViewModel = OrderViewModel()
     private var itemOrderListViewModel = ItemOrderListViewModel()
     
-    var delegate: HomeViewModelDelegate?
+    weak var delegate: HomeViewModelDelegate?
+    
+    private let apiClient: MockApiClient
+    
+    init(apiClient: MockApiClient) {
+        self.apiClient = apiClient
+    }
     
     func viewDidAppear() {
-        self.clearViewModels()
-        self.fetchMenu()
-        self.fetchOrder()
-        self.fetchItems()
-        self.loadCartButton()
+        fetchMenu()
+        fetchOrder()
+        fetchItems()
     }
     
     private func fetchMenu() {
-        MockApiClient().fetchMenu { (_, menuData) in
+        apiClient.fetchMenu { [weak self] (_, menuData) in
+            guard let self = self else { return }
             self.menuListViewModel.menuViewModel = menuData.map(MenuViewModel.init)
             self.delegate?.didFetchMenu(menuListViewModel: self.menuListViewModel)
         }
@@ -44,32 +49,29 @@ class HomeViewModel {
         }
     }
     
-    private func clearViewModels() {
-        self.itemOrderListViewModel = ItemOrderListViewModel()
-        self.orderViewModel = OrderViewModel()
-    }
-    
-    
     private func fetchOrder() {
-        self.orderViewModel.fetch { orderViewModel in
+        orderViewModel.fetch { [weak self] orderViewModel in
+            guard let self = self else { return }
             if let orderVM = orderViewModel {
                 self.orderViewModel = orderVM
             }
         }
     }
+    
     private func fetchItems() {
-        if self.orderViewModel.order != nil {
-            self.itemOrderListViewModel.fetchAll(orderViewModel: self.orderViewModel) { itemOrderListVM in
-                if let itemOrderListVM = itemOrderListVM {
-                    self.itemOrderListViewModel = itemOrderListVM
-                }
+        guard let order = orderViewModel.order else { return }
+        itemOrderListViewModel.fetchAll(orderViewModel: orderViewModel) { [weak self] itemOrderListVM in
+            guard let self = self else { return }
+            if let itemOrderListVM = itemOrderListVM {
+                self.itemOrderListViewModel = itemOrderListVM
             }
+            self.loadCartButton()
         }
     }
     
-   func createOrder() {
-        if self.orderViewModel.order == nil {
-            self.orderViewModel.createOrder()
+    func createOrder() {
+        if orderViewModel.order == nil {
+            orderViewModel.createOrder()
         }
     }
 }
