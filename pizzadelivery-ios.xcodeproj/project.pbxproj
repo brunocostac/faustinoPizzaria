@@ -45,6 +45,7 @@
 		11498DD22791E69900241EC9 /* DeliveryLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */; };
 		11498DD52792014100241EC9 /* DeliveryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */; };
 		1153293529BBBCC600CFEBA0 /* Extension+UITabBar+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1153293429BBBCC600CFEBA0 /* Extension+UITabBar+Appearance.swift */; };
+		115D52AC29E43E5000312E74 /* Extension+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115D52AB29E43E5000312E74 /* Extension+UITableView.swift */; };
 		11627C842790CED900FC4AA0 /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */; };
 		11627C862790CF0100FC4AA0 /* CartItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */; };
 		116972CB27BD64B000F7A6B2 /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116972CA27BD64AF00F7A6B2 /* Extension+Date.swift */; };
@@ -121,6 +122,7 @@
 		11498DD12791E69800241EC9 /* DeliveryLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationTableViewCell.swift; sourceTree = "<group>"; };
 		11498DD42792014100241EC9 /* DeliveryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLocationViewController.swift; sourceTree = "<group>"; };
 		1153293429BBBCC600CFEBA0 /* Extension+UITabBar+Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UITabBar+Appearance.swift"; sourceTree = "<group>"; };
+		115D52AB29E43E5000312E74 /* Extension+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UITableView.swift"; sourceTree = "<group>"; };
 		1161EE2029CCD9390046C4CD /* pizzadelivery-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "pizzadelivery-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		11627C832790CED900FC4AA0 /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
 		11627C852790CF0100FC4AA0 /* CartItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				11E91A35295384FB002B799A /* Extension+UIViewController.swift */,
 				119A2F3129BBB3B100F2E244 /* Extension+UINavigationBar+Appearance.swift */,
 				1153293429BBBCC600CFEBA0 /* Extension+UITabBar+Appearance.swift */,
+				115D52AB29E43E5000312E74 /* Extension+UITableView.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -694,6 +697,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				115D52AC29E43E5000312E74 /* Extension+UITableView.swift in Sources */,
 				1119FA7A2787A91C00AF25E1 /* OrderBaseCoordinator.swift in Sources */,
 				1119FA492787586500AF25E1 /* Coordinator.swift in Sources */,
 				118560E1278DCA4E00B7D149 /* DishInfoView.swift in Sources */,

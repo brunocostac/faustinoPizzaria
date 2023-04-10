@@ -150,19 +150,13 @@ extension OrderHistoryViewController: UITableViewDataSource {
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if self.orderHistoryViewModel.orderListViewModel.numberOfSections == 0 {
-            let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
-            noDataLabel.font = UIFont(name: "avenir", size: 16)
-            noDataLabel.text = "Faça o seu primeiro pedido :)"
-            noDataLabel.textColor = UIColor.black
-            noDataLabel.textAlignment = .center
-            tableView.backgroundView  = noDataLabel
-        }
-        return self.orderHistoryViewModel.orderListViewModel.numberOfSections
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.orderHistoryViewModel.orderListViewModel.numberOfRowsInSection == 0 {
+            self.tableView.setEmptyView(title: "Nenhum pedido foi encontrado", message: "", messageImage: UIImage(systemName: "magnifyingglass.circle")!)
+        } else {
+            self.tableView.backgroundView = nil
+        }
+        
         return self.orderHistoryViewModel.orderListViewModel.numberOfRowsInSection
     }
     
