@@ -51,7 +51,7 @@ extension CampaignViewController: ViewConfiguration {
             self.firstPromotionalCampaign.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             self.firstPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             self.firstPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            self.firstPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
+            self.firstPromotionalCampaign.heightAnchor.constraint(equalToConstant: 250)
         ])
         
         self.secondPromotionalCampaign.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +59,7 @@ extension CampaignViewController: ViewConfiguration {
             self.secondPromotionalCampaign.topAnchor.constraint(equalTo: self.firstPromotionalCampaign.bottomAnchor, constant: 0),
             self.secondPromotionalCampaign.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             self.secondPromotionalCampaign.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            self.secondPromotionalCampaign.heightAnchor.constraint(equalToConstant: 140)
+            self.secondPromotionalCampaign.heightAnchor.constraint(equalToConstant: 250)
         ])
     }
     

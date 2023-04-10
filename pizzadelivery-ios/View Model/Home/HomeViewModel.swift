@@ -27,9 +27,9 @@ class HomeViewModel {
     }
     
     func viewDidAppear() {
-        fetchMenu()
-        fetchOrder()
-        fetchItems()
+        self.fetchMenu()
+        self.fetchOrder()
+        self.fetchItems()
     }
     
     private func fetchMenu() {
