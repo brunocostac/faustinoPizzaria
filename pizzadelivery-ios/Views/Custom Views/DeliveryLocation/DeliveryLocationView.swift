@@ -101,6 +101,8 @@ class DeliveryLocationView: UIView {
         self.saveLocationDeliveryButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            self.saveLocationDeliveryButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            self.saveLocationDeliveryButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             self.saveLocationDeliveryButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40),
             self.saveLocationDeliveryButton.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])

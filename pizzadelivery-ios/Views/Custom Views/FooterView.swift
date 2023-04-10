@@ -35,6 +35,8 @@ class FooterView: UIView {
     func setupFooterButtonConstraints() {
         self.footerButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            self.footerButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            self.footerButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             self.footerButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             self.footerButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
