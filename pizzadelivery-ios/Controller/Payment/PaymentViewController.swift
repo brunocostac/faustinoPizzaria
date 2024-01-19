@@ -238,7 +238,7 @@ extension PaymentViewController: UITableViewDataSource {
             "DeliveryLocationTableViewCell", for: indexPath) as? DeliveryLocationTableViewCell else {
                 return UITableViewCell()
             }
-            cell3.delegate = self
+            cell3.delegate = self 
             cell3.configureWithText(address: (self.paymentViewModel?.orderViewModel.getAddressMessage())!)
             
             return cell3

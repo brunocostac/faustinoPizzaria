@@ -11,6 +11,13 @@ class DeliveryLocationView: UIView {
     
     // MARK: - Views
     
+    let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+
+    
     let addressTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 4
@@ -63,6 +70,17 @@ class DeliveryLocationView: UIView {
     }
     
     // MARK: - Setup Constraints
+    
+    func setupScrollViewConstraints() {
+         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+         NSLayoutConstraint.activate([
+             self.scrollView.topAnchor.constraint(equalTo: topAnchor),
+             self.scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+             self.scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+             self.scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+         ])
+     }
     
     func setupAddressTextFieldConstraints() {
         self.addressTextField.translatesAutoresizingMaskIntoConstraints = false
