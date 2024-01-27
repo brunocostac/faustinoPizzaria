@@ -29,7 +29,7 @@ class HeaderView: UIView {
     // MARK: - Functions
     
     func setup() {
-        self.nameLabel.text = "Pizza Lover - Freguesia"
+        self.nameLabel.text = "Faustino - Freguesia"
         self.addressLabel.text = "Rua Araguaia 2000"
         self.timeLabel.text = "⏱ Aberto"
         self.feeLabel.text = "Entrega a partir de R$ 0,00 ● 45m - 1h"

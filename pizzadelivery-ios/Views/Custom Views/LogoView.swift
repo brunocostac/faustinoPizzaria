@@ -36,10 +36,10 @@ class LogoView: UIView {
         self.backgroundImage.translatesAutoresizingMaskIntoConstraints = false
             
         NSLayoutConstraint.activate([
-            self.backgroundImage.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            self.backgroundImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
             self.backgroundImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
             self.backgroundImage.rightAnchor.constraint(equalTo: rightAnchor, constant: 0),
-            self.backgroundImage.heightAnchor.constraint(equalToConstant: 150)
+            self.backgroundImage.heightAnchor.constraint(equalToConstant: 160)
         ])
     }
 }

@@ -23,15 +23,15 @@ class MainCoordinator: MainBaseCoordinator {
         homeCoordinator.parentCoordinator = self
         homeViewController.tabBarItem = UITabBarItem(title: "Cardápio", image: UIImage(systemName: "menucard"), tag: 0)
         
-        let campaignViewController = campaignCoordinator.start()
-        campaignCoordinator.parentCoordinator = self
-        campaignViewController.tabBarItem = UITabBarItem(title: "Promoções", image: UIImage(systemName: "tag"), tag: 1)
+        //let campaignViewController = campaignCoordinator.start()
+        //campaignCoordinator.parentCoordinator = self
+        //campaignViewController.tabBarItem = UITabBarItem(title: "Promoções", image: UIImage(systemName: "tag"), tag: 1)
         
         let orderViewController = orderCoordinator.start()
         orderCoordinator.parentCoordinator = self
         orderViewController.tabBarItem = UITabBarItem(title: "Pedidos", image: UIImage(systemName: "doc.plaintext"), tag: 2)
         
-        (rootViewController as? UITabBarController)?.viewControllers = [homeViewController, campaignViewController, orderViewController]
+        (rootViewController as? UITabBarController)?.viewControllers = [homeViewController, orderViewController]
     
         return rootViewController
     }

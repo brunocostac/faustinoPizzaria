@@ -914,7 +914,7 @@
 				DEVELOPMENT_TEAM = S5RL328K3W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "pizzadelivery-ios/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pizza Lover";
+				INFOPLIST_KEY_CFBundleDisplayName = "Faustino Pizzaria";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
@@ -944,7 +944,7 @@
 				DEVELOPMENT_TEAM = S5RL328K3W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "pizzadelivery-ios/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pizza Lover";
+				INFOPLIST_KEY_CFBundleDisplayName = "Faustino Pizzaria";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
