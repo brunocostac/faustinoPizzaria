@@ -18,12 +18,6 @@ class LogoView: UIView {
         return backgroundImage
     }()
     
-    private let logoImage: UIImageView = {
-        let logoImage = UIImageView(image: UIImage(named: "logoImage"))
-        logoImage.contentMode = .scaleAspectFit
-        logoImage.clipsToBounds = true
-        return logoImage
-    }()
     
     // MARK: - Initialization
     
@@ -48,16 +42,6 @@ class LogoView: UIView {
             self.backgroundImage.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
-    private func setupLogoConstraints() {
-        self.logoImage.translatesAutoresizingMaskIntoConstraints = false
-            
-        NSLayoutConstraint.activate([
-            self.logoImage.centerXAnchor.constraint(equalTo: self.backgroundImage.centerXAnchor),
-            self.logoImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 25),
-            self.logoImage.heightAnchor.constraint(equalToConstant: 80),
-            self.logoImage.widthAnchor.constraint(equalToConstant: 80)
-        ])
-    }
 }
 
 // MARK: - ViewConfiguration
@@ -65,12 +49,10 @@ class LogoView: UIView {
 extension LogoView: ViewConfiguration {
     func setupConstraints() {
         self.setupHeaderImageConstraints()
-        self.setupLogoConstraints()
     }
     
     func buildViewHierarchy() {
         addSubview(self.backgroundImage)
-        addSubview(self.logoImage)
     }
     
     func configureViews() {
